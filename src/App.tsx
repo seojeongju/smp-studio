@@ -87,25 +87,31 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // 비포애프터용 고품질 Unsplash 모정 이미지 데이터
+  // 비포애프터 포트폴리오 데이터 (duration·point 추가)
   const beforeAfterPortfolio = [
     {
-      before: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop', // 숱이 다소 정돈되지 않은 원본 얼굴
-      after: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop',  // 결이 잡히고 또렷해진 눈썹
-      title: '여성 자연눈썹 (엠보 결) 시술',
+      before: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop',
+      after: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop',
+      title: '여성 자연눈썹 엠보 결 시술',
       category: '자연눈썹',
+      duration: '90분 소요',
+      point: '모근 결을 한 올씩 표현하는 엠보 기법으로 지극히 자연스러운 눈썹 결을 완성했습니다.',
     },
     {
-      before: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=600&auto=format&fit=crop', // 헤어 밀도가 낮은 헤어라인 영역
-      after: 'https://images.unsplash.com/photo-1620121692029-d088224ddc74?q=80&w=600&auto=format&fit=crop',  // 톤 다운되어 숱이 풍성해 보이는 두피
-      title: '정수리 탈모 보강 SMP 시술',
+      before: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=600&auto=format&fit=crop',
+      after: 'https://images.unsplash.com/photo-1620121692029-d088224ddc74?q=80&w=600&auto=format&fit=crop',
+      title: '정수리 탈모 보강 SMP',
       category: '두피 SMP',
+      duration: '세션당 120분',
+      point: '실제 모근 크기와 동일한 초미세 도팅으로 두피의 빈틈을 자연스럽게 채웠습니다.',
     },
     {
-      before: 'https://images.unsplash.com/photo-1607990283143-e81e7a2c93ab?q=80&w=600&auto=format&fit=crop', // 흐릿한 남자 눈썹 상태
-      after: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop',  // 단정하고 선명하게 윤곽이 잡힌 눈썹
+      before: 'https://images.unsplash.com/photo-1607990283143-e81e7a2c93ab?q=80&w=600&auto=format&fit=crop',
+      after: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop',
       title: '남성 골격 맞춤 자연눈썹',
       category: '남자눈썹',
+      duration: '90분 소요',
+      point: '두상 골격과 근육 움직임을 분석해 과장되지 않은 정돈된 남성 눈썹을 디자인했습니다.',
     },
   ];
 
@@ -356,18 +362,92 @@ function App() {
           {/* === GALLERY TAB === */}
           {activeTab === 'gallery' && (
             <div style={{ animation: 'fadeIn 0.3s ease' }}>
-              <h2 className="section-title">Before & After 포트폴리오</h2>
-              <p className="section-subtitle">
-                직접 중앙의 슬라이더 바를 좌우로 조절하여 드라마틱한 시술 전후 차이를 눈으로 확인해 보세요.
-              </p>
+              {/* 갤러리 페이지 헤더 인포그래픽 배너 */}
+              <div style={{
+                background: 'linear-gradient(135deg, var(--color-text-main) 0%, #2b2520 100%)',
+                borderRadius: 'var(--radius-md)',
+                padding: '22px 20px',
+                marginBottom: '20px',
+                color: 'var(--color-primary-light)',
+                position: 'relative',
+                overflow: 'hidden',
+              }}>
+                {/* 배경 장식 원 */}
+                <div style={{
+                  position: 'absolute', top: '-20px', right: '-20px',
+                  width: '100px', height: '100px', borderRadius: '50%',
+                  backgroundColor: 'rgba(255,255,255,0.04)',
+                  pointerEvents: 'none',
+                }} />
+                <div style={{
+                  position: 'absolute', bottom: '-30px', right: '40px',
+                  width: '70px', height: '70px', borderRadius: '50%',
+                  backgroundColor: 'rgba(255,255,255,0.03)',
+                  pointerEvents: 'none',
+                }} />
+
+                <span style={{
+                  display: 'inline-block',
+                  fontSize: '9.5px', fontWeight: 700,
+                  letterSpacing: '1.8px', textTransform: 'uppercase',
+                  backgroundColor: 'rgba(255,255,255,0.12)',
+                  border: '1px solid rgba(255,255,255,0.18)',
+                  padding: '3px 10px', borderRadius: '20px',
+                  marginBottom: '10px',
+                }}>
+                  Portfolio Gallery
+                </span>
+                <h2 style={{
+                  fontSize: '18px', fontWeight: 700,
+                  letterSpacing: '-0.4px', margin: '0 0 8px 0',
+                  color: '#FAF6F0',
+                }}>
+                  Before &amp; After 포트폴리오
+                </h2>
+                <p style={{
+                  fontSize: '12px', opacity: 0.75, lineHeight: 1.65,
+                  fontWeight: 300, margin: 0, wordBreak: 'keep-all',
+                }}>
+                  슬라이더 핸들을 좌우로 드래그해
+                  시술 전후 차이를 직접 확인해 보세요.
+                </p>
+
+                {/* 통계 뱃지 행 */}
+                <div style={{
+                  display: 'flex', gap: '12px', marginTop: '16px',
+                }}>
+                  {[
+                    { label: '시술 케이스', value: '3+' },
+                    { label: '평균 만족도', value: '4.9★' },
+                    { label: '리터치 포함', value: '전 항목' },
+                  ].map((stat, i) => (
+                    <div key={i} style={{
+                      flex: 1, textAlign: 'center',
+                      backgroundColor: 'rgba(255,255,255,0.08)',
+                      borderRadius: '10px', padding: '10px 6px',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                    }}>
+                      <div style={{ fontSize: '16px', fontWeight: 800, color: '#FAF6F0', lineHeight: 1 }}>
+                        {stat.value}
+                      </div>
+                      <div style={{ fontSize: '9.5px', opacity: 0.7, marginTop: '4px', fontWeight: 500 }}>
+                        {stat.label}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
               {beforeAfterPortfolio.map((item, idx) => (
                 <BeforeAfterSlider
                   key={idx}
+                  index={idx + 1}
                   beforeImage={item.before}
                   afterImage={item.after}
                   title={item.title}
                   category={item.category}
+                  duration={item.duration}
+                  point={item.point}
                 />
               ))}
             </div>
