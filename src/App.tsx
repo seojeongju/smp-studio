@@ -484,14 +484,10 @@ function App() {
           {/* === CARE TAB === */}
           {activeTab === 'care' && (
             <div style={{ animation: 'fadeIn 0.3s ease' }}>
-              <h2 className="section-title">맞춤형 사후 관리 가이드</h2>
-              <p className="section-subtitle">
-                시술 후 탈각이 완전히 이루어지는 1주일 동안 아래 가이드라인을 꼭 참고하여 관리해 주세요.
-              </p>
-
               <CareGuide />
             </div>
           )}
+
         </main>
 
         {/* 3. 모바일 하단 플로팅 퀵바 (클래스 기반 컨트롤) */}
