@@ -415,15 +415,7 @@ function App() {
           <div className="floating-quickbar-content">
             <button
               onClick={openConsulting}
-              className="btn btn-primary"
-              style={{
-                flex: 1,
-                borderRadius: '24px',
-                padding: '10px 16px',
-                fontSize: '12.5px',
-                boxShadow: '0 8px 24px rgba(58,50,44,0.15)',
-                border: '1px solid var(--color-primary-dark)',
-              }}
+              className="quickbar-btn consulting"
             >
               📸 비대면 맞춤 사진 견적
             </button>
@@ -431,17 +423,7 @@ function App() {
               href="https://booking.naver.com" // 예시용
               target="_blank"
               rel="noopener noreferrer"
-              className="btn"
-              style={{
-                flex: 1,
-                backgroundColor: '#03C75A',
-                color: '#fff',
-                borderRadius: '24px',
-                padding: '10px 16px',
-                fontSize: '12.5px',
-                textDecoration: 'none',
-                boxShadow: '0 8px 24px rgba(3,199,90,0.15)',
-              }}
+              className="quickbar-btn naver"
             >
               📅 네이버 예약 가기
             </a>
