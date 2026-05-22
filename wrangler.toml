@@ -6,7 +6,7 @@ pages_build_output_dir = "dist"
 [[d1_databases]]
 binding = "DB"
 database_name = "smp-studio-db"
-database_id = "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d" # 임의의 D1 UUID
+database_id = "5011362c-7929-466b-a424-7f4bde29aec5"
 
 # R2 Storage 바인딩
 [[r2_buckets]]
