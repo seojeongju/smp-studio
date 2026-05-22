@@ -243,25 +243,43 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
               카카오톡 실시간 빠른 상담
             </a>
 
-            <button
-              onClick={handleReset}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--color-text-muted)',
-                fontSize: '12px',
-                alignSelf: 'center',
-                marginTop: '12px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                fontWeight: 600
-              }}
-            >
-              <RotateCcw size={12} />
-              자가진단 다시 하기
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '16px' }}>
+              <button
+                onClick={handlePrev}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--color-text-muted)',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontWeight: 600
+                }}
+              >
+                <ArrowLeft size={12} />
+                이전 질문으로
+              </button>
+
+              <button
+                onClick={handleReset}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--color-text-muted)',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontWeight: 600
+                }}
+              >
+                <RotateCcw size={12} />
+                처음부터 다시 하기
+              </button>
+            </div>
           </div>
         </div>
       )}

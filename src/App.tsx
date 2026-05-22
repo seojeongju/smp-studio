@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BottomNav, type TabType } from './components/BottomNav';
 import { BeforeAfterSlider } from './components/BeforeAfterSlider';
 import { DiagnosticTest } from './components/DiagnosticTest';
@@ -7,7 +7,7 @@ import { ReviewList } from './components/ReviewList';
 import { ReviewForm } from './components/ReviewForm';
 import { ConsultingForm } from './components/ConsultingForm';
 import { ServicesInfo } from './components/ServicesInfo';
-import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award } from 'lucide-react';
+import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award, ChevronLeft } from 'lucide-react';
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -22,6 +22,66 @@ function App() {
   const triggerRefreshReviews = () => {
     setRefreshReviews((prev) => !prev);
   };
+
+  // activeTab 변경 시 히스토리에 푸시하는 함수
+  const changeTab = (tab: TabType) => {
+    setActiveTab(tab);
+    window.history.pushState({ tab }, '', `#${tab}`);
+  };
+
+  // 모달 열기 래퍼
+  const openConsulting = () => {
+    setIsConsultingOpen(true);
+    window.history.pushState({ modal: 'consulting', tab: activeTab }, '', '');
+  };
+
+  const openReviewForm = () => {
+    setIsReviewFormOpen(true);
+    window.history.pushState({ modal: 'reviewForm', tab: activeTab }, '', '');
+  };
+
+  // 모달 닫기 래퍼 (직접 닫을 때도 history.back()을 호출하여 popstate에서 상태 일괄 닫기 처리하도록 유도)
+  const closeConsulting = () => {
+    if (isConsultingOpen) {
+      window.history.back();
+    }
+  };
+
+  const closeReviewForm = () => {
+    if (isReviewFormOpen) {
+      window.history.back();
+    }
+  };
+
+  // 마운트 시 초기 히스토리 상태 설정 및 popstate 이벤트 리스너 등록
+  useEffect(() => {
+    const initialTab = (window.location.hash.replace('#', '') as TabType) || 'home';
+    if (!['home', 'gallery', 'reviews', 'services', 'care'].includes(initialTab)) {
+      window.history.replaceState({ tab: 'home' }, '', '#home');
+      setActiveTab('home');
+    } else {
+      window.history.replaceState({ tab: initialTab }, '', `#${initialTab}`);
+      setActiveTab(initialTab);
+    }
+
+    const handlePopState = (event: PopStateEvent) => {
+      const state = event.state;
+
+      // 1. 모달이 열려 있었다면 닫기
+      setIsConsultingOpen(false);
+      setIsReviewFormOpen(false);
+
+      // 2. 탭 복원
+      if (state && state.tab) {
+        setActiveTab(state.tab);
+      } else {
+        setActiveTab('home');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [isConsultingOpen, isReviewFormOpen]);
 
   // 비포애프터용 고품질 Unsplash 모정 이미지 데이터
   const beforeAfterPortfolio = [
@@ -119,11 +179,32 @@ function App() {
       <div className="app-container">
         {/* 1. 상단 앱 헤더 */}
         <header className="app-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => setActiveTab('home')}>
-            <img src="/logo.png" alt="Grace Shop Logo" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--color-primary-dark)' }} />
-            <h1 className="brand-logo" style={{ fontSize: '18px', margin: 0 }}>
-              Grace Shop
-            </h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {activeTab !== 'home' && (
+              <button
+                onClick={() => window.history.back()}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: 'var(--color-text-main)',
+                  padding: '4px',
+                  marginRight: '2px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                aria-label="뒤로가기"
+              >
+                <ChevronLeft size={22} />
+              </button>
+            )}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => changeTab('home')}>
+              <img src="/logo.png" alt="Grace Shop Logo" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--color-primary-dark)' }} />
+              <h1 className="brand-logo" style={{ fontSize: '18px', margin: 0 }}>
+                Grace Shop
+              </h1>
+            </div>
           </div>
           <div style={{ display: 'flex', gap: '12px' }}>
             <a
@@ -134,7 +215,7 @@ function App() {
               <PhoneCall size={18} />
             </a>
             <button
-              onClick={() => setIsConsultingOpen(true)}
+              onClick={openConsulting}
               style={{
                 background: 'var(--color-text-main)',
                 color: 'var(--color-primary-light)',
@@ -264,28 +345,7 @@ function App() {
               </div>
 
               {/* 자가진단 퀴즈 연동 */}
-              <DiagnosticTest onStartConsulting={() => setIsConsultingOpen(true)} />
-
-              {/* 실시간 예약 경로 퀵 배너 */}
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '10px',
-                  marginTop: '10px',
-                }}
-              >
-                <a
-                  href="https://booking.naver.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary btn-glow"
-                  style={{ textDecoration: 'none', backgroundColor: '#03C75A', color: '#fff', border: 'none' }}
-                >
-                  <Calendar size={18} />
-                  네이버 예약으로 바로가기
-                </a>
-              </div>
+              <DiagnosticTest onStartConsulting={openConsulting} />
             </div>
           )}
 
@@ -320,7 +380,7 @@ function App() {
               <ReviewList
                 refreshTrigger={refreshReviews}
                 onRefresh={triggerRefreshReviews}
-                onOpenWriteForm={() => setIsReviewFormOpen(true)}
+                onOpenWriteForm={openReviewForm}
               />
             </div>
           )}
@@ -333,7 +393,7 @@ function App() {
                 시술 부위와 종류별 소요시간 및 관리 상세 기준표입니다.
               </p>
 
-              <ServicesInfo onStartConsulting={() => setIsConsultingOpen(true)} />
+              <ServicesInfo onStartConsulting={openConsulting} />
             </div>
           )}
 
@@ -354,7 +414,7 @@ function App() {
         <div className="floating-quickbar">
           <div className="floating-quickbar-content">
             <button
-              onClick={() => setIsConsultingOpen(true)}
+              onClick={openConsulting}
               className="btn btn-primary"
               style={{
                 flex: 1,
@@ -389,19 +449,19 @@ function App() {
         </div>
 
         {/* 4. 하단 고정 탭 바 */}
-        <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
+        <BottomNav activeTab={activeTab} setActiveTab={changeTab} />
 
         {/* 5. 리뷰 작성 바텀 시트 */}
         {isReviewFormOpen && (
           <ReviewForm
-            onClose={() => setIsReviewFormOpen(false)}
+            onClose={closeReviewForm}
             onSuccess={triggerRefreshReviews}
           />
         )}
 
         {/* 6. 1:1 사진 견적 신청 바텀 시트 */}
         {isConsultingOpen && (
-          <ConsultingForm onClose={() => setIsConsultingOpen(false)} />
+          <ConsultingForm onClose={closeConsulting} />
         )}
       </div>
     </div>
