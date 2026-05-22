@@ -97,7 +97,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
 
         {/* 제목 + 카테고리 칩 */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <h4 style={{
+          <h4 className="notranslate" style={{
             fontSize: '14.5px',
             fontWeight: 700,
             color: 'var(--color-text-main)',
@@ -329,12 +329,13 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
           gap: '7px',
         }}>
           <Sparkles size={12} color="var(--color-text-main)" style={{ marginTop: '2px', flexShrink: 0 }} />
-          <span style={{
+          <span className="notranslate" style={{
             fontSize: '12px',
             color: 'var(--color-text-muted)',
             lineHeight: 1.55,
             fontWeight: 500,
             wordBreak: 'keep-all',
+            overflowWrap: 'break-word',
           }}>
             {point}
           </span>

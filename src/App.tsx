@@ -404,11 +404,12 @@ function App() {
                 }}>
                   Before &amp; After 포트폴리오
                 </h2>
-                <p style={{
+                <p className="notranslate" style={{
                   fontSize: '12px', opacity: 0.75, lineHeight: 1.65,
                   fontWeight: 300, margin: 0, wordBreak: 'keep-all',
+                  overflowWrap: 'break-word',
                 }}>
-                  슬라이더 핸들을 좌우로 드래그해
+                  슬라이더 핸들을 좌우로 드래그해<br />
                   시술 전후 차이를 직접 확인해 보세요.
                 </p>
 
