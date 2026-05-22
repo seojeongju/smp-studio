@@ -3,6 +3,7 @@ import { HelpCircle, ChevronRight, RotateCcw, MessageCircle, Sparkles, Compass, 
 
 interface Option {
   label: string;
+  desc?: string;
   nextStep: number | string;
   icon: React.ComponentType<{ size?: number; className?: string; color?: string }>;
 }
@@ -23,25 +24,25 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
       id: 1,
       text: '가장 고민이거나 관심 있는 시술 부위는 어디인가요?',
       options: [
-        { label: '눈썹 반영구 시술', nextStep: 2, icon: Sparkles },
-        { label: '두피 SMP / 헤어라인 커버', nextStep: 3, icon: Compass },
+        { label: '눈썹 반영구', desc: '결을 살린 자연 눈썹 및 섀도우 콤보', nextStep: 2, icon: Sparkles },
+        { label: '두피 SMP / 헤어라인', desc: '모근 표현 두피 미세 색소 요법', nextStep: 3, icon: Compass },
       ],
     },
     2: {
       id: 2,
       text: '이전에 눈썹 문신/반영구 시술을 받으신 적이 있나요?',
       options: [
-        { label: '처음 받는 첫 시술입니다.', nextStep: 'eyebrow_new', icon: UserCheck },
-        { label: '붉거나 푸른 잔흔이 남아 있습니다.', nextStep: 'eyebrow_cover', icon: AlertTriangle },
+        { label: '생애 첫 시술', desc: '반영구 흔적이 없는 깨끗한 피부 상태', nextStep: 'eyebrow_new', icon: UserCheck },
+        { label: '잔흔 보유 시술', desc: '붉거나 푸른 이전 시술 흔적 존재', nextStep: 'eyebrow_cover', icon: AlertTriangle },
       ],
     },
     3: {
       id: 3,
       text: '어떤 형태의 두피 탈모/헤어라인 고민을 가지고 계시나요?',
       options: [
-        { label: '정수리 또는 가르마 갈라짐 숱 보강', nextStep: 'smp_crown', icon: Sparkles },
-        { label: 'M자 이마 보강 및 헤어라인 정돈', nextStep: 'smp_hairline', icon: Compass },
-        { label: '민머리/삭발 두피 전체 커버 시술', nextStep: 'smp_full', icon: Flame },
+        { label: '정수리/가르마 숱 보강', desc: '비치는 두피의 미세 모근 밀도 향상', nextStep: 'smp_crown', icon: Sparkles },
+        { label: 'M자 이마/헤어라인', desc: '헤어라인을 메워 작고 입체적인 이마 라인', nextStep: 'smp_hairline', icon: Compass },
+        { label: '삭발 SMP 전체 커버', desc: '민머리 스타일 및 대면적 토탈 디자인', nextStep: 'smp_full', icon: Flame },
       ],
     },
   };
@@ -94,12 +95,24 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
   };
 
   const isResult = typeof currentStep === 'string';
+  const progressWidth = isResult ? '100%' : (currentStep === 1 ? '33%' : '66%');
 
   return (
     <div className="card" style={{ border: '1px solid var(--color-primary-dark)', padding: '24px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <HelpCircle size={20} color="var(--color-text-main)" style={{ marginRight: '8px' }} />
-        <span style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.3px' }}>1분 맞춤 시술 자가진단</span>
+      {/* 자가진단 인포그래픽 헤더 */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <HelpCircle size={20} color="var(--color-text-main)" style={{ marginRight: '8px' }} />
+          <span style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.3px' }}>1분 맞춤 시술 자가진단</span>
+        </div>
+        <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-text-muted)' }}>
+          {isResult ? '완료' : `${currentStep === 1 ? '1' : '2'} / 2단계`}
+        </span>
+      </div>
+
+      {/* 진행 상황 프로그레스 게이지 */}
+      <div className="diag-progress-container">
+        <div className="diag-progress-bar" style={{ width: progressWidth }} />
       </div>
 
       {!isResult ? (
@@ -107,38 +120,35 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
         <div>
           <p
             style={{
-              fontSize: '15.5px',
+              fontSize: '16.5px',
               fontWeight: 700,
               color: 'var(--color-text-main)',
-              marginBottom: '20px',
+              marginBottom: '24px',
               lineHeight: '1.45',
+              letterSpacing: '-0.4px',
             }}
           >
             Q. {steps[currentStep as number].text}
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div className={`diag-card-grid ${currentStep === 1 ? 'cols-2' : 'cols-1'}`}>
             {steps[currentStep as number].options.map((opt, i) => {
               const OptIcon = opt.icon;
+              const isRowStyle = currentStep !== 1;
               return (
                 <button
                   key={i}
-                  className="btn btn-secondary hover-lift"
-                  style={{
-                    justifyContent: 'space-between',
-                    textAlign: 'left',
-                    padding: '16px 20px',
-                    borderRadius: 'var(--radius-sm)',
-                    backgroundColor: 'var(--color-card)',
-                    border: '1px solid var(--color-border)',
-                  }}
+                  className={`diag-option-card ${isRowStyle ? 'row-style' : ''}`}
                   onClick={() => handleOptionClick(opt.nextStep)}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <OptIcon size={16} color="var(--color-text-muted)" />
-                    <span style={{ fontSize: '13.5px', fontWeight: 600 }}>{opt.label}</span>
+                  <div className="diag-icon-box">
+                    <OptIcon size={isRowStyle ? 18 : 22} />
                   </div>
-                  <ChevronRight size={16} color="var(--color-text-muted)" />
+                  <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <span className="diag-card-title">{opt.label}</span>
+                    {opt.desc && <span className="diag-card-desc">{opt.desc}</span>}
+                  </div>
+                  {isRowStyle && <ChevronRight size={16} color="var(--color-text-muted)" style={{ marginLeft: 'auto' }} />}
                 </button>
               );
             })}
@@ -167,31 +177,15 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
       ) : (
         // 결과 화면 (호버 줌 및 리프트 효과 탑재된 프리미엄 결과 카드)
         <div style={{ animation: 'fadeIn 0.4s ease' }}>
-          <div
-            className="glass-panel"
-            style={{
-              padding: '20px',
-              borderRadius: 'var(--radius-sm)',
-              marginBottom: '18px',
-              border: '1px solid var(--color-primary-dark)',
-              backgroundColor: 'var(--color-primary-light)',
-            }}
-          >
-            <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 700, letterSpacing: '1px' }}>
-              RECOMMENDED SOLUTION
+          <div className="diag-result-header">
+            <div className="diag-badge">
+              <Award size={12} />
+              Recommended Solution
+            </div>
+            <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 700, letterSpacing: '0.5px' }}>
+              고객님께 추천하는 1:1 맞춤형 케어
             </span>
-            <h4
-              style={{
-                fontSize: '17px',
-                fontWeight: 700,
-                color: 'var(--color-text-main)',
-                marginTop: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
-            >
-              <Award size={18} color="var(--color-text-main)" />
+            <h4 className="diag-result-title">
               {results[currentStep as string].title}
             </h4>
           </div>
@@ -200,28 +194,33 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
             style={{
               fontSize: '13.5px',
               color: 'var(--color-text-main)',
-              lineHeight: '1.65',
-              marginBottom: '16px',
-              fontWeight: 400
+              lineHeight: '1.7',
+              marginBottom: '20px',
+              fontWeight: 400,
+              padding: '0 4px'
             }}
           >
             {results[currentStep as string].desc}
           </p>
 
-          <p
+          <div
             style={{
               fontSize: '12px',
               color: 'var(--color-text-muted)',
-              backgroundColor: '#fff',
-              padding: '12px 14px',
-              borderRadius: 'var(--radius-sm)',
-              borderLeft: '3px solid var(--color-text-main)',
-              marginBottom: '24px',
-              lineHeight: '1.5'
+              backgroundColor: 'var(--color-primary-light)',
+              padding: '16px',
+              borderRadius: 'var(--radius-md)',
+              borderLeft: '4px solid var(--color-text-main)',
+              marginBottom: '28px',
+              lineHeight: '1.55',
+              boxShadow: 'var(--shadow-subtle)'
             }}
           >
-            💡 <strong>시술 핵심 가이드:</strong> {results[currentStep as string].tip}
-          </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '6px' }}>
+              <span>💡</span> 시술 핵심 가이드 & 팁
+            </div>
+            {results[currentStep as string].tip}
+          </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <button className="btn btn-primary btn-glow" onClick={onStartConsulting}>
@@ -243,14 +242,14 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
               카카오톡 실시간 빠른 상담
             </a>
 
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '20px' }}>
               <button
                 onClick={handlePrev}
                 style={{
                   background: 'none',
                   border: 'none',
                   color: 'var(--color-text-muted)',
-                  fontSize: '12px',
+                  fontSize: '12.5px',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -258,7 +257,7 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
                   fontWeight: 600
                 }}
               >
-                <ArrowLeft size={12} />
+                <ArrowLeft size={13} />
                 이전 질문으로
               </button>
 
@@ -268,7 +267,7 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
                   background: 'none',
                   border: 'none',
                   color: 'var(--color-text-muted)',
-                  fontSize: '12px',
+                  fontSize: '12.5px',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -276,7 +275,7 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
                   fontWeight: 600
                 }}
               >
-                <RotateCcw size={12} />
+                <RotateCcw size={13} />
                 처음부터 다시 하기
               </button>
             </div>
