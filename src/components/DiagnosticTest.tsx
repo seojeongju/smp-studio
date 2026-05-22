@@ -22,18 +22,18 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
   const steps: Record<number, Question> = {
     1: {
       id: 1,
-      text: '가장 고민이거나 관심 있는 시술 부위는 어디인가요?',
+      text: '가장 고민이거나 관심 있는 케어 부위는 어디인가요?',
       options: [
-        { label: '눈썹 반영구', desc: '결을 살린 자연 눈썹 및 섀도우 콤보', nextStep: 2, icon: Sparkles },
-        { label: '두피 SMP / 헤어라인', desc: '모근 표현 두피 미세 색소 요법', nextStep: 3, icon: Compass },
+        { label: '눈썹 디자인', desc: '결을 살린 자연 눈썹 및 섀도우 콤보', nextStep: 2, icon: Sparkles },
+        { label: '두피 케어 / 헤어라인', desc: '모근 표현 두피 미세 색소 요법', nextStep: 3, icon: Compass },
       ],
     },
     2: {
       id: 2,
-      text: '이전에 눈썹 문신/반영구 시술을 받으신 적이 있나요?',
+      text: '이전에 눈썹 디자인/브로우 메이크업 케어를 받으신 적이 있나요?',
       options: [
-        { label: '생애 첫 시술', desc: '반영구 흔적이 없는 깨끗한 피부 상태', nextStep: 'eyebrow_new', icon: UserCheck },
-        { label: '잔흔 보유 시술', desc: '붉거나 푸른 이전 시술 흔적 존재', nextStep: 'eyebrow_cover', icon: AlertTriangle },
+        { label: '생애 첫 케어', desc: '이전 디자인 흔적이 없는 깨끗한 피부 상태', nextStep: 'eyebrow_new', icon: UserCheck },
+        { label: '잔흔 보유 케어', desc: '붉거나 푸른 이전 디자인 흔적 존재', nextStep: 'eyebrow_cover', icon: AlertTriangle },
       ],
     },
     3: {
@@ -42,7 +42,7 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
       options: [
         { label: '정수리/가르마 숱 보강', desc: '비치는 두피의 미세 모근 밀도 향상', nextStep: 'smp_crown', icon: Sparkles },
         { label: 'M자 이마/헤어라인', desc: '헤어라인을 메워 작고 입체적인 이마 라인', nextStep: 'smp_hairline', icon: Compass },
-        { label: '삭발 SMP 전체 커버', desc: '민머리 스타일 및 대면적 토탈 디자인', nextStep: 'smp_full', icon: Flame },
+        { label: '삭발 스타일 전체 커버', desc: '민머리 스타일 및 대면적 토탈 디자인 케어', nextStep: 'smp_full', icon: Flame },
       ],
     },
   };
@@ -52,27 +52,27 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
     eyebrow_new: {
       title: '자연 눈썹 (엠보 결) 또는 콤보 눈썹',
       desc: '잔흔이 없는 깨끗한 피부 상태이므로, 본래 눈썹 결을 한 올 한 올 살리는 엠보 기법을 사용해 극도로 자연스러운 연출이 가능합니다. 이목구비를 조금 더 또렷하게 강조하고 싶으시다면 엠보 결 기법에 은은한 섀도우 음영을 한 층 더하는 콤보 기법을 강력 추천합니다.',
-      tip: '시술 시간은 약 1시간 30분 소요되며, 1차 시술 후 피부가 완벽히 재생되는 4~6주 사이에 리터치를 진행해 완성도를 최고로 높입니다.',
+      tip: '케어 시간은 약 1시간 30분 소요되며, 1차 케어 후 피부가 완벽히 재생되는 4~6주 사이에 리터치를 진행해 완성도를 최고로 높입니다.',
     },
     eyebrow_cover: {
-      title: '잔흔 중화 & 커버업 콤보 눈썹',
-      desc: '기존에 받은 반영구의 붉거나 붉푸른 잔흔이 피부에 다소 남아 있는 상태입니다. 이 경우에는 단순 자연눈썹 결 시술 시 잔흔이 제대로 커버되지 않아 이질감이 생길 수 있습니다. 정교한 보색 중화 과정을 거친 후, 밀도를 높여 덮어주는 수지(섀도우) 기법이 결합된 커버업 콤보 시술을 권장합니다.',
+      title: '잔흔 중화 & 커버업 콤보 디자인',
+      desc: '기존에 받은 디자인의 붉거나 붉푸른 잔흔이 피부에 다소 남아 있는 상태입니다. 이 경우에는 단순 자연눈썹 결 디자인 시 잔흔이 제대로 커버되지 않아 이질감이 생길 수 있습니다. 정교한 보색 중화 과정을 거친 후, 밀도를 높여 덮어주는 수지(섀도우) 기법이 결합된 커버업 콤보 케어를 권장합니다.',
       tip: '정확한 잔흔 상태 파악을 위해 하단의 [1:1 사진 견적 신청]을 통해 현재 눈썹 부위 사진을 전송해 주시면 더욱 정밀한 1:1 상담이 가능합니다.',
     },
     smp_crown: {
-      title: '정수리 / 가르마 미세 색소 요법 (SMP)',
-      desc: '모발 사이로 비치는 가르마와 하얗게 드러나는 두피 면적을 시각적으로 자연스럽게 차단하기 위해, 실제 모근 크기와 동일한 미세 도트를 입체감 있게 표현하는 시술입니다. 가르마 방향에 따라 자연스러운 도트 분산 기법으로 풍성한 머리숱을 연출합니다.',
-      tip: '피부 재생 주기에 맞춰 통상 3~4회 세션으로 점진적으로 채워드리며, 시술 직후 바로 정상적인 일상생활이 가능합니다.',
+      title: '정수리 / 가르마 미세 도트 커버',
+      desc: '모발 사이로 비치는 가르마와 하얗게 드러나는 두피 면적을 시각적으로 자연스럽게 차단하기 위해, 실제 모근 크기와 동일한 미세 도트를 입체감 있게 표현하는 디자인 케어입니다. 가르마 방향에 따라 자연스러운 도트 분산 기법으로 풍성한 머리숱을 연출합니다.',
+      tip: '피부 재생 주기에 맞춰 통상 3~4회 세션으로 점진적으로 채워드리며, 케어 직후 바로 정상적인 일상생활이 가능합니다.',
     },
     smp_hairline: {
-      title: '헤어라인 쉐이딩 SMP 시술',
-      desc: '양측 M자 부위나 불규칙하게 뒤로 밀려난 헤어라인을 메워 얼굴형을 작고 입체감 있게 잡아주는 정밀 시술입니다. 주변 모근 두께와 정밀하게 톤을 매칭하여 흐르듯 자연스러운 이마 라인을 완성합니다.',
-      tip: '헤어라인 부위는 두피 중에서도 표피층이 얇고 섬세하므로 깊이 조절에 능숙한 마이크로 디테일 시술이 필요합니다.',
+      title: '헤어라인 쉐이딩 커버 디자인',
+      desc: '양측 M자 부위나 불규칙하게 뒤로 밀려난 헤어라인을 메워 얼굴형을 작고 입체감 있게 잡아주는 정밀 디자인 케어입니다. 주변 모근 두께와 정밀하게 톤을 매칭하여 흐르듯 자연스러운 이마 라인을 완성합니다.',
+      tip: '헤어라인 부위는 두피 중에서도 표피층이 얇고 섬세하므로 깊이 조절에 능숙한 마이크로 디테일 케어가 필요합니다.',
     },
     smp_full: {
-      title: '디자인 민머리 삭발 SMP 전체 커버',
-      desc: '전반적인 탈모가 많이 진행되었거나 삭발 스타일을 상시 유지하시는 분들을 위한 토탈 디자인 시술입니다. 구강 구조, 이마 비율, 관자놀이 라인을 토대로 가상의 세련된 헤어라인 구획을 디자인하고 모근 밀도를 완성도 높게 채워 시각적인 젊음을 선사합니다.',
-      tip: '전체 커버는 광범위한 명도 대비 톤 매칭이 핵심이므로 보통 4~5회 이상의 정밀 레이어링 세션이 필요합니다.',
+      title: '디자인 민머리 삭발 전체 커버 디자인',
+      desc: '전반적인 탈모가 많이 진행되었거나 삭발 스타일을 상시 유지하시는 분들을 위한 토탈 디자인 케어 프로그램입니다. 구강 구조, 이마 비율, 관자놀이 라인을 토대로 가상의 세련된 헤어라인 구획을 디자인하고 모근 밀도를 완성도 높게 채워 시각적인 젊음을 선사합니다.',
+      tip: '전체 커버 디자인은 광범위한 명도 대비 톤 매칭이 핵심이므로 보통 4~5회 이상의 정밀 레이어링 세션이 필요합니다.',
     },
   };
 
@@ -103,7 +103,7 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <HelpCircle size={20} color="var(--color-text-main)" style={{ marginRight: '8px' }} />
-          <span style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.3px' }}>1분 맞춤 시술 자가진단</span>
+          <span style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.3px' }}>1분 맞춤 케어 자가진단</span>
         </div>
         <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-text-muted)' }}>
           {isResult ? '완료' : `${currentStep === 1 ? '1' : '2'} / 2단계`}
@@ -217,7 +217,7 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '6px' }}>
-              <span>💡</span> 시술 핵심 가이드 & 팁
+              <span>💡</span> 케어 핵심 가이드 & 팁
             </div>
             {results[currentStep as string].tip}
           </div>

@@ -92,24 +92,24 @@ function App() {
     {
       before: '/eyebrow-before.png',
       after: '/eyebrow-after.png',
-      title: '여성 자연눈썹 엠보 결 시술',
-      category: '자연눈썹',
+      title: '여성 자연 눈썹 디자인 (엠보 메이크업)',
+      category: '눈썹 디자인',
       duration: '90분 소요',
       point: '모근 결을 한 올씩 표현하는 엠보 기법으로 지극히 자연스러운 눈썹 결을 완성했습니다.',
     },
     {
       before: '/smp-before.png',
       after: '/smp-after.png',
-      title: '정수리 탈모 보강 SMP',
-      category: '두피 SMP',
+      title: '정수리 두피 커버 케어 (SMP)',
+      category: '두피 케어',
       duration: '세션당 120분',
       point: '실제 모근 크기와 동일한 초미세 도팅으로 두피의 빈틈을 자연스럽게 채웠습니다.',
     },
     {
       before: '/men-eyebrow-before.png',
       after: '/men-eyebrow-after.png',
-      title: '남성 골격 맞춤 자연눈썹',
-      category: '남자눈썹',
+      title: '남성 골격 맞춤 브로우 메이크업',
+      category: '브로우 메이크업',
       duration: '90분 소요',
       point: '두상 골격과 근육 움직임을 분석해 과장되지 않은 정돈된 남성 눈썹을 디자인했습니다.',
     },
@@ -130,15 +130,15 @@ function App() {
           
           <p className="desktop-brand-desc">
             본연의 아름다움을 정교하게 다듬어가는 여정,<br />
-            그레이스 샵 반영구 눈썹 & 두피 SMP 스튜디오입니다.
+            그레이스 샵 브로우 메이크업 & 두피 커버 케어 스튜디오입니다.
           </p>
           
           <div className="desktop-info-card glass-panel card hover-lift">
             <div className="desktop-info-item" style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: '12px' }}>
               <Award size={20} color="var(--color-text-muted)" style={{ marginTop: '2px', flexShrink: 0 }} />
               <div>
-                <span className="info-label">대표 시술 항목</span>
-                <span className="info-value">엠보 자연눈썹 · 콤보눈썹 · 두피 SMP · 헤어라인 밀도 보강</span>
+                <span className="info-label">대표 케어 프로그램</span>
+                <span className="info-value">엠보 눈썹 디자인 · 콤보 메이크업 · 두피 커버 · 헤어라인 쉐이딩</span>
               </div>
             </div>
             <div className="desktop-info-item" style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: '12px' }}>
@@ -434,7 +434,7 @@ function App() {
                   overflowWrap: 'break-word',
                 }}>
                   슬라이더 핸들을 좌우로 드래그해<br />
-                  시술 전후 차이를 직접 확인해 보세요.
+                  케어 전후 결과를 직접 확인해 보세요.
                 </p>
 
                 {/* 통계 뱃지 행 */}
@@ -442,7 +442,7 @@ function App() {
                   display: 'flex', gap: '12px', marginTop: '16px',
                 }}>
                   {[
-                    { label: '시술 케이스', value: '3+' },
+                    { label: '케어 건수', value: '3+' },
                     { label: '평균 만족도', value: '4.9★' },
                     { label: '리터치 포함', value: '전 항목' },
                   ].map((stat, i) => (
@@ -481,9 +481,9 @@ function App() {
           {/* === REVIEWS TAB === */}
           {activeTab === 'reviews' && (
             <div style={{ animation: 'fadeIn 0.3s ease' }}>
-              <h2 className="section-title">고객 시술 후기</h2>
+              <h2 className="section-title">고객 이용 후기</h2>
               <p className="section-subtitle">
-                실제 그레이스 샵 시술 고객분들이 남겨주신 솔직한 생생 리뷰 목록입니다.
+                그레이스 샵 케어 프로그램을 이용하신 고객분들의 생생한 리뷰 목록입니다.
               </p>
 
               <ReviewList
@@ -497,9 +497,9 @@ function App() {
           {/* === SERVICES TAB === */}
           {activeTab === 'services' && (
             <div style={{ animation: 'fadeIn 0.3s ease' }}>
-              <h2 className="section-title">시술 항목 및 가격</h2>
+              <h2 className="section-title">케어 프로그램 및 비용</h2>
               <p className="section-subtitle">
-                시술 부위와 종류별 소요시간 및 관리 상세 기준표입니다.
+                케어 부위와 종류별 소요 시간 및 관리 상세 기준표입니다.
               </p>
 
               <ServicesInfo onStartConsulting={openConsulting} />

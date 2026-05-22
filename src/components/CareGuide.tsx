@@ -25,17 +25,17 @@ export const CareGuide: React.FC = () => {
     {
       day: 'Day 1',
       shortDay: 'D1',
-      title: '시술 당일',
+      title: '케어 당일',
       subtitle: '착색 & 위생 집중 관리',
       emoji: '🛡️',
       color: '#6B8FAB',
       icon: ShieldCheck,
       checklist: [
-        { text: '시술 후 최소 24시간, 물이 절대 닿지 않도록 세안 금지', icon: Droplets },
+        { text: '케어 후 최소 24시간, 물이 절대 닿지 않도록 세안 금지', icon: Droplets },
         { text: '격한 운동·사우나·찜질방 등 땀 흘리는 활동 전면 금지', icon: Flame },
         { text: '진물이 날 경우 마른 면봉으로 가볍게 톡톡 닦기', icon: Scissors },
       ],
-      warning: '절대 손으로 시술 부위를 만지거나 긁어서 세균에 노출되지 않도록 주의하세요.',
+      warning: '절대 손으로 케어 부위를 만지거나 긁어서 세균에 노출되지 않도록 주의하세요.',
       tip: '당일은 색소가 피부에 자리잡는 가장 중요한 시간입니다.',
     },
     {
@@ -47,9 +47,9 @@ export const CareGuide: React.FC = () => {
       color: '#8B6F8F',
       icon: Sparkles,
       checklist: [
-        { text: '가벼운 물세안 가능 (시술 부위는 비비지 않고 폼클렌저 금지)', icon: Droplets },
+        { text: '가벼운 물세안 가능 (케어 부위는 비비지 않고 폼클렌저 금지)', icon: Droplets },
         { text: '재생 크림을 아침·저녁 쌀 한 톨 크기로 아주 얇게 펴 바르기', icon: Sparkles },
-        { text: '시술 부위가 일시적으로 진하고 어둡게 보이는 것은 정상', icon: CheckCircle2 },
+        { text: '케어 부위가 일시적으로 진하고 어둡게 보이는 것은 정상', icon: CheckCircle2 },
       ],
       warning: '음주와 흡연은 염증반응을 유도하고 재생을 더디게 합니다. 금주·금연 필수!',
       tip: '착색이 진해 보이는 건 정상입니다. 걱정하지 마세요.',
@@ -120,7 +120,7 @@ export const CareGuide: React.FC = () => {
           맞춤형 사후 관리 7일 플랜
         </h2>
         <p style={{ fontSize: '12px', opacity: 0.72, lineHeight: 1.6, fontWeight: 300, margin: '0 0 16px 0', wordBreak: 'keep-all', color: '#FAF6F0' }}>
-          반영구 시술의 착색률, 사후 관리가 <strong style={{ fontWeight: 700, opacity: 1 }}>80%</strong>를 결정합니다.
+          디자인 케어의 착색률, 사후 관리가 <strong style={{ fontWeight: 700, opacity: 1 }}>80%</strong>를 결정합니다.
           일자별 수칙을 반드시 지켜주세요.
         </p>
 
@@ -445,17 +445,17 @@ export const CareGuide: React.FC = () => {
           {
             icon: '☀️', color: '#C9932B',
             title: '자외선 차단 필수',
-            desc: '시술 후 4주간 시술 부위에 자외선이 직접 닿으면 색소가 변색될 수 있으니 선크림을 꼭 발라주세요.',
+            desc: '케어 후 4주간 케어 부위에 자외선이 직접 닿으면 색소가 변색될 수 있으니 선크림을 꼭 발라주세요.',
           },
           {
             icon: '💧', color: '#6B8FAB',
             title: '충분한 보습 유지',
-            desc: '건조한 피부는 색소 유지력을 낮춥니다. 시술 부위를 지속적으로 촉촉하게 유지해 주세요.',
+            desc: '건조한 피부는 색소 유지력을 낮춥니다. 케어 부위를 지속적으로 촉촉하게 유지해 주세요.',
           },
           {
             icon: '📅', color: '#556E5C',
             title: '4~6주 후 리터치 예약',
-            desc: '1차 시술 후 필연적으로 20~50% 색소가 빠집니다. 리터치에서 빈 부분을 채워 완성도를 높입니다.',
+            desc: '1차 케어 후 필연적으로 20~50% 색소가 빠집니다. 리터치에서 빈 부분을 채워 완성도를 높입니다.',
           },
         ].map((item, i) => (
           <div key={i} style={{

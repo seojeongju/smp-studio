@@ -32,9 +32,9 @@ export const ServicesInfo: React.FC<ServicesInfoProps> = ({ onStartConsulting })
   const services: ServiceCategory[] = [
     {
       id: 'eyebrow',
-      label: '눈썹 반영구',
+      label: '눈썹 디자인',
       emoji: '✦',
-      title: '눈썹 반영구 아트',
+      title: '눈썹 디자인 아트',
       subtitle: 'Eyebrow Artistry',
       icon: Smile,
       items: [
@@ -47,8 +47,8 @@ export const ServicesInfo: React.FC<ServicesInfoProps> = ({ onStartConsulting })
           tag: 'FIRST 추천',
           features: [
             '본래 눈썹 결을 한 올 한 올 미세하게 그리는 엠보 기법',
-            '눈썹 모가 얇거나 고르지 못한 첫 시술 고객에게 최적',
-            '1차 시술 후 6주 내 리터치 1회 무료 포함',
+            '눈썹 모가 얇거나 고르지 못한 첫 디자인 고객에게 최적',
+            '1차 케어 후 6주 내 리터치 1회 무료 포함',
           ],
         },
         {
@@ -59,9 +59,9 @@ export const ServicesInfo: React.FC<ServicesInfoProps> = ({ onStartConsulting })
           icon: Scissors,
           tag: '인기',
           features: [
-            '엠보 결 표현 + 그라데이션 섀도우 음영 병행 시술',
+            '엠보 결 표현 + 그라데이션 섀도우 음영 병행 케어',
             '메이크업을 한 듯 또렷하고 그윽한 눈매 연출',
-            '기존 문신 잔흔이 붉거나 푸르게 남은 분께 추천',
+            '기존 디자인 잔흔이 붉거나 푸르게 남은 분께 추천',
           ],
         },
         {
@@ -80,9 +80,9 @@ export const ServicesInfo: React.FC<ServicesInfoProps> = ({ onStartConsulting })
     },
     {
       id: 'smp',
-      label: '두피 SMP',
+      label: '두피 커버 디자인',
       emoji: '◎',
-      title: '두피 마이크로 피그멘테이션',
+      title: '두피 마이크로 디자인',
       subtitle: 'Scalp Micro Pigmentation',
       icon: Compass,
       items: [
@@ -93,11 +93,11 @@ export const ServicesInfo: React.FC<ServicesInfoProps> = ({ onStartConsulting })
           duration: '120분',
           sessions: '3 ~ 4회',
           icon: Sparkles,
-          tag: '분할 시술',
+          tag: '분할 케어',
           features: [
             '정수리·가르마 갈라짐 부위 빈틈 정밀 보강',
             '실제 모근 두께와 동일한 초미세 도팅 기법 적용',
-            '그라데이션 자연스러움을 위한 3~4회 분할 시술',
+            '그라데이션 자연스러움을 위한 3~4회 분할 케어',
           ],
         },
         {
@@ -285,7 +285,7 @@ export const ServicesInfo: React.FC<ServicesInfoProps> = ({ onStartConsulting })
                   borderRight: '1px solid var(--color-border)',
                 }}>
                   <div style={{ fontSize: '10px', color: 'var(--color-text-muted)', fontWeight: 600, marginBottom: '5px', letterSpacing: '0.5px' }}>
-                    💰 시술 가격
+                    💰 케어 비용
                   </div>
                   <div style={{
                     fontSize: item.priceType === 'fixed' ? '14px' : '12px',
@@ -340,7 +340,7 @@ export const ServicesInfo: React.FC<ServicesInfoProps> = ({ onStartConsulting })
               }}>
                 <ShieldCheck size={12} color="var(--color-text-muted)" />
                 <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 600 }}>
-                  1회용 멸균 도구 · 위생 안전 인증 시술
+                  1회용 멸균 도구 · 위생 안전 인증 완료
                 </span>
               </div>
 
@@ -400,7 +400,7 @@ export const ServicesInfo: React.FC<ServicesInfoProps> = ({ onStartConsulting })
                     e.currentTarget.style.color = 'var(--color-text-main)';
                   }}
                 >
-                  이 시술 1:1 상담 신청하기
+                  이 프로그램 1:1 상담 신청하기
                   <ChevronRight size={14} />
                 </button>
               </div>
@@ -435,7 +435,7 @@ export const ServicesInfo: React.FC<ServicesInfoProps> = ({ onStartConsulting })
           <AlertCircle size={24} color="var(--color-primary)" />
         </div>
         <p style={{ fontSize: '15.5px', fontWeight: 700, marginBottom: '8px', color: '#FAF6F0', letterSpacing: '-0.3px' }}>
-          정확한 시술 견적이 필요하신가요?
+          정확한 케어 견적이 필요하신가요?
         </p>
         <p style={{ fontSize: '12px', opacity: 0.75, marginBottom: '20px', lineHeight: '1.7', fontWeight: 300, color: '#FAF6F0' }}>
           두피 탈모 면적이나 눈썹 잔흔 진하기에 따라<br />

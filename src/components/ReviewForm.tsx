@@ -10,7 +10,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onClose, onSuccess }) =>
   const [name, setName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [rating, setRating] = useState<number>(5);
-  const [category, setCategory] = useState<string>('자연눈썹');
+  const [category, setCategory] = useState<string>('눈썹 디자인');
   const [comment, setComment] = useState<string>('');
 
   // 이미지 업로드 관련 상태
@@ -118,7 +118,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onClose, onSuccess }) =>
           }}
         >
           <h3 className="section-title" style={{ fontSize: '18px', marginBottom: 0 }}>
-            시술 리얼 후기 작성
+            고객 리얼 후기 작성
           </h3>
           <button
             onClick={onClose}
@@ -160,20 +160,20 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onClose, onSuccess }) =>
           {/* 시술 종류 & 평점 선택 */}
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <div className="form-group" style={{ flex: 1.2 }}>
-              <label className="form-label">받으신 시술 *</label>
+              <label className="form-label">이용하신 케어 *</label>
               <select
                 className="form-select"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               >
-                <option value="자연눈썹">자연눈썹</option>
-                <option value="남자눈썹">남자눈썹</option>
-                <option value="두피 SMP">두피 SMP</option>
-                <option value="헤어라인">헤어라인</option>
+                <option value="눈썹 디자인">눈썹 디자인</option>
+                <option value="브로우 메이크업">브로우 메이크업</option>
+                <option value="두피 케어">두피 케어</option>
+                <option value="헤어라인 디자인">헤어라인 디자인</option>
               </select>
             </div>
             <div className="form-group" style={{ flex: 1 }}>
-              <label className="form-label">시술 만족도 *</label>
+              <label className="form-label">케어 만족도 *</label>
               <div style={{ display: 'flex', gap: '4px', height: '42px', alignItems: 'center' }}>
                 {Array.from({ length: 5 }).map((_, i) => (
                   <button
@@ -198,7 +198,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onClose, onSuccess }) =>
             <label className="form-label">솔직한 후기를 남겨주세요 *</label>
             <textarea
               className="form-textarea"
-              placeholder="시술 결과, 원장님 친절도, 위생 관리 등 다른 고객들에게 도움 되는 솔직한 평가를 적어주세요. (최소 10자)"
+              placeholder="케어 결과, 원장님 친절도, 위생 관리 등 다른 고객들에게 도움 되는 솔직한 평가를 적어주세요. (최소 10자)"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               minLength={10}
@@ -208,7 +208,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onClose, onSuccess }) =>
 
           {/* 이미지 첨부 (2슬롯) */}
           <div className="form-group">
-            <label className="form-label">시술 후기 사진 첨부 (최대 2장)</label>
+            <label className="form-label">케어 후기 사진 첨부 (최대 2장)</label>
             <div style={{ display: 'flex', gap: '12px' }}>
               {/* 이미지 슬롯 1 */}
               <div

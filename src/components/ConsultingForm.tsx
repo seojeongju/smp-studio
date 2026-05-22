@@ -122,7 +122,7 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
           }}
         >
           <h3 className="section-title" style={{ fontSize: '18px', marginBottom: 0 }}>
-            1:1 시술상담 & 맞춤견적 신청
+            1:1 맞춤 케어 & 견적 상담 신청
           </h3>
           <button
             onClick={onClose}
@@ -225,7 +225,7 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
                   <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-text-main)' }}>카카오톡 3초 간편상담</span>
                 </div>
                 <p style={{ fontSize: '11px', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.4 }}>
-                  폼 작성이 번거로우시다면 카카오 채널로 바로 시술 문의가 가능합니다.
+                  폼 작성이 번거로우시다면 카카오 채널로 바로 케어 문의가 가능합니다.
                 </p>
               </div>
               <a
@@ -279,25 +279,25 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
               />
             </div>
 
-            {/* 시술 유형 선택 */}
+            {/* 케어 종류 선택 */}
             <div className="form-group">
-              <label className="form-label">관심 있는 시술 *</label>
+              <label className="form-label">관심 있는 케어 *</label>
               <select
                 className="form-select"
                 value={service}
                 onChange={(e) => setService(e.target.value)}
               >
-                <option value="자연눈썹">자연눈썹 (엠보 결 기법)</option>
-                <option value="남자눈썹">남자눈썹 (맞춤형 교정)</option>
-                <option value="두피 SMP">두피 SMP (가르마/정수리 밀도 보강)</option>
-                <option value="헤어라인">헤어라인 (이마 쉐이딩 SMP)</option>
+                <option value="눈썹 디자인">눈썹 디자인 (엠보 결 기법)</option>
+                <option value="브로우 메이크업">브로우 메이크업 (맞춤형 디자인)</option>
+                <option value="두피 케어">두피 케어 (가르마/정수리 밀도 보강)</option>
+                <option value="헤어라인 디자인">헤어라인 디자인 (이마 쉐이딩 디자인)</option>
               </select>
             </div>
 
             {/* 희망 날짜 & 시간 */}
             <div style={{ display: 'flex', gap: '12px' }}>
               <div className="form-group" style={{ flex: 1.2 }}>
-                <label className="form-label">희망 시술 날짜 *</label>
+                <label className="form-label">희망 예약 날짜 *</label>
                 <input
                   type="date"
                   className="form-input"
@@ -308,7 +308,7 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
                 />
               </div>
               <div className="form-group" style={{ flex: 0.8 }}>
-                <label className="form-label">희망 시술 시간 *</label>
+                <label className="form-label">희망 예약 시간 *</label>
                 <select
                   className="form-select"
                   value={time}
@@ -327,7 +327,7 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
 
             {/* 이전 잔흔 유무 */}
             <div className="form-group">
-              <label className="form-label">이전 시술 흔적(잔흔)이나 탈모 여부 *</label>
+              <label className="form-label">이전 디자인 흔적(잔흔)이나 탈모 여부 *</label>
               <div style={{ display: 'flex', gap: '16px', marginTop: '4px' }}>
                 <label style={{ display: 'inline-flex', alignItems: 'center', fontSize: '14px', cursor: 'pointer' }}>
                   <input
@@ -345,14 +345,14 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
                     onChange={() => setHasTattoo(false)}
                     style={{ marginRight: '6px', accentColor: 'var(--color-text-main)' }}
                   />
-                  없음 (완전 첫 시술)
+                  없음 (완전 첫 케어)
                 </label>
               </div>
             </div>
 
             {/* 잔흔/탈모 부위 사진 첨부 */}
             <div className="form-group">
-              <label className="form-label">시술 부위 사진 첨부 (선택)</label>
+              <label className="form-label">케어 부위 사진 첨부 (선택)</label>
               <div
                 style={{
                   position: 'relative',

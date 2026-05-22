@@ -13,7 +13,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab })
     { id: 'home' as TabType, label: '홈', icon: Home },
     { id: 'gallery' as TabType, label: '전후사진', icon: Image },
     { id: 'reviews' as TabType, label: '고객후기', icon: MessageSquare },
-    { id: 'services' as TabType, label: '시술안내', icon: BookOpen },
+    { id: 'services' as TabType, label: '케어안내', icon: BookOpen },
     { id: 'care' as TabType, label: '맞춤케어', icon: Compass },
   ];
 

@@ -119,7 +119,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
             scrollbarWidth: 'none',
           }}
         >
-          {['전체', '자연눈썹', '남자눈썹', '두피 SMP', '헤어라인'].map((cat) => (
+          {['전체', '눈썹 디자인', '브로우 메이크업', '두피 케어', '헤어라인 디자인'].map((cat) => (
             <button
               key={cat}
               onClick={() => setCategory(cat)}
@@ -177,7 +177,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
         }}
       >
         <p style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px' }}>
-          Beige Curve 시술을 받아보셨나요?
+          Beige Curve 디자인 케어를 받아보셨나요?
         </p>
         <p style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginBottom: '14px' }}>
           소중한 솔직 리뷰를 남겨주시면 리터치 할인 혜택을 드려요.

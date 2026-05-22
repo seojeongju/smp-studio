@@ -6,8 +6,8 @@ interface BeforeAfterSliderProps {
   afterImage: string;
   title: string;
   category: string;
-  duration?: string;    // 시술 소요시간 (선택)
-  point?: string;       // 핵심 시술 포인트 (선택)
+  duration?: string;    // 케어 소요시간 (선택)
+  point?: string;       // 핵심 디자인 포인트 (선택)
   index?: number;       // 순번 (1, 2, 3...)
 }
 
@@ -145,7 +145,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
         {/* Before 이미지 (배경) */}
         <img
           src={beforeImage}
-          alt="시술 전 Before"
+          alt="케어 전 Before"
           draggable={false}
           style={{
             position: 'absolute',
@@ -168,7 +168,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
         >
           <img
             src={afterImage}
-            alt="시술 후 After"
+            alt="디자인 후 After"
             draggable={false}
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
@@ -297,7 +297,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
         }}>
           <ShieldCheck size={12} color="var(--color-text-muted)" />
           <span style={{ fontSize: '10.5px', color: 'var(--color-text-muted)', fontWeight: 600 }}>
-            1회용 멸균 도구 시술
+            멸균 도구 안전 위생 준수
           </span>
         </div>
 
@@ -318,7 +318,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
         )}
       </div>
 
-      {/* ── 시술 포인트 (있을 때만 표시) ── */}
+      {/* ── 디자인 포인트 (있을 때만 표시) ── */}
       {point && (
         <div style={{
           padding: '11px 18px',
