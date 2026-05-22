@@ -90,8 +90,8 @@ function App() {
   // 비포애프터 포트폴리오 데이터 (duration·point 추가)
   const beforeAfterPortfolio = [
     {
-      before: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop',
-      after: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop',
+      before: '/eyebrow-before.png',
+      after: '/eyebrow-after.png',
       title: '여성 자연눈썹 엠보 결 시술',
       category: '자연눈썹',
       duration: '90분 소요',
