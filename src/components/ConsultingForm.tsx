@@ -134,7 +134,7 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
 
         {success ? (
           // 성공 시 노출할 안내 화면
-          <div style={{ textAlign: 'center', padding: '30px 10px', animation: 'fadeIn 0.3s ease' }}>
+          <div style={{ textAlign: 'center', padding: '10px 5px', animation: 'fadeIn 0.3s ease' }}>
             <div
               style={{
                 width: '60px',
@@ -153,22 +153,106 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
             <h4 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>상담 신청 접수 완료!</h4>
             <p
               style={{
-                fontSize: '13.5px',
+                fontSize: '13px',
                 color: 'var(--color-text-muted)',
                 lineHeight: '1.6',
-                marginBottom: '24px',
+                marginBottom: '20px',
               }}
             >
               입력해주신 연락처로 원장님이 직접 상태 검토 후<br />
               빠른 시간 내에 카카오톡 또는 문자로 연락해 드립니다.
             </p>
-            <button className="btn btn-primary" onClick={onClose}>
-              확인
+
+            {/* 성공 화면 내 카카오톡 채널 연동 카드 */}
+            <div style={{
+              backgroundColor: 'var(--color-bg)',
+              borderRadius: 'var(--radius-sm)',
+              padding: '16px 14px',
+              marginBottom: '24px',
+              border: '1px solid var(--color-border)',
+              textAlign: 'center',
+            }}>
+              <p style={{ fontSize: '11.5px', color: 'var(--color-text-muted)', margin: '0 0 12px 0', lineHeight: 1.5, fontWeight: 500 }}>
+                더 빠른 확답 또는 추가 상세 사진 발송은<br />
+                그레이스 샵 카카오톡 공식 채널을 이용해 주세요.
+              </p>
+              <a
+                href="https://pf.kakao.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  backgroundColor: '#FEE500',
+                  color: '#191919',
+                  textDecoration: 'none',
+                  padding: '10px 20px',
+                  borderRadius: '12px',
+                  fontSize: '12.5px',
+                  fontWeight: 700,
+                  width: '100%',
+                  boxShadow: '0 4px 12px rgba(254,229,0,0.15)',
+                }}
+              >
+                💬 그레이스 샵 카톡 추가 문의
+              </a>
+            </div>
+
+            <button className="btn btn-primary" onClick={onClose} style={{ width: '100%' }}>
+              확인 후 닫기
             </button>
           </div>
         ) : (
           // 일반 입력 폼 화면
-          <form onSubmit={handleSubmit}>
+          <>
+            {/* 카카오톡 3초 간편 상담 빠른 배너 */}
+            <div style={{
+              backgroundColor: '#FAF6E6',
+              border: '1px solid rgba(203, 185, 167, 0.4)',
+              borderRadius: 'var(--radius-sm)',
+              padding: '12px 14px',
+              marginBottom: '18px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+            }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+                  <span style={{ fontSize: '9px', fontWeight: 800, backgroundColor: 'var(--color-text-main)', color: 'var(--color-primary-light)', padding: '1.5px 5px', borderRadius: '3px', letterSpacing: '0.5px' }}>FAST</span>
+                  <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-text-main)' }}>카카오톡 3초 간편상담</span>
+                </div>
+                <p style={{ fontSize: '11px', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.4 }}>
+                  폼 작성이 번거로우시다면 카카오 채널로 바로 시술 문의가 가능합니다.
+                </p>
+              </div>
+              <a
+                href="https://pf.kakao.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '4px',
+                  backgroundColor: '#FEE500',
+                  color: '#191919',
+                  textDecoration: 'none',
+                  padding: '8px 12px',
+                  borderRadius: '10px',
+                  fontSize: '11.5px',
+                  fontWeight: 700,
+                  flexShrink: 0,
+                  boxShadow: '0 4px 10px rgba(254,229,0,0.18)',
+                }}
+              >
+                💬 상담 시작
+              </a>
+            </div>
+
+            <form onSubmit={handleSubmit}>
             {/* 이름 및 연락처 */}
             <div className="form-group">
               <label className="form-label">고객명 *</label>
@@ -347,6 +431,7 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
               </button>
             </div>
           </form>
+          </>
         )}
       </div>
     </div>
