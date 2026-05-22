@@ -8,17 +8,19 @@
   --color-bg: #FAF6F0;            /* Creamy Ivory Background */
   --color-card: #FFFFFF;          /* Pure White for Cards */
   --color-text-main: #3A322C;     /* Warm Deep Brown / Charcoal */
-  --color-text-muted: #8C7F72;   /* Earth Muted Grey */
+  --color-text-muted: #8C7F72;    /* Earth Muted Grey */
   --color-border: #EFEAE2;        /* Light Grey-Beige for dividers */
   --color-danger: #D9534F;        /* Soft Coral Red for warnings */
   
   --font-family: 'Outfit', 'Noto Sans KR', sans-serif;
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --shadow-subtle: 0 4px 20px rgba(58, 50, 44, 0.04);
-  --shadow-medium: 0 10px 30px rgba(58, 50, 44, 0.08);
+  --transition-spring: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15); /* 부드러운 팅김 피드백 효과 */
+  --shadow-subtle: 0 4px 24px rgba(58, 50, 44, 0.03);
+  --shadow-medium: 0 12px 36px rgba(58, 50, 44, 0.06);
+  --shadow-hover: 0 20px 48px rgba(58, 50, 44, 0.12); /* 카드가 떠오를 때의 풍성한 그림자 */
   --radius-lg: 24px;
   --radius-md: 16px;
-  --radius-sm: 10px;
+  --radius-sm: 12px;
 }
 
 /* 초기화 및 모바일 웹앱 기초 스타일 */
@@ -360,7 +362,89 @@ body {
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: var(--shadow-subtle);
-  border: 1px solid rgba(230, 213, 195, 0.2);
+  border: 1px solid rgba(230, 213, 195, 0.15);
+  transition: var(--transition-spring);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 마우스 호버 시 위로 뜨고 입체적인 섀도우를 주는 고급 효과 */
+.card.hover-lift {
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .card.hover-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--color-primary-dark);
+  }
+}
+.card.hover-lift:active {
+  transform: scale(0.97) translateY(-2px);
+  box-shadow: var(--shadow-subtle);
+}
+
+/* 프리미엄 글래스모피즘 */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: var(--shadow-subtle);
+}
+
+/* 히어로 줌인 모션 컨테이너 */
+.hero-zoom-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  transition: var(--transition-spring);
+  box-shadow: var(--shadow-medium);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-zoom-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 1;
+}
+
+.hero-zoom-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(58, 50, 44, 0.2) 0%, rgba(58, 50, 44, 0.85) 100%);
+  z-index: 2;
+}
+
+.hero-zoom-content {
+  position: relative;
+  z-index: 3;
+  padding: 32px 24px;
+  color: #FAF6F0;
+}
+
+@media (hover: hover) {
+  .hero-zoom-card:hover .hero-zoom-bg {
+    transform: scale(1.06);
+  }
+  .hero-zoom-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+  }
 }
 
 /* 헤드라인 타이틀 */
@@ -369,6 +453,7 @@ body {
   font-weight: 700;
   color: var(--color-text-main);
   margin-bottom: 8px;
+  letter-spacing: -0.5px;
 }
 
 .section-subtitle {
@@ -385,31 +470,50 @@ body {
   width: 100%;
   padding: 14px 20px;
   border-radius: var(--radius-md);
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 600;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: var(--transition-smooth);
+  transition: var(--transition-spring);
   font-family: var(--font-family);
+  gap: 8px;
 }
 
 .btn-primary {
   background-color: var(--color-text-main);
   color: var(--color-primary-light);
+  box-shadow: 0 4px 14px rgba(58, 50, 44, 0.15);
+}
+
+@media (hover: hover) {
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(58, 50, 44, 0.25);
+    background-color: #2b2520;
+  }
 }
 
 .btn-primary:active {
-  transform: scale(0.98);
-  opacity: 0.9;
+  transform: scale(0.96) translateY(0);
+  box-shadow: 0 2px 8px rgba(58, 50, 44, 0.15);
 }
 
 .btn-secondary {
   background-color: var(--color-primary-light);
   color: var(--color-text-main);
+  border: 1px solid rgba(230, 213, 195, 0.4);
+}
+
+@media (hover: hover) {
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+    background-color: #ede2d5;
+    border-color: var(--color-primary-dark);
+  }
 }
 
 .btn-secondary:active {
-  transform: scale(0.98);
+  transform: scale(0.96) translateY(0);
 }
 
 /* 모달 바텀 시트 (Bottom Sheet) */

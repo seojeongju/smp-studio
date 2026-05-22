@@ -1,44 +1,47 @@
 import React, { useState } from 'react';
-import { HelpCircle, ChevronRight, RotateCcw, MessageCircle } from 'lucide-react';
+import { HelpCircle, ChevronRight, RotateCcw, MessageCircle, Sparkles, Compass, Award, AlertTriangle, UserCheck, Flame, ArrowLeft } from 'lucide-react';
+
+interface Option {
+  label: string;
+  nextStep: number | string;
+  icon: React.ComponentType<{ size?: number; className?: string; color?: string }>;
+}
 
 interface Question {
   id: number;
   text: string;
-  options: {
-    label: string;
-    nextStep: number | string; // 다음 질문 ID 혹은 결과 Key
-  }[];
+  options: Option[];
 }
 
 export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ onStartConsulting }) => {
   const [currentStep, setCurrentStep] = useState<number | string>(1);
   const [history, setHistory] = useState<(number | string)[]>([]);
 
-  // 자가진단 흐름 데이터 정의
+  // 자가진단 흐름 데이터 및 아이콘 매핑
   const steps: Record<number, Question> = {
     1: {
       id: 1,
       text: '가장 고민이거나 관심 있는 시술 부위는 어디인가요?',
       options: [
-        { label: '✨ 눈썹 반영구 시술', nextStep: 2 },
-        { label: '💇 두피 SMP / 헤어라인 커버', nextStep: 3 },
+        { label: '눈썹 반영구 시술', nextStep: 2, icon: Sparkles },
+        { label: '두피 SMP / 헤어라인 커버', nextStep: 3, icon: Compass },
       ],
     },
     2: {
       id: 2,
       text: '이전에 눈썹 문신/반영구 시술을 받으신 적이 있나요?',
       options: [
-        { label: '처음 받는 첫 시술입니다.', nextStep: 'eyebrow_new' },
-        { label: '붉거나 푸른 잔흔이 남아 있습니다.', nextStep: 'eyebrow_cover' },
+        { label: '처음 받는 첫 시술입니다.', nextStep: 'eyebrow_new', icon: UserCheck },
+        { label: '붉거나 푸른 잔흔이 남아 있습니다.', nextStep: 'eyebrow_cover', icon: AlertTriangle },
       ],
     },
     3: {
       id: 3,
       text: '어떤 형태의 두피 탈모/헤어라인 고민을 가지고 계시나요?',
       options: [
-        { label: '정수리 또는 가르마 갈라짐 숱 보강', nextStep: 'smp_crown' },
-        { label: 'M자 이마 보강 및 헤어라인 정돈', nextStep: 'smp_hairline' },
-        { label: '민머리/삭발 두피 전체 커버 시술', nextStep: 'smp_full' },
+        { label: '정수리 또는 가르마 갈라짐 숱 보강', nextStep: 'smp_crown', icon: Sparkles },
+        { label: 'M자 이마 보강 및 헤어라인 정돈', nextStep: 'smp_hairline', icon: Compass },
+        { label: '민머리/삭발 두피 전체 커버 시술', nextStep: 'smp_full', icon: Flame },
       ],
     },
   };
@@ -47,28 +50,28 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
   const results: Record<string, { title: string; desc: string; tip: string }> = {
     eyebrow_new: {
       title: '자연 눈썹 (엠보 결) 또는 콤보 눈썹',
-      desc: '잔흔이 없는 최상의 상태로, 본래 눈썹 결을 한 올 한 올 살리는 엠보 기법을 사용해 극도로 자연스러운 연출이 가능합니다. 이목구비를 조금 더 또렷하게 만들고 싶다면 결 표현에 섀도우 음영을 더하는 콤보 기법을 추천합니다.',
-      tip: '시술 시간은 약 1시간 30분 소요되며, 1차 시술 후 4~6주 사이에 리터치를 통해 완성도를 높입니다.',
+      desc: '잔흔이 없는 깨끗한 피부 상태이므로, 본래 눈썹 결을 한 올 한 올 살리는 엠보 기법을 사용해 극도로 자연스러운 연출이 가능합니다. 이목구비를 조금 더 또렷하게 강조하고 싶으시다면 엠보 결 기법에 은은한 섀도우 음영을 한 층 더하는 콤보 기법을 강력 추천합니다.',
+      tip: '시술 시간은 약 1시간 30분 소요되며, 1차 시술 후 피부가 완벽히 재생되는 4~6주 사이에 리터치를 진행해 완성도를 최고로 높입니다.',
     },
     eyebrow_cover: {
       title: '잔흔 중화 & 커버업 콤보 눈썹',
-      desc: '기존의 붉거나 붉푸른 반영구 잔흔이 남아 있는 상태입니다. 이 경우에는 단순 엠보 결 시술을 하면 잔흔이 가려지지 않아 어색할 수 있습니다. 보색 중화 시술을 거친 후, 밀도를 높여 덮어주는 수지(섀도우) 기법이 결합된 커버업 콤보 시술을 권장합니다.',
-      tip: '정확한 잔흔 상태 파악을 위해 1:1 맞춤 견적 신청을 통해 잔흔 사진을 첨부해 주시면 더욱 정밀한 맞춤 상담이 가능합니다.',
+      desc: '기존에 받은 반영구의 붉거나 붉푸른 잔흔이 피부에 다소 남아 있는 상태입니다. 이 경우에는 단순 자연눈썹 결 시술 시 잔흔이 제대로 커버되지 않아 이질감이 생길 수 있습니다. 정교한 보색 중화 과정을 거친 후, 밀도를 높여 덮어주는 수지(섀도우) 기법이 결합된 커버업 콤보 시술을 권장합니다.',
+      tip: '정확한 잔흔 상태 파악을 위해 하단의 [1:1 사진 견적 신청]을 통해 현재 눈썹 부위 사진을 전송해 주시면 더욱 정밀한 1:1 상담이 가능합니다.',
     },
     smp_crown: {
       title: '정수리 / 가르마 미세 색소 요법 (SMP)',
-      desc: '머리카락 사이로 비치는 하얀 두피 면적을 줄이기 위해 실제 모근 크기의 미세한 도트를 밀도 높게 표현하는 시술입니다. 가르마 방향이나 정수리 탈모 부위에 음영감을 주어 머리숱이 시각적으로 풍성해 보이는 효과가 탁월합니다.',
-      tip: '진행 정도에 따라 통상 3~4회 차 나누어 시술이 진행되며, 일상생활이 바로 가능합니다.',
+      desc: '모발 사이로 비치는 가르마와 하얗게 드러나는 두피 면적을 시각적으로 자연스럽게 차단하기 위해, 실제 모근 크기와 동일한 미세 도트를 입체감 있게 표현하는 시술입니다. 가르마 방향에 따라 자연스러운 도트 분산 기법으로 풍성한 머리숱을 연출합니다.',
+      tip: '피부 재생 주기에 맞춰 통상 3~4회 세션으로 점진적으로 채워드리며, 시술 직후 바로 정상적인 일상생활이 가능합니다.',
     },
     smp_hairline: {
       title: '헤어라인 쉐이딩 SMP 시술',
-      desc: 'M자 이마 양 끝이나 불규칙한 헤어라인을 채워 얼굴형을 작고 갸름하게 잡아주는 시술입니다. 모근 결 방향에 맞춘 자연스러운 도트 분산 기법으로 이마 라인이 둥글고 자연스럽게 보이도록 연출합니다.',
-      tip: '헤어라인 부위는 두피 중에서도 피부가 얇아 고도의 조절이 필요하므로 숙련된 마이크로 도팅이 필수적입니다.',
+      desc: '양측 M자 부위나 불규칙하게 뒤로 밀려난 헤어라인을 메워 얼굴형을 작고 입체감 있게 잡아주는 정밀 시술입니다. 주변 모근 두께와 정밀하게 톤을 매칭하여 흐르듯 자연스러운 이마 라인을 완성합니다.',
+      tip: '헤어라인 부위는 두피 중에서도 표피층이 얇고 섬세하므로 깊이 조절에 능숙한 마이크로 디테일 시술이 필요합니다.',
     },
     smp_full: {
-      title: '디자인 민머리 삭발 SMP 커버',
-      desc: '머리 전체에 모발이 없거나 삭발 스타일을 유지하시는 분들을 위한 토탈 디자인 시술입니다. 구강 구조, 이마 라인, 관자놀이 밸런스에 맞춰 가상 헤어라인 구획을 디자인하고 모근 밀도를 전반적으로 입체감 있게 채워 드립니다.',
-      tip: '전체 커버는 정교한 톤 매칭이 필요하므로 시술 횟수가 4~5회 이상 필요할 수 있습니다.',
+      title: '디자인 민머리 삭발 SMP 전체 커버',
+      desc: '전반적인 탈모가 많이 진행되었거나 삭발 스타일을 상시 유지하시는 분들을 위한 토탈 디자인 시술입니다. 구강 구조, 이마 비율, 관자놀이 라인을 토대로 가상의 세련된 헤어라인 구획을 디자인하고 모근 밀도를 완성도 높게 채워 시각적인 젊음을 선사합니다.',
+      tip: '전체 커버는 광범위한 명도 대비 톤 매칭이 핵심이므로 보통 4~5회 이상의 정밀 레이어링 세션이 필요합니다.',
     },
   };
 
@@ -93,10 +96,10 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
   const isResult = typeof currentStep === 'string';
 
   return (
-    <div className="card" style={{ border: '1px solid var(--color-primary)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-        <HelpCircle size={20} color="var(--color-text-muted)" style={{ marginRight: '8px' }} />
-        <span style={{ fontSize: '15px', fontWeight: 700 }}>1분 맞춤 시술 자가진단</span>
+    <div className="card" style={{ border: '1px solid var(--color-primary-dark)', padding: '24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <HelpCircle size={20} color="var(--color-text-main)" style={{ marginRight: '8px' }} />
+        <span style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.3px' }}>1분 맞춤 시술 자가진단</span>
       </div>
 
       {!isResult ? (
@@ -104,35 +107,41 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
         <div>
           <p
             style={{
-              fontSize: '16px',
-              fontWeight: 600,
+              fontSize: '15.5px',
+              fontWeight: 700,
               color: 'var(--color-text-main)',
               marginBottom: '20px',
-              lineHeight: '1.4',
+              lineHeight: '1.45',
             }}
           >
             Q. {steps[currentStep as number].text}
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {steps[currentStep as number].options.map((opt, i) => (
-              <button
-                key={i}
-                className="btn btn-secondary"
-                style={{
-                  justifyContent: 'space-between',
-                  textAlign: 'left',
-                  padding: '16px 20px',
-                  borderRadius: 'var(--radius-sm)',
-                  backgroundColor: 'var(--color-card)',
-                  border: '1px solid var(--color-border)',
-                }}
-                onClick={() => handleOptionClick(opt.nextStep)}
-              >
-                <span>{opt.label}</span>
-                <ChevronRight size={16} />
-              </button>
-            ))}
+            {steps[currentStep as number].options.map((opt, i) => {
+              const OptIcon = opt.icon;
+              return (
+                <button
+                  key={i}
+                  className="btn btn-secondary hover-lift"
+                  style={{
+                    justifyContent: 'space-between',
+                    textAlign: 'left',
+                    padding: '16px 20px',
+                    borderRadius: 'var(--radius-sm)',
+                    backgroundColor: 'var(--color-card)',
+                    border: '1px solid var(--color-border)',
+                  }}
+                  onClick={() => handleOptionClick(opt.nextStep)}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <OptIcon size={16} color="var(--color-text-muted)" />
+                    <span style={{ fontSize: '13.5px', fontWeight: 600 }}>{opt.label}</span>
+                  </div>
+                  <ChevronRight size={16} color="var(--color-text-muted)" />
+                </button>
+              );
+            })}
           </div>
 
           {history.length > 0 && (
@@ -143,49 +152,57 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
                 border: 'none',
                 color: 'var(--color-text-muted)',
                 fontSize: '12px',
-                marginTop: '15px',
+                marginTop: '16px',
                 cursor: 'pointer',
-                display: 'flex',
+                display: 'inline-flex',
                 alignItems: 'center',
                 gap: '4px',
+                fontWeight: 600,
               }}
             >
-              ← 이전 질문으로
+              <ArrowLeft size={13} /> 이전 질문으로
             </button>
           )}
         </div>
       ) : (
-        // 결과 화면
+        // 결과 화면 (호버 줌 및 리프트 효과 탑재된 프리미엄 결과 카드)
         <div style={{ animation: 'fadeIn 0.4s ease' }}>
           <div
+            className="glass-panel"
             style={{
-              backgroundColor: 'var(--color-primary-light)',
-              padding: '16px',
+              padding: '20px',
               borderRadius: 'var(--radius-sm)',
-              marginBottom: '16px',
+              marginBottom: '18px',
+              border: '1px solid var(--color-primary-dark)',
+              backgroundColor: 'var(--color-primary-light)',
             }}
           >
-            <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: 600 }}>
-              추천 시술 솔루션
+            <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 700, letterSpacing: '1px' }}>
+              RECOMMENDED SOLUTION
             </span>
             <h4
               style={{
-                fontSize: '18px',
+                fontSize: '17px',
                 fontWeight: 700,
                 color: 'var(--color-text-main)',
-                marginTop: '4px',
+                marginTop: '6px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
               }}
             >
+              <Award size={18} color="var(--color-text-main)" />
               {results[currentStep as string].title}
             </h4>
           </div>
 
           <p
             style={{
-              fontSize: '14px',
+              fontSize: '13.5px',
               color: 'var(--color-text-main)',
-              lineHeight: '1.6',
-              marginBottom: '14px',
+              lineHeight: '1.65',
+              marginBottom: '16px',
+              fontWeight: 400
             }}
           >
             {results[currentStep as string].desc}
@@ -196,32 +213,33 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
               fontSize: '12px',
               color: 'var(--color-text-muted)',
               backgroundColor: '#fff',
-              padding: '10px 12px',
-              borderRadius: '8px',
-              borderLeft: '3px solid var(--color-primary-dark)',
-              marginBottom: '20px',
+              padding: '12px 14px',
+              borderRadius: 'var(--radius-sm)',
+              borderLeft: '3px solid var(--color-text-main)',
+              marginBottom: '24px',
+              lineHeight: '1.5'
             }}
           >
-            💡 <strong>시술 가이드:</strong> {results[currentStep as string].tip}
+            💡 <strong>시술 핵심 가이드:</strong> {results[currentStep as string].tip}
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <button className="btn btn-primary" onClick={onStartConsulting}>
+            <button className="btn btn-primary btn-glow" onClick={onStartConsulting}>
               💬 1:1 맞춤 견적 & 사진 상담받기
             </button>
 
             <a
-              href="https://pf.kakao.com" // 예시 링크
+              href="https://pf.kakao.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn"
+              className="btn btn-glow"
               style={{
                 backgroundColor: '#FEE500',
                 color: '#191919',
                 textDecoration: 'none',
               }}
             >
-              <MessageCircle size={18} style={{ marginRight: '6px' }} />
+              <MessageCircle size={18} />
               카카오톡 실시간 빠른 상담
             </a>
 
@@ -233,11 +251,12 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
                 color: 'var(--color-text-muted)',
                 fontSize: '12px',
                 alignSelf: 'center',
-                marginTop: '10px',
+                marginTop: '12px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px',
+                fontWeight: 600
               }}
             >
               <RotateCcw size={12} />

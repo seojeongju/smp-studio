@@ -7,7 +7,7 @@ import { ReviewList } from './components/ReviewList';
 import { ReviewForm } from './components/ReviewForm';
 import { ConsultingForm } from './components/ConsultingForm';
 import { ServicesInfo } from './components/ServicesInfo';
-import { Calendar, PhoneCall, Sparkles, ShieldCheck } from 'lucide-react';
+import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award } from 'lucide-react';
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -50,46 +50,65 @@ function App() {
       {/* 데스크톱 전용 브랜드 사이드 패널 (1024px 이상 대화면에서만 노출됨) */}
       <aside className="desktop-brand-panel">
         <div className="desktop-brand-content">
-          <img src="/logo.png" alt="Grace Shop Premium Logo" className="desktop-brand-logo" />
-          <h2 className="desktop-brand-title">Grace Shop</h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <img src="/logo.png" alt="Grace Shop Premium Logo" className="desktop-brand-logo" />
+            <div>
+              <h2 className="desktop-brand-title" style={{ margin: 0, paddingBottom: '4px' }}>Grace Shop</h2>
+              <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 700, letterSpacing: '1px' }}>PREMIUM BEAUTY STUDIO</span>
+            </div>
+          </div>
+          
           <p className="desktop-brand-desc">
-            본연의 아름다움을 찾아가는 여정,<br />
+            본연의 아름다움을 정교하게 다듬어가는 여정,<br />
             그레이스 샵 반영구 눈썹 & 두피 SMP 스튜디오입니다.
           </p>
           
-          <div className="desktop-info-card">
-            <div className="desktop-info-item">
-              <span className="info-label">시술 항목</span>
-              <span className="info-value">엠보 자연눈썹 · 콤보눈썹 · 두피 SMP · 헤어라인 보강</span>
+          <div className="desktop-info-card glass-panel card hover-lift">
+            <div className="desktop-info-item" style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: '12px' }}>
+              <Award size={20} color="var(--color-text-muted)" style={{ marginTop: '2px', flexShrink: 0 }} />
+              <div>
+                <span className="info-label">대표 시술 항목</span>
+                <span className="info-value">엠보 자연눈썹 · 콤보눈썹 · 두피 SMP · 헤어라인 밀도 보강</span>
+              </div>
             </div>
-            <div className="desktop-info-item">
-              <span className="info-label">예약 안내</span>
-              <span className="info-value">100% 프라이빗 1:1 사전 예약제 운영</span>
+            <div className="desktop-info-item" style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: '12px' }}>
+              <Clock size={20} color="var(--color-text-muted)" style={{ marginTop: '2px', flexShrink: 0 }} />
+              <div>
+                <span className="info-label">예약제 운영 방식</span>
+                <span className="info-value">100% 프라이빗 1:1 사전 예약제 운영</span>
+              </div>
             </div>
-            <div className="desktop-info-item">
-              <span className="info-label">카카오톡 채널</span>
-              <span className="info-value">@그레이스샵_반영구</span>
+            <div className="desktop-info-item" style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: '12px' }}>
+              <MapPin size={20} color="var(--color-text-muted)" style={{ marginTop: '2px', flexShrink: 0 }} />
+              <div>
+                <span className="info-label">스튜디오 주소</span>
+                <span className="info-value">서울 마포구 공덕역 도보 3분 거리 (무료 주차 제공)</span>
+              </div>
             </div>
           </div>
 
           <div className="desktop-qr-section">
-            <p className="qr-title">간편 모바일 예약 및 문의</p>
+            <p className="qr-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <MessageSquare size={16} /> 실시간 간편 예약 및 문의
+            </p>
             <div className="qr-links">
               <a
                 href="https://booking.naver.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="qr-btn naver"
+                style={{ gap: '8px', boxShadow: '0 4px 12px rgba(3,199,90,0.1)' }}
               >
-                네이버 실시간 예약 바로가기
+                <Calendar size={16} /> 네이버 실시간 예약 바로가기
               </a>
               <a
                 href="https://pf.kakao.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="qr-btn kakao"
+                style={{ gap: '8px', boxShadow: '0 4px 12px rgba(254,229,0,0.15)' }}
               >
-                카카오톡 1:1 채팅 문의
+                <MessageSquare size={16} /> 카카오톡 1:1 채팅 문의
               </a>
             </div>
           </div>
@@ -140,59 +159,54 @@ function App() {
           {/* === HOME TAB === */}
           {activeTab === 'home' && (
             <div style={{ animation: 'fadeIn 0.3s ease' }}>
-              {/* 감각적인 무드 히어로 카드 */}
-              <div
-                className="card"
-                style={{
-                  backgroundImage: `linear-gradient(rgba(58, 50, 44, 0.4), rgba(58, 50, 44, 0.75)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=600&auto=format&fit=crop')`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  color: '#FAF6F0',
-                  padding: '40px 24px',
-                  borderRadius: 'var(--radius-lg)',
-                  minHeight: '200px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'flex-end',
-                  marginBottom: '20px',
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: '11px',
-                    backgroundColor: 'rgba(230, 213, 195, 0.25)',
-                    padding: '2px 8px',
-                    borderRadius: '12px',
-                    alignSelf: 'flex-start',
-                    fontWeight: 600,
-                    marginBottom: '8px',
-                    letterSpacing: '1px',
-                    backdropFilter: 'blur(4px)',
-                  }}
-                >
-                  PREMIUM ARTISTRY
-                </span>
-                <h2 style={{ fontSize: '22px', fontWeight: 700, lineHeight: '1.3', marginBottom: '8px' }}>
-                  우아함과 자연스러움의 시작<br />그레이스 샵 반영구 & SMP 스튜디오
-                </h2>
-                <p style={{ fontSize: '12px', opacity: 0.85, lineHeight: '1.5' }}>
-                  인위적인 인위성을 배제하고 본래의 모근 결에 자연스럽게 톤을 덧입혀 가장 조화로운 결과를 선사합니다.
-                </p>
+              {/* 감각적인 무드 히어로 카드 (호버 줌인 효과 적용) */}
+              <div className="hero-zoom-card">
+                <div 
+                  className="hero-zoom-bg" 
+                  style={{ backgroundImage: `url('https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=600&auto=format&fit=crop')` }}
+                />
+                <div className="hero-zoom-overlay" />
+                <div className="hero-zoom-content">
+                  <span
+                    style={{
+                      fontSize: '10px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                      border: '1px solid rgba(255, 255, 255, 0.3)',
+                      padding: '3px 10px',
+                      borderRadius: '20px',
+                      alignSelf: 'flex-start',
+                      fontWeight: 700,
+                      marginBottom: '10px',
+                      letterSpacing: '1.5px',
+                      backdropFilter: 'blur(4px)',
+                      display: 'inline-block',
+                      textTransform: 'uppercase'
+                    }}
+                  >
+                    Premium Artistry
+                  </span>
+                  <h2 style={{ fontSize: '23px', fontWeight: 700, lineHeight: '1.35', marginBottom: '8px', letterSpacing: '-0.5px' }}>
+                    우아함과 자연스러움의 시작<br />그레이스 샵 스튜디오
+                  </h2>
+                  <p style={{ fontSize: '12px', opacity: 0.9, lineHeight: '1.6', fontWeight: 300 }}>
+                    인위적인 느낌을 배제하고, 고객 고유의 모근 결에 최적화된 톤을 한 올 한 올 자연스럽게 디자인해 드립니다.
+                  </p>
+                </div>
               </div>
 
-              {/* 브랜드 핵심 가치 */}
+              {/* 브랜드 핵심 가치 (호버 리프트 적용) */}
               <div
                 style={{
                   display: 'flex',
                   gap: '12px',
-                  marginBottom: '24px',
+                  marginBottom: '20px',
                 }}
               >
                 <div
-                  className="card"
+                  className="card hover-lift"
                   style={{
                     flex: 1,
-                    padding: '16px',
+                    padding: '20px 16px',
                     marginBottom: 0,
                     display: 'flex',
                     flexDirection: 'column',
@@ -200,17 +214,29 @@ function App() {
                     textAlign: 'center',
                   }}
                 >
-                  <ShieldCheck size={24} color="var(--color-text-muted)" style={{ marginBottom: '8px' }} />
-                  <span style={{ fontSize: '13px', fontWeight: 700, marginBottom: '2px' }}>철저한 1회용 위생</span>
-                  <span style={{ fontSize: '10px', color: 'var(--color-text-muted)' }}>
-                    안전 멸균 니들 사용 및 직후 즉시 폐기 원칙
+                  <div style={{
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                    backgroundColor: 'var(--color-primary-light)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '10px'
+                  }}>
+                    <ShieldCheck size={20} color="var(--color-text-main)" />
+                  </div>
+                  <span style={{ fontSize: '13px', fontWeight: 700, marginBottom: '4px', color: 'var(--color-text-main)' }}>1회용 위생 도구</span>
+                  <span style={{ fontSize: '10.5px', color: 'var(--color-text-muted)', lineHeight: '1.4' }}>
+                    멸균 니들 100% 사용 직후 즉시 폐기 원칙 준수
                   </span>
                 </div>
+                
                 <div
-                  className="card"
+                  className="card hover-lift"
                   style={{
                     flex: 1,
-                    padding: '16px',
+                    padding: '20px 16px',
                     marginBottom: 0,
                     display: 'flex',
                     flexDirection: 'column',
@@ -218,10 +244,21 @@ function App() {
                     textAlign: 'center',
                   }}
                 >
-                  <Sparkles size={24} color="var(--color-text-muted)" style={{ marginBottom: '8px' }} />
-                  <span style={{ fontSize: '13px', fontWeight: 700, marginBottom: '2px' }}>천연 무독성 색소</span>
-                  <span style={{ fontSize: '10px', color: 'var(--color-text-muted)' }}>
-                    자가검사번호 획득 정품 색소만 블렌딩 적용
+                  <div style={{
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                    backgroundColor: 'var(--color-primary-light)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '10px'
+                  }}>
+                    <Sparkles size={20} color="var(--color-text-main)" />
+                  </div>
+                  <span style={{ fontSize: '13px', fontWeight: 700, marginBottom: '4px', color: 'var(--color-text-main)' }}>정품 천연 색소</span>
+                  <span style={{ fontSize: '10.5px', color: 'var(--color-text-muted)', lineHeight: '1.4' }}>
+                    안전성 승인 획득한 고급 원료 커스텀 블렌딩
                   </span>
                 </div>
               </div>
@@ -239,13 +276,13 @@ function App() {
                 }}
               >
                 <a
-                  href="https://booking.naver.com" // 임시 네이버 예약
+                  href="https://booking.naver.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-primary"
-                  style={{ textDecoration: 'none', backgroundColor: '#03C75A', color: '#fff' }}
+                  className="btn btn-primary btn-glow"
+                  style={{ textDecoration: 'none', backgroundColor: '#03C75A', color: '#fff', border: 'none' }}
                 >
-                  <Calendar size={18} style={{ marginRight: '8px' }} />
+                  <Calendar size={18} />
                   네이버 예약으로 바로가기
                 </a>
               </div>
