@@ -32,12 +32,12 @@ function App() {
   // 모달 열기 래퍼
   const openConsulting = () => {
     setIsConsultingOpen(true);
-    window.history.pushState({ modal: 'consulting', tab: activeTab }, '', '');
+    window.history.pushState({ modal: 'consulting', tab: activeTab }, '', `#${activeTab}`);
   };
 
   const openReviewForm = () => {
     setIsReviewFormOpen(true);
-    window.history.pushState({ modal: 'reviewForm', tab: activeTab }, '', '');
+    window.history.pushState({ modal: 'reviewForm', tab: activeTab }, '', `#${activeTab}`);
   };
 
   // 모달 닫기 래퍼 (직접 닫을 때도 history.back()을 호출하여 popstate에서 상태 일괄 닫기 처리하도록 유도)
@@ -56,18 +56,16 @@ function App() {
   // 마운트 시 초기 히스토리 상태 설정 및 popstate 이벤트 리스너 등록
   useEffect(() => {
     const initialTab = (window.location.hash.replace('#', '') as TabType) || 'home';
-    if (!['home', 'gallery', 'reviews', 'services', 'care'].includes(initialTab)) {
-      window.history.replaceState({ tab: 'home' }, '', '#home');
-      setActiveTab('home');
-    } else {
-      window.history.replaceState({ tab: initialTab }, '', `#${initialTab}`);
-      setActiveTab(initialTab);
-    }
+    const validTabs: TabType[] = ['home', 'gallery', 'reviews', 'services', 'care'];
+    const targetTab = validTabs.includes(initialTab) ? initialTab : 'home';
+
+    window.history.replaceState({ tab: targetTab }, '', `#${targetTab}`);
+    setActiveTab(targetTab);
 
     const handlePopState = (event: PopStateEvent) => {
       const state = event.state;
 
-      // 1. 모달이 열려 있었다면 닫기
+      // 1. 모달이 열려 있었다면 일괄 닫기
       setIsConsultingOpen(false);
       setIsReviewFormOpen(false);
 
@@ -75,13 +73,19 @@ function App() {
       if (state && state.tab) {
         setActiveTab(state.tab);
       } else {
-        setActiveTab('home');
+        // state가 만료되었거나 없을 시 해시값 기반 복원
+        const hashTab = (window.location.hash.replace('#', '') as TabType);
+        if (validTabs.includes(hashTab)) {
+          setActiveTab(hashTab);
+        } else {
+          setActiveTab('home');
+        }
       }
     };
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [isConsultingOpen, isReviewFormOpen]);
+  }, []);
 
   // 비포애프터용 고품질 Unsplash 모정 이미지 데이터
   const beforeAfterPortfolio = [
