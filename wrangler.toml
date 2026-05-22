@@ -1,0 +1,15 @@
+# Cloudflare Pages 환경 설정 파일
+name = "smp-curve-studio"
+pages_build_output_dir = "dist"
+
+# D1 Database 바인딩
+[[d1_databases]]
+binding = "DB"
+database_name = "smp-studio-db"
+database_id = "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d" # 임의의 D1 UUID
+
+# R2 Storage 바인딩
+[[r2_buckets]]
+binding = "MEDIA_BUCKET"
+bucket_name = "smp-studio-media"
+preview_bucket_name = "smp-studio-media-preview"
