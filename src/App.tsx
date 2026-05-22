@@ -497,15 +497,23 @@ function App() {
               onClick={openConsulting}
               className="quickbar-btn consulting"
             >
-              📸 비대면 맞춤 사진 견적
+              <span className="quickbar-icon">📸</span>
+              <span className="quickbar-text">
+                <span>비대면 맞춤</span>
+                <span>사진 견적</span>
+              </span>
             </button>
             <a
-              href="https://booking.naver.com" // 예시용
+              href="https://booking.naver.com"
               target="_blank"
               rel="noopener noreferrer"
               className="quickbar-btn naver"
             >
-              📅 네이버 예약 가기
+              <span className="quickbar-icon">📅</span>
+              <span className="quickbar-text">
+                <span>네이버</span>
+                <span>예약 가기</span>
+              </span>
             </a>
           </div>
         </div>
