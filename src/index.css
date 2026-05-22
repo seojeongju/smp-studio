@@ -950,3 +950,10 @@ body {
   line-height: 1.4;
 }
 
+/* 모바일 화면 해상도에 맞춘 상단 앱 헤더 크기 및 여백 반응형 미세조정 */
+@media (max-width: 480px) {
+  .app-header {
+    padding: 12px 14px !important; /* 패딩을 타이트하게 조정하여 모바일에서 좌우 공간을 최대한 확보 */
+  }
+}
+

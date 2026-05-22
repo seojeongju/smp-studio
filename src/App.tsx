@@ -189,7 +189,7 @@ function App() {
       <div className="app-container">
         {/* 1. 상단 앱 헤더 */}
         <header className="app-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
             {activeTab !== 'home' && (
               <button
                 onClick={() => window.history.back()}
@@ -203,26 +203,48 @@ function App() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  flexShrink: 0,
                 }}
                 aria-label="뒤로가기"
               >
                 <ChevronLeft size={22} />
               </button>
             )}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => changeTab('home')}>
-              <img src="/logo.png" alt="Grace Shop Logo" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--color-primary-dark)' }} />
-              <h1 className="brand-logo" style={{ fontSize: '18px', margin: 0 }}>
+            <div 
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '6px', 
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                minWidth: 0 
+              }} 
+              onClick={() => changeTab('home')}
+            >
+              <img 
+                src="/logo.png" 
+                alt="Grace Shop Logo" 
+                style={{ 
+                  width: '26px', 
+                  height: '26px', 
+                  borderRadius: '50%', 
+                  objectFit: 'cover', 
+                  border: '1px solid var(--color-primary-dark)',
+                  flexShrink: 0 
+                }} 
+              />
+              <h1 className="brand-logo" style={{ fontSize: '17px', margin: 0, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
                 Grace Shop
               </h1>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexShrink: 0 }}>
             <a
               href="tel:010-0000-0000"
-              style={{ color: 'var(--color-text-main)', display: 'flex', alignItems: 'center' }}
+              style={{ color: 'var(--color-text-main)', display: 'flex', alignItems: 'center', flexShrink: 0 }}
               aria-label="전화 문의"
             >
-              <PhoneCall size={18} />
+              <PhoneCall size={17} />
             </a>
             <button
               onClick={openConsulting}
@@ -230,14 +252,16 @@ function App() {
                 background: 'var(--color-text-main)',
                 color: 'var(--color-primary-light)',
                 border: 'none',
-                padding: '6px 12px',
+                padding: '6px 10px',
                 borderRadius: '20px',
                 fontSize: '11px',
                 fontWeight: 700,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '4px',
+                gap: '3px',
+                whiteSpace: 'nowrap',
+                flexShrink: 0
               }}
             >
               <Sparkles size={11} /> 1:1 상담
