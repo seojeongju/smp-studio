@@ -30,7 +30,9 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab })
             onClick={() => setActiveTab(item.id)}
             aria-label={item.label}
           >
-            <IconComponent size={20} />
+            <div className="nav-icon-wrapper">
+              <IconComponent size={18} />
+            </div>
             <span>{item.label}</span>
           </button>
         );
