@@ -65,7 +65,7 @@ export const CareGuide: React.FC = () => {
       checklist: [
         { text: '가려움증과 함께 미세한 각질이 자연스럽게 떨어지기 시작', icon: Sparkles },
         { text: '건조하지 않도록 보습 크림을 지속적으로 충분히 바르기', icon: Droplets },
-        { text: '두피 SMP는 샴푸 시 손가락 지문 부위로 부드럽게 세정', icon: Scissors },
+        { text: '두피 케어 부위는 샴푸 시 손가락 지문 부위로 부드럽게 세정', icon: Scissors },
       ],
       warning: '⭐ 가장 중요: 딱지·각질을 억지로 떼어내면 색소가 함께 탈락해 얼룩이 생깁니다. 자연 탈각될 때까지 절대 손대지 마세요!',
       tip: '이 시기가 가장 힘들지만, 참을수록 결과가 좋아집니다.',

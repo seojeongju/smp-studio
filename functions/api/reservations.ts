@@ -67,7 +67,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
                 fields: [
                   { name: '고객명', value: client_name, inline: true },
                   { name: '연락처', value: phone, inline: true },
-                  { name: '희망 시술', value: service_type, inline: true },
+                  { name: '관심 케어', value: service_type, inline: true },
                   { name: '희망 일시', value: `${preferred_date} ${preferred_time}`, inline: false },
                   { name: '기존 잔흔 여부', value: has_previous_tattoo ? '있음 (사진 확인 요망)' : '없음', inline: true },
                   { name: '추가 요청사항', value: note || '없음', inline: false },

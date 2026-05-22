@@ -8,7 +8,7 @@ interface ConsultingFormProps {
 export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
   const [name, setName] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
-  const [service, setService] = useState<string>('자연눈썹');
+  const [service, setService] = useState<string>('눈썹 디자인');
   const [date, setDate] = useState<string>('');
   const [time, setTime] = useState<string>('11:00');
   const [hasTattoo, setHasTattoo] = useState<boolean>(false);

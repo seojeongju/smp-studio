@@ -100,7 +100,7 @@ function App() {
     {
       before: '/smp-before.png',
       after: '/smp-after.png',
-      title: '정수리 두피 커버 케어 (SMP)',
+      title: '정수리 두피 커버 디자인 케어',
       category: '두피 케어',
       duration: '세션당 120분',
       point: '실제 모근 크기와 동일한 초미세 도팅으로 두피의 빈틈을 자연스럽게 채웠습니다.',

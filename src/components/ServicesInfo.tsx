@@ -83,7 +83,7 @@ export const ServicesInfo: React.FC<ServicesInfoProps> = ({ onStartConsulting })
       label: '두피 커버 디자인',
       emoji: '◎',
       title: '두피 마이크로 디자인',
-      subtitle: 'Scalp Micro Pigmentation',
+      subtitle: 'Scalp Micro Cover Design',
       icon: Compass,
       items: [
         {
@@ -114,7 +114,7 @@ export const ServicesInfo: React.FC<ServicesInfoProps> = ({ onStartConsulting })
           ],
         },
         {
-          name: '민머리 전체 커버 SMP',
+          name: '민머리 전체 커버 디자인',
           price: '견적 상담',
           priceType: 'quote',
           duration: '180 ~ 240분',

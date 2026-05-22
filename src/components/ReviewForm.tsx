@@ -157,7 +157,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onClose, onSuccess }) =>
             </div>
           </div>
 
-          {/* 시술 종류 & 평점 선택 */}
+          {/* 케어 종류 & 평점 선택 */}
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <div className="form-group" style={{ flex: 1.2 }}>
               <label className="form-label">이용하신 케어 *</label>
