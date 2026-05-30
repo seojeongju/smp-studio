@@ -9,6 +9,10 @@ interface BeforeAfterSliderProps {
   duration?: string;    // 케어 소요시간 (선택)
   point?: string;       // 핵심 디자인 포인트 (선택)
   index?: number;       // 순번 (1, 2, 3...)
+  /** 이미지 원본 비율 (기본 4:3). 세로형 전후사진은 3/4 등으로 지정 */
+  imageAspectRatio?: string;
+  imageObjectFit?: 'cover' | 'contain';
+  imageObjectPosition?: string;
 }
 
 export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
@@ -19,7 +23,18 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
   duration,
   point,
   index,
+  imageAspectRatio = '4 / 3',
+  imageObjectFit = 'cover',
+  imageObjectPosition = 'center',
 }) => {
+  const imageStyle: React.CSSProperties = {
+    width: '100%',
+    height: '100%',
+    objectFit: imageObjectFit,
+    objectPosition: imageObjectPosition,
+    display: 'block',
+    pointerEvents: 'none',
+  };
   const [sliderPosition, setSliderPosition] = useState<number>(50);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [hasInteracted, setHasInteracted] = useState<boolean>(false);
@@ -133,7 +148,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
         style={{
           position: 'relative',
           width: '100%',
-          aspectRatio: '4 / 3',
+          aspectRatio: imageAspectRatio,
           overflow: 'hidden',
           userSelect: 'none',
           cursor: 'ew-resize',
@@ -150,10 +165,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
           style={{
             position: 'absolute',
             inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            pointerEvents: 'none',
+            ...imageStyle,
           }}
         />
 
@@ -170,7 +182,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
             src={afterImage}
             alt="디자인 후 After"
             draggable={false}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            style={imageStyle}
           />
         </div>
 

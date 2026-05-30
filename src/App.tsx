@@ -104,6 +104,7 @@ function App() {
       category: '두피 케어',
       duration: '세션당 120분',
       point: '실제 모근 크기와 동일한 초미세 도팅으로 두피의 빈틈을 자연스럽게 채웠습니다.',
+      imageAspectRatio: '3 / 4',
     },
     {
       before: '/men-eyebrow-before.png',
@@ -473,6 +474,7 @@ function App() {
                   category={item.category}
                   duration={item.duration}
                   point={item.point}
+                  imageAspectRatio={'imageAspectRatio' in item ? item.imageAspectRatio : undefined}
                 />
               ))}
             </div>
