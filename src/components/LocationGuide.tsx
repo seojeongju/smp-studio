@@ -18,6 +18,7 @@ interface LocationGuideProps {
 
 export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<kakao.maps.Map | null>(null);
   const [coords, setCoords] = useState({ lat: SHOP_LOCATION.lat, lng: SHOP_LOCATION.lng });
   const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'fallback' | 'error'>('loading');
   const [copyDone, setCopyDone] = useState(false);
@@ -62,6 +63,7 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
             center,
             level: 3,
           });
+          mapInstanceRef.current = map;
 
           const overlay = new kakao.maps.CustomOverlay({
             map,
@@ -75,6 +77,12 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
 
           setCoords({ lat, lng });
           setMapStatus('ready');
+
+          // 컨테이너 크기 반영 후 타일 재렌더링
+          requestAnimationFrame(() => {
+            map.relayout();
+            map.setCenter(center);
+          });
         };
 
         searchAddress(SHOP_LOCATION.geocodeQueries);
@@ -89,8 +97,26 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
 
     return () => {
       cancelled = true;
+      mapInstanceRef.current = null;
     };
   }, []);
+
+  // 탭 전환·레이아웃 변경 후 지도 영역 재계산
+  useEffect(() => {
+    if (mapStatus !== 'ready' || !mapInstanceRef.current) return;
+
+    const relayoutMap = () => {
+      mapInstanceRef.current?.relayout();
+    };
+
+    const timer = window.setTimeout(relayoutMap, 150);
+    window.addEventListener('resize', relayoutMap);
+
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('resize', relayoutMap);
+    };
+  }, [mapStatus]);
 
   const handleCopyAddress = async () => {
     try {
@@ -113,47 +139,9 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
       </p>
 
       {/* 지도 영역 */}
-      <div
-        className="card"
-        style={{ padding: 0, overflow: 'hidden', marginBottom: '16px' }}
-      >
-        {mapStatus === 'loading' && (
-          <div
-            style={{
-              height: '240px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: 'var(--color-primary-light)',
-              color: 'var(--color-text-muted)',
-              fontSize: '13px',
-            }}
-          >
-            지도를 불러오는 중...
-          </div>
-        )}
-        <div
-          ref={mapContainerRef}
-          style={{
-            width: '100%',
-            height: mapStatus === 'loading' ? 0 : '240px',
-            overflow: 'hidden',
-          }}
-        />
-        {mapStatus === 'fallback' && (
-          <div
-            style={{
-              height: '240px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '12px',
-              backgroundColor: 'var(--color-primary-light)',
-              padding: '20px',
-              textAlign: 'center',
-            }}
-          >
+      <div className="card location-map-card">
+        {mapStatus === 'fallback' ? (
+          <div className="location-map-fallback">
             <MapPin size={32} color="var(--color-text-muted)" />
             <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
               {KAKAO_APP_KEY
@@ -179,6 +167,13 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
             >
               <ExternalLink size={14} /> 카카오맵에서 보기
             </a>
+          </div>
+        ) : (
+          <div className="location-map-wrap">
+            {mapStatus === 'loading' && (
+              <div className="location-map-loading">지도를 불러오는 중...</div>
+            )}
+            <div ref={mapContainerRef} className="location-map-container" />
           </div>
         )}
       </div>
