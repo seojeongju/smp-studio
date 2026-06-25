@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { X, Camera, Loader2, CalendarRange } from 'lucide-react';
+import { KakaoChannelButton } from './KakaoChannelButton';
+import { isKakaoChannelConfigured } from '../constants/kakao';
 
 interface ConsultingFormProps {
   onClose: () => void;
@@ -164,6 +166,7 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
             </p>
 
             {/* 성공 화면 내 카카오톡 채널 연동 카드 */}
+            {isKakaoChannelConfigured() && (
             <div style={{
               backgroundColor: 'var(--color-bg)',
               borderRadius: 'var(--radius-sm)',
@@ -176,10 +179,8 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
                 더 빠른 확답 또는 추가 상세 사진 발송은<br />
                 그레이스 샵 카카오톡 공식 채널을 이용해 주세요.
               </p>
-              <a
-                href="https://pf.kakao.com"
-                target="_blank"
-                rel="noopener noreferrer"
+              <KakaoChannelButton
+                action="follow"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -187,18 +188,20 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
                   gap: '8px',
                   backgroundColor: '#FEE500',
                   color: '#191919',
-                  textDecoration: 'none',
+                  border: 'none',
                   padding: '10px 20px',
                   borderRadius: '12px',
                   fontSize: '12.5px',
                   fontWeight: 700,
                   width: '100%',
+                  cursor: 'pointer',
                   boxShadow: '0 4px 12px rgba(254,229,0,0.15)',
                 }}
               >
                 💬 그레이스 샵 카톡 추가 문의
-              </a>
+              </KakaoChannelButton>
             </div>
+            )}
 
             <button className="btn btn-primary" onClick={onClose} style={{ width: '100%' }}>
               확인 후 닫기
@@ -208,6 +211,7 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
           // 일반 입력 폼 화면
           <>
             {/* 카카오톡 3초 간편 상담 빠른 배너 */}
+            {isKakaoChannelConfigured() && (
             <div style={{
               backgroundColor: '#FAF6E6',
               border: '1px solid rgba(203, 185, 167, 0.4)',
@@ -228,10 +232,8 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
                   폼 작성이 번거로우시다면 카카오 채널로 바로 케어 문의가 가능합니다.
                 </p>
               </div>
-              <a
-                href="https://pf.kakao.com"
-                target="_blank"
-                rel="noopener noreferrer"
+              <KakaoChannelButton
+                action="chat"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -239,18 +241,20 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
                   gap: '4px',
                   backgroundColor: '#FEE500',
                   color: '#191919',
-                  textDecoration: 'none',
+                  border: 'none',
                   padding: '8px 12px',
                   borderRadius: '10px',
                   fontSize: '11.5px',
                   fontWeight: 700,
                   flexShrink: 0,
+                  cursor: 'pointer',
                   boxShadow: '0 4px 10px rgba(254,229,0,0.18)',
                 }}
               >
                 💬 상담 시작
-              </a>
+              </KakaoChannelButton>
             </div>
+            )}
 
             <form onSubmit={handleSubmit}>
             {/* 이름 및 연락처 */}

@@ -1,8 +1,15 @@
+import { getKakaoAppKey } from '../constants/kakao';
+
 const KAKAO_SDK_URL = 'https://dapi.kakao.com/v2/maps/sdk.js';
 
 let loadPromise: Promise<typeof kakao> | null = null;
 
-export function loadKakaoMapSdk(appKey: string): Promise<typeof kakao> {
+export function loadKakaoMapSdk(appKey?: string): Promise<typeof kakao> {
+  const resolvedKey = appKey ?? getKakaoAppKey();
+  if (!resolvedKey) {
+    return Promise.reject(new Error('카카오 JavaScript 키가 설정되지 않았습니다.'));
+  }
+
   if (loadPromise) {
     return loadPromise;
   }
@@ -18,7 +25,7 @@ export function loadKakaoMapSdk(appKey: string): Promise<typeof kakao> {
     }
 
     const script = document.createElement('script');
-    script.src = `${KAKAO_SDK_URL}?appkey=${encodeURIComponent(appKey)}&autoload=false&libraries=services`;
+    script.src = `${KAKAO_SDK_URL}?appkey=${encodeURIComponent(resolvedKey)}&autoload=false&libraries=services`;
     script.async = true;
     script.onload = init;
     script.onerror = () => {

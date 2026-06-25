@@ -1,3 +1,17 @@
+interface KakaoChannelApi {
+  chat(options: { channelPublicId: string }): void;
+  addChannel(options: { channelPublicId: string }): void;
+  followChannel(options: { channelPublicId: string }): Promise<unknown>;
+  createChatButton(options: { container: string; channelPublicId: string }): void;
+  createAddChannelButton(options: { container: string; channelPublicId: string }): void;
+}
+
+interface KakaoSDK {
+  init(appKey: string): void;
+  isInitialized(): boolean;
+  Channel: KakaoChannelApi;
+}
+
 declare namespace kakao.maps {
   class LatLng {
     constructor(lat: number, lng: number);
@@ -18,6 +32,18 @@ declare namespace kakao.maps {
   class InfoWindow {
     constructor(options: { content: string });
     open(map: Map, marker: Marker): void;
+  }
+
+  class CustomOverlay {
+    constructor(options: {
+      map?: Map;
+      position: LatLng;
+      content: string | HTMLElement;
+      xAnchor?: number;
+      yAnchor?: number;
+      zIndex?: number;
+    });
+    setMap(map: Map | null): void;
   }
 
   namespace services {
@@ -43,5 +69,6 @@ interface KakaoMaps {
 }
 
 interface Window {
+  Kakao: KakaoSDK;
   kakao: KakaoMaps;
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { HelpCircle, ChevronRight, RotateCcw, MessageCircle, Sparkles, Compass, Award, AlertTriangle, UserCheck, Flame, ArrowLeft } from 'lucide-react';
+import { KakaoChannelButton } from './KakaoChannelButton';
 
 interface Option {
   label: string;
@@ -227,20 +228,24 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
               💬 1:1 맞춤 견적 & 사진 상담받기
             </button>
 
-            <a
-              href="https://pf.kakao.com"
-              target="_blank"
-              rel="noopener noreferrer"
+            <KakaoChannelButton
+              action="chat"
               className="btn btn-glow"
               style={{
                 backgroundColor: '#FEE500',
                 color: '#191919',
-                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                width: '100%',
+                border: 'none',
+                cursor: 'pointer',
               }}
             >
               <MessageCircle size={18} />
               카카오톡 실시간 빠른 상담
-            </a>
+            </KakaoChannelButton>
 
             <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '20px' }}>
               <button

@@ -6,10 +6,17 @@ import {
   getKakaoNavigationLink,
 } from '../constants/location';
 import { loadKakaoMapSdk } from '../utils/kakaoMap';
+import { createShopMapMarkerHtml } from '../utils/mapMarkerOverlay';
+import { getKakaoAppKey } from '../constants/kakao';
+import { KakaoChannelCard } from './KakaoChannelCard';
 
-const KAKAO_APP_KEY = import.meta.env.VITE_KAKAO_MAP_APP_KEY as string | undefined;
+const KAKAO_APP_KEY = getKakaoAppKey();
 
-export function LocationGuide() {
+interface LocationGuideProps {
+  onStartConsulting?: () => void;
+}
+
+export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState({ lat: SHOP_LOCATION.lat, lng: SHOP_LOCATION.lng });
   const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'fallback' | 'error'>('loading');
@@ -29,6 +36,24 @@ export function LocationGuide() {
         if (cancelled || !mapContainerRef.current) return;
 
         const geocoder = new kakao.maps.services.Geocoder();
+
+        const searchAddress = (queries: string[], index = 0): void => {
+          if (cancelled || index >= queries.length) {
+            placeMarker(SHOP_LOCATION.lat, SHOP_LOCATION.lng);
+            return;
+          }
+
+          geocoder.addressSearch(queries[index], (result, status) => {
+            if (cancelled) return;
+
+            if (status === kakao.maps.services.Status.OK && result[0]) {
+              placeMarker(parseFloat(result[0].y), parseFloat(result[0].x));
+            } else {
+              searchAddress(queries, index + 1);
+            }
+          });
+        };
+
         const placeMarker = (lat: number, lng: number) => {
           if (cancelled || !mapContainerRef.current) return;
 
@@ -38,25 +63,21 @@ export function LocationGuide() {
             level: 3,
           });
 
-          const marker = new kakao.maps.Marker({ map, position: center });
-          const infoWindow = new kakao.maps.InfoWindow({
-            content: `<div style="padding:8px 12px;font-size:13px;font-weight:600;white-space:nowrap;">${SHOP_LOCATION.name}</div>`,
+          const overlay = new kakao.maps.CustomOverlay({
+            map,
+            position: center,
+            content: createShopMapMarkerHtml(),
+            xAnchor: 0.5,
+            yAnchor: 1,
+            zIndex: 3,
           });
-          infoWindow.open(map, marker);
+          overlay.setMap(map);
 
           setCoords({ lat, lng });
           setMapStatus('ready');
         };
 
-        geocoder.addressSearch(SHOP_LOCATION.address, (result, status) => {
-          if (cancelled) return;
-
-          if (status === kakao.maps.services.Status.OK && result[0]) {
-            placeMarker(parseFloat(result[0].y), parseFloat(result[0].x));
-          } else {
-            placeMarker(SHOP_LOCATION.lat, SHOP_LOCATION.lng);
-          }
-        });
+        searchAddress(SHOP_LOCATION.geocodeQueries);
       } catch {
         if (!cancelled) {
           setMapStatus('fallback');
@@ -137,7 +158,7 @@ export function LocationGuide() {
             <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
               {KAKAO_APP_KEY
                 ? '지도를 표시할 수 없습니다. 아래 버튼으로 카카오맵에서 확인해 주세요.'
-                : '카카오맵 API 키가 설정되지 않았습니다. .env 파일에 VITE_KAKAO_MAP_APP_KEY를 추가해 주세요.'}
+                : '카카오맵 API 키가 설정되지 않았습니다. VITE_KAKAO_APP_KEY 또는 VITE_KAKAO_MAP_APP_KEY를 추가해 주세요.'}
             </p>
             <a
               href={mapLink}
@@ -236,7 +257,7 @@ export function LocationGuide() {
             <div>
               <div style={{ fontSize: '12px', fontWeight: 600 }}>주차</div>
               <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                앞산리슈빌앤리마크 단지 내 주차 이용 가능
+                앞산리슈빌앤리마크 501동 상가 · 단지 내 주차 이용 가능
               </div>
             </div>
           </div>
@@ -290,6 +311,10 @@ export function LocationGuide() {
           카카오맵에서 위치 보기
         </a>
       </div>
+
+      <div style={{ marginTop: '20px' }}>
+        <KakaoChannelCard onAlternateContact={onStartConsulting} />
+      </div>
     </div>
   );
-};
+}

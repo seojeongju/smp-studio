@@ -8,6 +8,8 @@ import { ReviewForm } from './components/ReviewForm';
 import { ConsultingForm } from './components/ConsultingForm';
 import { ServicesInfo } from './components/ServicesInfo';
 import { LocationGuide } from './components/LocationGuide';
+import { KakaoChannelCard } from './components/KakaoChannelCard';
+import { KakaoChannelButton } from './components/KakaoChannelButton';
 import { SHOP_LOCATION } from './constants/location';
 import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award, ChevronLeft } from 'lucide-react';
 
@@ -174,15 +176,15 @@ function App() {
               >
                 <Calendar size={16} /> 네이버 실시간 예약 바로가기
               </a>
-              <a
-                href="https://pf.kakao.com"
-                target="_blank"
-                rel="noopener noreferrer"
+              <KakaoChannelButton
+                action="chat"
+                asLink
+                hideWhenUnavailable
                 className="qr-btn kakao"
                 style={{ gap: '8px', boxShadow: '0 4px 12px rgba(254,229,0,0.15)' }}
               >
                 <MessageSquare size={16} /> 카카오톡 1:1 채팅 문의
-              </a>
+              </KakaoChannelButton>
             </div>
           </div>
         </div>
@@ -381,6 +383,9 @@ function App() {
                 </div>
               </div>
 
+              {/* 카카오톡 공식 채널 */}
+              <KakaoChannelCard onAlternateContact={openConsulting} />
+
               {/* 자가진단 퀴즈 연동 */}
               <DiagnosticTest onStartConsulting={openConsulting} />
             </div>
@@ -519,7 +524,7 @@ function App() {
 
           {/* === LOCATION TAB === */}
           {activeTab === 'location' && (
-            <LocationGuide />
+            <LocationGuide onStartConsulting={openConsulting} />
           )}
 
         </main>
