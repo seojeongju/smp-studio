@@ -451,7 +451,7 @@ function App() {
                   display: 'flex', gap: '12px', marginTop: '16px',
                 }}>
                   {[
-                    { label: '케어 건수', value: '3+' },
+                    { label: '케어 건수', value: '3K+' },
                     { label: '평균 만족도', value: '4.9★' },
                     { label: '리터치 포함', value: '전 항목' },
                   ].map((stat, i) => (
