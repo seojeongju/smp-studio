@@ -10,6 +10,7 @@ import { ServicesInfo } from './components/ServicesInfo';
 import { LocationGuide } from './components/LocationGuide';
 import { KakaoChannelCard } from './components/KakaoChannelCard';
 import { KakaoChannelButton } from './components/KakaoChannelButton';
+import { KakaoChannelFab } from './components/KakaoChannelFab';
 import { SHOP_LOCATION } from './constants/location';
 import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award, ChevronLeft } from 'lucide-react';
 
@@ -542,6 +543,18 @@ function App() {
                 <span>사진 견적</span>
               </span>
             </button>
+            <KakaoChannelButton
+              action="chat"
+              hideWhenUnavailable={false}
+              onUnavailable={openConsulting}
+              className="quickbar-btn kakao"
+            >
+              <span className="quickbar-icon">💬</span>
+              <span className="quickbar-text">
+                <span>카카오톡</span>
+                <span>빠른 문의</span>
+              </span>
+            </KakaoChannelButton>
             <a
               href="https://booking.naver.com"
               target="_blank"
@@ -556,6 +569,9 @@ function App() {
             </a>
           </div>
         </div>
+
+        {/* 카카오톡 채널 FAB (우측 하단) */}
+        <KakaoChannelFab onUnavailable={openConsulting} />
 
         {/* 4. 하단 고정 탭 바 */}
         <BottomNav activeTab={activeTab} setActiveTab={changeTab} />
