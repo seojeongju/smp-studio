@@ -447,7 +447,7 @@ function App() {
                 </p>
 
                 {/* 통계 뱃지 행 */}
-                <div style={{
+                <div className="notranslate" style={{
                   display: 'flex', gap: '12px', marginTop: '16px',
                 }}>
                   {[
@@ -461,7 +461,7 @@ function App() {
                       borderRadius: '10px', padding: '10px 6px',
                       border: '1px solid rgba(255,255,255,0.1)',
                     }}>
-                      <div style={{ fontSize: '16px', fontWeight: 800, color: '#FAF6F0', lineHeight: 1 }}>
+                      <div className="notranslate" style={{ fontSize: '16px', fontWeight: 800, color: '#FAF6F0', lineHeight: 1 }}>
                         {stat.value}
                       </div>
                       <div style={{ fontSize: '9.5px', opacity: 0.7, marginTop: '4px', fontWeight: 500 }}>
