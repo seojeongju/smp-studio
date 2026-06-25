@@ -305,7 +305,7 @@ body {
 .floating-quickbar-content {
   pointer-events: auto;
   display: flex;
-  gap: 6px;
+  gap: 8px;
 }
 
 @media (min-width: 481px) {
@@ -327,7 +327,7 @@ body {
   flex: 1;
   min-width: 0;
   min-height: 50px; /* 2줄 텍스트를 위해 높이 확장 */
-  padding: 8px 8px;
+  padding: 8px 12px;
   border-radius: 16px; /* 2줄에 맞는 살짝 덜 둥근 형태 */
   font-size: 11.5px;
   font-weight: 700;
@@ -357,9 +357,9 @@ body {
 
 .quickbar-text span {
   display: block;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.2px;
 }
 
 /* 1:1 사진 견적: 웜베이지 테마와 호응하는 에크루 화이트 & 소프트 차콜 보더 */
@@ -391,28 +391,14 @@ body {
   }
 }
 
-/* 카카오톡 빠른 문의 */
-.quickbar-btn.kakao {
-  background-color: #FEE500;
-  color: #191919;
-  box-shadow: 0 4px 12px rgba(254, 229, 0, 0.22);
-}
-
-@media (hover: hover) {
-  .quickbar-btn.kakao:hover {
-    background-color: #F5DC00;
-    transform: translateY(-2px);
-  }
-}
-
 .quickbar-btn:active {
   transform: scale(0.96);
 }
 
-/* 카카오톡 채널 FAB (우측 하단 플로팅) */
+/* 카카오톡 채널 FAB (우측 세로 중앙 고정) */
 .kakao-channel-fab {
   position: fixed;
-  bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+  top: 50%;
   right: max(14px, calc(50vw - 240px + 14px));
   width: 52px;
   height: 52px;
@@ -430,6 +416,7 @@ body {
   z-index: 95;
   transition: var(--transition-spring);
   padding: 0;
+  transform: translateY(-50%);
 }
 
 .kakao-channel-fab__hint {
@@ -449,7 +436,7 @@ body {
 
 @media (hover: hover) {
   .kakao-channel-fab:hover {
-    transform: translateY(-3px) scale(1.05);
+    transform: translateY(calc(-50% - 3px)) scale(1.05);
     box-shadow:
       0 10px 28px rgba(254, 229, 0, 0.42),
       0 4px 12px rgba(58, 50, 44, 0.12);
@@ -457,14 +444,23 @@ body {
 }
 
 .kakao-channel-fab:active {
-  transform: scale(0.92);
+  transform: translateY(-50%) scale(0.92);
 }
 
 @media (min-width: 481px) {
   .kakao-channel-fab {
     position: absolute;
-    bottom: 132px;
+    top: 50%;
     right: 12px;
+    transform: translateY(-50%);
+  }
+
+  .kakao-channel-fab:hover {
+    transform: translateY(calc(-50% - 3px)) scale(1.05);
+  }
+
+  .kakao-channel-fab:active {
+    transform: translateY(-50%) scale(0.92);
   }
 }
 

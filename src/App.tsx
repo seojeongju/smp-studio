@@ -543,18 +543,6 @@ function App() {
                 <span>사진 견적</span>
               </span>
             </button>
-            <KakaoChannelButton
-              action="chat"
-              hideWhenUnavailable={false}
-              onUnavailable={openConsulting}
-              className="quickbar-btn kakao"
-            >
-              <span className="quickbar-icon">💬</span>
-              <span className="quickbar-text">
-                <span>카카오톡</span>
-                <span>빠른 문의</span>
-              </span>
-            </KakaoChannelButton>
             <a
               href="https://booking.naver.com"
               target="_blank"
