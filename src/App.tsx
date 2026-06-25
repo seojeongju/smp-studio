@@ -7,6 +7,8 @@ import { ReviewList } from './components/ReviewList';
 import { ReviewForm } from './components/ReviewForm';
 import { ConsultingForm } from './components/ConsultingForm';
 import { ServicesInfo } from './components/ServicesInfo';
+import { LocationGuide } from './components/LocationGuide';
+import { SHOP_LOCATION } from './constants/location';
 import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award, ChevronLeft } from 'lucide-react';
 
 function App() {
@@ -56,7 +58,7 @@ function App() {
   // 마운트 시 초기 히스토리 상태 설정 및 popstate 이벤트 리스너 등록
   useEffect(() => {
     const initialTab = (window.location.hash.replace('#', '') as TabType) || 'home';
-    const validTabs: TabType[] = ['home', 'gallery', 'reviews', 'services', 'care'];
+    const validTabs: TabType[] = ['home', 'gallery', 'reviews', 'services', 'care', 'location'];
     const targetTab = validTabs.includes(initialTab) ? initialTab : 'home';
 
     window.history.replaceState({ tab: targetTab }, '', `#${targetTab}`);
@@ -153,7 +155,7 @@ function App() {
               <MapPin size={20} color="var(--color-text-muted)" style={{ marginTop: '2px', flexShrink: 0 }} />
               <div>
                 <span className="info-label">스튜디오 주소</span>
-                <span className="info-value">서울 마포구 공덕역 도보 3분 거리 (무료 주차 제공)</span>
+                <span className="info-value">{SHOP_LOCATION.fullAddress}</span>
               </div>
             </div>
           </div>
@@ -513,6 +515,11 @@ function App() {
             <div style={{ animation: 'fadeIn 0.3s ease' }}>
               <CareGuide />
             </div>
+          )}
+
+          {/* === LOCATION TAB === */}
+          {activeTab === 'location' && (
+            <LocationGuide />
           )}
 
         </main>

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Home, Image, MessageSquare, BookOpen, Compass } from 'lucide-react';
+import { Home, Image, MessageSquare, BookOpen, Compass, MapPin } from 'lucide-react';
 
-export type TabType = 'home' | 'gallery' | 'reviews' | 'services' | 'care';
+export type TabType = 'home' | 'gallery' | 'reviews' | 'services' | 'care' | 'location';
 
 interface BottomNavProps {
   activeTab: TabType;
@@ -15,6 +15,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab })
     { id: 'reviews' as TabType, label: '고객후기', icon: MessageSquare },
     { id: 'services' as TabType, label: '케어안내', icon: BookOpen },
     { id: 'care' as TabType, label: '맞춤케어', icon: Compass },
+    { id: 'location' as TabType, label: '오시는길', icon: MapPin },
   ];
 
   return (
