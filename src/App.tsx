@@ -11,6 +11,7 @@ import { LocationGuide } from './components/LocationGuide';
 import { DirectorProfile } from './components/DirectorProfile';
 import { AdminPanel } from './components/AdminPanel';
 import { HomeFeaturedResults } from './components/HomeFeaturedResults';
+import { GalleryFeed } from './components/GalleryFeed';
 import { KakaoChannelCard } from './components/KakaoChannelCard';
 import { KakaoChannelButton } from './components/KakaoChannelButton';
 import { KakaoChannelFab } from './components/KakaoChannelFab';
@@ -68,7 +69,7 @@ function App() {
   // 마운트 시 초기 히스토리 상태 설정 및 popstate 이벤트 리스너 등록
   useEffect(() => {
     const initialTab = (window.location.hash.replace('#', '') as TabType) || 'home';
-    const validTabs: TabType[] = ['home', 'gallery', 'reviews', 'services', 'care', 'location', 'profile', 'admin'];
+    const validTabs: TabType[] = ['home', 'gallery', 'portfolio', 'reviews', 'services', 'care', 'location', 'profile', 'admin'];
     const targetTab = validTabs.includes(initialTab) ? initialTab : 'home';
 
     window.history.replaceState({ tab: targetTab }, '', `#${targetTab}`);
@@ -405,7 +406,7 @@ function App() {
               {/* 대표 전후 결과 + 원장 신뢰 요약 */}
               <HomeFeaturedResults
                 portfolios={portfolios}
-                onOpenGallery={() => changeTab('gallery')}
+                onOpenGallery={() => changeTab('portfolio')}
                 onOpenProfile={() => changeTab('profile')}
                 onStartConsulting={openConsulting}
               />
@@ -418,8 +419,13 @@ function App() {
             </div>
           )}
 
-          {/* === GALLERY TAB === */}
+          {/* === GALLERY TAB (시술 사진) === */}
           {activeTab === 'gallery' && (
+            <GalleryFeed onStartConsulting={openConsulting} />
+          )}
+
+          {/* === PORTFOLIO TAB (전후사진) === */}
+          {activeTab === 'portfolio' && (
             <div style={{ animation: 'fadeIn 0.3s ease' }}>
               {/* 갤러리 페이지 헤더 인포그래픽 배너 */}
               <div style={{

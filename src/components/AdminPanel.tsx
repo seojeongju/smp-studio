@@ -15,8 +15,10 @@ import {
 } from 'lucide-react';
 import {
   FALLBACK_PRICE_CATEGORIES,
+  GALLERY_CATEGORY_OPTIONS,
   PORTFOLIO_CATEGORY_OPTIONS,
   PRICE_CATEGORY_PRESETS,
+  type GalleryImage,
   type PortfolioItem,
   type PriceKind,
   type ServicePrice,
@@ -28,7 +30,7 @@ import {
   uploadImage,
 } from '../utils/adminApi';
 
-type AdminSection = 'prices' | 'portfolios' | 'reviews' | 'reservations';
+type AdminSection = 'prices' | 'portfolios' | 'gallery' | 'reviews' | 'reservations';
 type ReservationStatus = 'pending' | 'confirmed' | 'cancelled' | 'done';
 
 interface AdminReview {
@@ -90,6 +92,16 @@ interface PortfolioFormState {
   is_published: boolean;
 }
 
+interface GalleryFormState {
+  id?: string;
+  title: string;
+  category: string;
+  image_url: string;
+  caption: string;
+  sort_order: number;
+  is_published: boolean;
+}
+
 const emptyPriceForm = (): PriceFormState => ({
   category_id: PRICE_CATEGORY_PRESETS[0].id,
   category_label: PRICE_CATEGORY_PRESETS[0].label,
@@ -115,6 +127,15 @@ const emptyPortfolioForm = (): PortfolioFormState => ({
   is_published: true,
 });
 
+const emptyGalleryForm = (): GalleryFormState => ({
+  title: '',
+  category: GALLERY_CATEGORY_OPTIONS[0],
+  image_url: '',
+  caption: '',
+  sort_order: 0,
+  is_published: true,
+});
+
 export function AdminPanel() {
   const [checking, setChecking] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
@@ -125,6 +146,7 @@ export function AdminPanel() {
   const [section, setSection] = useState<AdminSection>('prices');
   const [prices, setPrices] = useState<ServicePrice[]>([]);
   const [portfolios, setPortfolios] = useState<PortfolioItem[]>([]);
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const [reviews, setReviews] = useState<AdminReview[]>([]);
   const [reservations, setReservations] = useState<AdminReservation[]>([]);
   const [reviewFilter, setReviewFilter] = useState<'all' | 'visible' | 'hidden'>('all');
@@ -135,10 +157,12 @@ export function AdminPanel() {
 
   const [priceForm, setPriceForm] = useState<PriceFormState>(emptyPriceForm());
   const [portfolioForm, setPortfolioForm] = useState<PortfolioFormState>(emptyPortfolioForm());
+  const [galleryForm, setGalleryForm] = useState<GalleryFormState>(emptyGalleryForm());
   const [showPriceForm, setShowPriceForm] = useState(false);
   const [showPortfolioForm, setShowPortfolioForm] = useState(false);
+  const [showGalleryForm, setShowGalleryForm] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState<'before' | 'after' | null>(null);
+  const [uploading, setUploading] = useState<'before' | 'after' | 'gallery' | null>(null);
 
   useEffect(() => {
     checkAdminAuth()
@@ -165,6 +189,11 @@ export function AdminPanel() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || '포트폴리오를 불러오지 못했습니다.');
         setPortfolios(data.portfolios || []);
+      } else if (target === 'gallery') {
+        const res = await fetch('/api/admin/gallery', { credentials: 'include' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || '갤러리를 불러오지 못했습니다.');
+        setGalleryImages(data.images || []);
       } else if (target === 'reviews') {
         const res = await fetch(`/api/admin/reviews?filter=${reviewFilter}`, {
           credentials: 'include',
@@ -207,6 +236,7 @@ export function AdminPanel() {
     setAuthenticated(false);
     setPrices([]);
     setPortfolios([]);
+    setGalleryImages([]);
     setReviews([]);
     setReservations([]);
   };
@@ -470,6 +500,92 @@ export function AdminPanel() {
     }
   };
 
+  const openCreateGallery = () => {
+    setGalleryForm(emptyGalleryForm());
+    setShowGalleryForm(true);
+  };
+
+  const openEditGallery = (row: GalleryImage) => {
+    setGalleryForm({
+      id: row.id,
+      title: row.title || '',
+      category: row.category,
+      image_url: row.image_url,
+      caption: row.caption || '',
+      sort_order: row.sort_order,
+      is_published: row.is_published !== 0,
+    });
+    setShowGalleryForm(true);
+  };
+
+  const handleGalleryUpload = async (file: File | null) => {
+    if (!file) return;
+    setUploading('gallery');
+    setError('');
+    try {
+      const url = await uploadImage(file, 'gallery');
+      setGalleryForm((prev) => ({ ...prev, image_url: url }));
+    } catch (err: any) {
+      setError(err.message || '업로드에 실패했습니다.');
+    } finally {
+      setUploading(null);
+    }
+  };
+
+  const saveGallery = async (e: FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    setError('');
+    setMessage('');
+    try {
+      const payload = {
+        title: galleryForm.title || null,
+        category: galleryForm.category,
+        image_url: galleryForm.image_url,
+        caption: galleryForm.caption || null,
+        sort_order: Number(galleryForm.sort_order) || 0,
+        is_published: galleryForm.is_published ? 1 : 0,
+      };
+
+      const res = await fetch(
+        galleryForm.id ? `/api/admin/gallery/${galleryForm.id}` : '/api/admin/gallery',
+        {
+          method: galleryForm.id ? 'PUT' : 'POST',
+          credentials: 'include',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(payload),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || '저장에 실패했습니다.');
+
+      setMessage(galleryForm.id ? '갤러리 사진이 수정되었습니다.' : '갤러리 사진이 등록되었습니다.');
+      setShowGalleryForm(false);
+      await loadSectionData('gallery');
+    } catch (err: any) {
+      setError(err.message || '저장에 실패했습니다.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const deleteGallery = async (id: string) => {
+    if (!confirm('이 갤러리 사진을 삭제할까요?')) return;
+    setError('');
+    try {
+      const res = await fetch(`/api/admin/gallery/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || '삭제에 실패했습니다.');
+      setMessage('갤러리 사진이 삭제되었습니다.');
+      await loadSectionData('gallery');
+    } catch (err: any) {
+      setError(err.message || '삭제에 실패했습니다.');
+    }
+  };
+
   if (checking) {
     return (
       <div className="admin-panel admin-center">
@@ -487,7 +603,7 @@ export function AdminPanel() {
             <Lock size={20} />
           </div>
           <h2>관리자 로그인</h2>
-          <p>단가표·전후사진 관리를 위해 비밀번호를 입력해 주세요.</p>
+          <p>단가표·전후사진·갤러리 관리를 위해 비밀번호를 입력해 주세요.</p>
           <form onSubmit={handleLogin}>
             <input
               type="password"
@@ -535,6 +651,13 @@ export function AdminPanel() {
           onClick={() => setSection('portfolios')}
         >
           전후사진
+        </button>
+        <button
+          type="button"
+          className={`admin-tab${section === 'gallery' ? ' active' : ''}`}
+          onClick={() => setSection('gallery')}
+        >
+          갤러리
         </button>
         <button
           type="button"
@@ -653,6 +776,49 @@ export function AdminPanel() {
               ))}
               {portfolios.length === 0 && (
                 <li className="admin-empty">등록된 전후 사진이 없습니다.</li>
+              )}
+            </ul>
+          )}
+        </section>
+      )}
+
+      {section === 'gallery' && (
+        <section className="admin-section">
+          <div className="admin-section-bar">
+            <h3>시술 갤러리 ({galleryImages.length})</h3>
+            <button type="button" className="admin-add-btn" onClick={openCreateGallery}>
+              <Plus size={14} /> 추가
+            </button>
+          </div>
+
+          {loading ? (
+            <div className="admin-center"><Loader2 className="admin-spin" size={20} /></div>
+          ) : (
+            <ul className="admin-list">
+              {galleryImages.map((row) => (
+                <li key={row.id} className={`admin-list-item${!row.is_published ? ' muted' : ''}`}>
+                  <div className="admin-thumb-single">
+                    <img src={row.image_url} alt="" />
+                  </div>
+                  <div className="admin-item-body">
+                    <div className="admin-item-title">
+                      {row.title || '(제목 없음)'}
+                      {!row.is_published && <span className="admin-chip ghost">비공개</span>}
+                    </div>
+                    <p className="admin-item-meta">{row.category}</p>
+                  </div>
+                  <div className="admin-item-actions">
+                    <button type="button" onClick={() => openEditGallery(row)} aria-label="수정">
+                      <Pencil size={14} />
+                    </button>
+                    <button type="button" onClick={() => deleteGallery(row.id)} aria-label="삭제">
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </li>
+              ))}
+              {galleryImages.length === 0 && (
+                <li className="admin-empty">등록된 갤러리 사진이 없습니다.</li>
               )}
             </ul>
           )}
@@ -1035,6 +1201,108 @@ export function AdminPanel() {
               type="submit"
               className="btn btn-primary"
               disabled={saving || !portfolioForm.before_url || !portfolioForm.after_url}
+            >
+              {saving ? '저장 중…' : '저장'}
+            </button>
+          </form>
+        </div>
+      )}
+
+      {showGalleryForm && (
+        <div className="admin-modal-overlay" onClick={() => setShowGalleryForm(false)}>
+          <form
+            className="admin-modal"
+            onClick={(e) => e.stopPropagation()}
+            onSubmit={saveGallery}
+          >
+            <div className="admin-modal-head">
+              <h3>{galleryForm.id ? '갤러리 수정' : '갤러리 등록'}</h3>
+              <button type="button" onClick={() => setShowGalleryForm(false)} aria-label="닫기">
+                <X size={18} />
+              </button>
+            </div>
+
+            <label className="admin-label">
+              제목 (선택)
+              <input
+                className="admin-input"
+                value={galleryForm.title}
+                onChange={(e) => setGalleryForm((p) => ({ ...p, title: e.target.value }))}
+                placeholder="예: 자연 엠보 눈썹"
+              />
+            </label>
+
+            <label className="admin-label">
+              카테고리
+              <select
+                className="admin-input"
+                value={galleryForm.category}
+                onChange={(e) => setGalleryForm((p) => ({ ...p, category: e.target.value }))}
+              >
+                {GALLERY_CATEGORY_OPTIONS.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+            </label>
+
+            <label className="admin-upload-box" style={{ marginBottom: 12, minHeight: 160 }}>
+              <span>시술 사진</span>
+              {galleryForm.image_url ? (
+                <img src={galleryForm.image_url} alt="gallery" style={{ height: 140 }} />
+              ) : (
+                <div className="admin-upload-placeholder">
+                  <ImagePlus size={20} />
+                  {uploading === 'gallery' ? '업로드 중…' : '사진 선택'}
+                </div>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(e) => handleGalleryUpload(e.target.files?.[0] || null)}
+              />
+            </label>
+
+            <label className="admin-label">
+              설명 (선택)
+              <textarea
+                className="admin-input admin-textarea"
+                value={galleryForm.caption}
+                onChange={(e) => setGalleryForm((p) => ({ ...p, caption: e.target.value }))}
+                rows={3}
+              />
+            </label>
+
+            <div className="admin-grid-2">
+              <label className="admin-label">
+                정렬 순서
+                <input
+                  type="number"
+                  className="admin-input"
+                  value={galleryForm.sort_order}
+                  onChange={(e) =>
+                    setGalleryForm((p) => ({ ...p, sort_order: Number(e.target.value) }))
+                  }
+                />
+              </label>
+              <div className="admin-checks">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={galleryForm.is_published}
+                    onChange={(e) =>
+                      setGalleryForm((p) => ({ ...p, is_published: e.target.checked }))
+                    }
+                  />
+                  공개
+                </label>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={saving || !galleryForm.image_url}
             >
               {saving ? '저장 중…' : '저장'}
             </button>

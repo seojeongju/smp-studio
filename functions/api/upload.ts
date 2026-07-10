@@ -22,11 +22,11 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
     const rawFolder = (formData.get('folder') as string) || 'reviews';
-    const allowedFolders = ['reviews', 'consulting', 'portfolio'];
+    const allowedFolders = ['reviews', 'consulting', 'portfolio', 'gallery'];
     const folder = allowedFolders.includes(rawFolder) ? rawFolder : 'reviews';
 
-    // 포트폴리오 업로드는 관리자만 가능
-    if (folder === 'portfolio') {
+    // 포트폴리오·갤러리 업로드는 관리자만 가능
+    if (folder === 'portfolio' || folder === 'gallery') {
       const auth = await requireAdmin(request, env);
       if (isErrorResponse(auth)) return auth;
     }

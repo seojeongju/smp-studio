@@ -26,7 +26,7 @@ export async function adminLogout(): Promise<void> {
   await fetch('/api/admin/auth', { method: 'DELETE', credentials: 'include' });
 }
 
-export async function uploadImage(file: File, folder: 'portfolio' | 'reviews' | 'consulting') {
+export async function uploadImage(file: File, folder: 'portfolio' | 'gallery' | 'reviews' | 'consulting') {
   const form = new FormData();
   form.append('file', file);
   form.append('folder', folder);

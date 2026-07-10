@@ -1,9 +1,10 @@
 import React from 'react';
-import { Home, Image, MessageSquare, BookOpen, Compass, MapPin, UserRound } from 'lucide-react';
+import { Home, Image, Images, MessageSquare, BookOpen, Compass, MapPin, UserRound } from 'lucide-react';
 
 export type TabType =
   | 'home'
   | 'gallery'
+  | 'portfolio'
   | 'reviews'
   | 'services'
   | 'care'
@@ -17,10 +18,11 @@ interface BottomNavProps {
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab }) => {
-  // 관리자(admin)는 하단 탭에 노출하지 않음 — #admin URL로만 접근
+  // 관리자(admin)는 하단 탭에 노출하지 않음 — 헤더 아이콘 / #admin 으로 접근
   const navItems = [
     { id: 'home' as TabType, label: '홈', icon: Home },
-    { id: 'gallery' as TabType, label: '전후사진', icon: Image },
+    { id: 'portfolio' as TabType, label: '전후사진', icon: Image },
+    { id: 'gallery' as TabType, label: '갤러리', icon: Images },
     { id: 'reviews' as TabType, label: '고객후기', icon: MessageSquare },
     { id: 'profile' as TabType, label: '원장소개', icon: UserRound },
     { id: 'services' as TabType, label: '케어안내', icon: BookOpen },
@@ -42,7 +44,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab })
             aria-label={item.label}
           >
             <div className="nav-icon-wrapper">
-              <IconComponent size={17} />
+              <IconComponent size={16} />
             </div>
             <span>{item.label}</span>
           </button>

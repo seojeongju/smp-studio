@@ -59,6 +59,29 @@ export const PORTFOLIO_CATEGORY_OPTIONS = [
   '기타',
 ] as const;
 
+export const GALLERY_CATEGORY_OPTIONS = [
+  '눈썹 디자인',
+  '두피 케어',
+  '헤어라인',
+  '아이라인',
+  '입술',
+  '스킨케어',
+  '타투',
+  '샵 전경',
+  '기타',
+] as const;
+
+export interface GalleryImage {
+  id: string;
+  title: string | null;
+  category: string;
+  image_url: string;
+  caption: string | null;
+  sort_order: number;
+  is_published?: number;
+  created_at?: string;
+}
+
 /** API 단가 행 → 카테고리 그룹 */
 export function groupPricesByCategory(prices: ServicePrice[]): PriceCategory[] {
   const map = new Map<string, PriceCategory>();
