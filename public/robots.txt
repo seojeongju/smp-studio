@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /#admin
+Disallow: /api/admin/
+
+User-agent: Yeti
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+Sitemap: https://smp-studio.pages.dev/sitemap.xml

@@ -11,12 +11,15 @@ import { LocationGuide } from './components/LocationGuide';
 import { DirectorProfile } from './components/DirectorProfile';
 import { AdminPanel } from './components/AdminPanel';
 import { HomeFeaturedResults } from './components/HomeFeaturedResults';
+import { HomeFaq } from './components/HomeFaq';
 import { GalleryFeed } from './components/GalleryFeed';
 import { KakaoChannelCard } from './components/KakaoChannelCard';
 import { KakaoChannelButton } from './components/KakaoChannelButton';
 import { KakaoChannelFab } from './components/KakaoChannelFab';
+import { SeoContent } from './components/SeoContent';
 import { SHOP_LOCATION } from './constants/location';
 import { FALLBACK_PORTFOLIOS, type PortfolioItem } from './constants/services';
+import { applyTabSeo } from './utils/seoDocument';
 import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award, ChevronLeft, Loader2, Settings2 } from 'lucide-react';
 
 function App() {
@@ -65,6 +68,11 @@ function App() {
       window.history.back();
     }
   };
+
+  // 탭별 SEO(title/description/canonical/OG) 갱신
+  useEffect(() => {
+    applyTabSeo(activeTab);
+  }, [activeTab]);
 
   // 마운트 시 초기 히스토리 상태 설정 및 popstate 이벤트 리스너 등록
   useEffect(() => {
@@ -414,6 +422,9 @@ function App() {
               {/* 카카오톡 공식 채널 */}
               <KakaoChannelCard onAlternateContact={openConsulting} />
 
+              {/* SEO/AEO FAQ */}
+              <HomeFaq />
+
               {/* 자가진단 퀴즈 연동 */}
               <DiagnosticTest onStartConsulting={openConsulting} />
             </div>
@@ -647,6 +658,9 @@ function App() {
         {isConsultingOpen && (
           <ConsultingForm onClose={closeConsulting} />
         )}
+
+        {/* 검색·AI 답변용 시맨틱 본문 (시각 숨김) */}
+        <SeoContent />
       </div>
     </div>
   );
