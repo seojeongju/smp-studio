@@ -13,13 +13,10 @@ import {
   type PriceCategory,
   type ServicePrice,
 } from '../constants/services';
+import { formatPriceDisplay } from '../utils/priceFormat';
 
 interface ServicesInfoProps {
   onStartConsulting: () => void;
-}
-
-function formatPrice(priceLabel: string, kind: 'fixed' | 'from'): string {
-  return kind === 'from' ? `${priceLabel}원~` : `${priceLabel}원`;
 }
 
 export function ServicesInfo({ onStartConsulting }: ServicesInfoProps) {
@@ -117,7 +114,7 @@ export function ServicesInfo({ onStartConsulting }: ServicesInfoProps) {
                   {item.note && <p className="services-price-note">{item.note}</p>}
                 </div>
                 <div className="services-price-value notranslate">
-                  <strong>{formatPrice(item.priceLabel, item.kind)}</strong>
+                  <strong>{formatPriceDisplay(item.priceLabel, item.kind)}</strong>
                 </div>
               </li>
             ))}

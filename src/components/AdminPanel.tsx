@@ -29,6 +29,7 @@ import {
   checkAdminAuth,
   uploadImage,
 } from '../utils/adminApi';
+import { formatPriceDisplay, formatPriceInput, formatPriceNumber } from '../utils/priceFormat';
 
 type AdminSection = 'prices' | 'portfolios' | 'gallery' | 'reviews' | 'reservations';
 type ReservationStatus = 'pending' | 'confirmed' | 'cancelled' | 'done';
@@ -335,7 +336,7 @@ export function AdminPanel() {
       category_label: row.category_label,
       category_subtitle: row.category_subtitle,
       name: row.name,
-      price_label: row.price_label,
+      price_label: formatPriceNumber(row.price_label),
       price_kind: row.price_kind,
       note: row.note || '',
       popular: !!row.popular,
@@ -356,7 +357,7 @@ export function AdminPanel() {
         category_label: priceForm.category_label,
         category_subtitle: priceForm.category_subtitle,
         name: priceForm.name,
-        price_label: priceForm.price_label.replace(/원|,/g, '').trim(),
+        price_label: formatPriceNumber(priceForm.price_label),
         price_kind: priceForm.price_kind,
         note: priceForm.note || null,
         popular: priceForm.popular ? 1 : 0,
@@ -715,7 +716,7 @@ export function AdminPanel() {
                       {!row.is_active && <span className="admin-chip ghost">숨김</span>}
                     </div>
                     <p className="admin-item-meta">
-                      {row.category_label} · {row.price_label}원{row.price_kind === 'from' ? '~' : ''}
+                      {row.category_label} · {formatPriceDisplay(row.price_label, row.price_kind)}
                     </p>
                   </div>
                   <div className="admin-item-actions">
@@ -1005,12 +1006,18 @@ export function AdminPanel() {
 
             <div className="admin-grid-2">
               <label className="admin-label">
-                가격 (숫자)
+                가격
                 <input
                   className="admin-input"
+                  inputMode="numeric"
                   value={priceForm.price_label}
-                  onChange={(e) => setPriceForm((p) => ({ ...p, price_label: e.target.value }))}
-                  placeholder="150000 또는 150,000"
+                  onChange={(e) =>
+                    setPriceForm((p) => ({
+                      ...p,
+                      price_label: formatPriceInput(e.target.value),
+                    }))
+                  }
+                  placeholder="예: 150,000"
                   required
                 />
               </label>
