@@ -1,7 +1,7 @@
 import React from 'react';
-import { Home, Image, MessageSquare, BookOpen, Compass, MapPin } from 'lucide-react';
+import { Home, Image, MessageSquare, BookOpen, Compass, MapPin, UserRound } from 'lucide-react';
 
-export type TabType = 'home' | 'gallery' | 'reviews' | 'services' | 'care' | 'location';
+export type TabType = 'home' | 'gallery' | 'reviews' | 'services' | 'care' | 'location' | 'profile';
 
 interface BottomNavProps {
   activeTab: TabType;
@@ -13,6 +13,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab })
     { id: 'home' as TabType, label: '홈', icon: Home },
     { id: 'gallery' as TabType, label: '전후사진', icon: Image },
     { id: 'reviews' as TabType, label: '고객후기', icon: MessageSquare },
+    { id: 'profile' as TabType, label: '원장소개', icon: UserRound },
     { id: 'services' as TabType, label: '케어안내', icon: BookOpen },
     { id: 'care' as TabType, label: '맞춤케어', icon: Compass },
     { id: 'location' as TabType, label: '오시는길', icon: MapPin },
@@ -32,7 +33,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab })
             aria-label={item.label}
           >
             <div className="nav-icon-wrapper">
-              <IconComponent size={18} />
+              <IconComponent size={17} />
             </div>
             <span>{item.label}</span>
           </button>

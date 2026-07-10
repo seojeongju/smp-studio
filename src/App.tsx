@@ -8,6 +8,7 @@ import { ReviewForm } from './components/ReviewForm';
 import { ConsultingForm } from './components/ConsultingForm';
 import { ServicesInfo } from './components/ServicesInfo';
 import { LocationGuide } from './components/LocationGuide';
+import { DirectorProfile } from './components/DirectorProfile';
 import { KakaoChannelCard } from './components/KakaoChannelCard';
 import { KakaoChannelButton } from './components/KakaoChannelButton';
 import { KakaoChannelFab } from './components/KakaoChannelFab';
@@ -61,7 +62,7 @@ function App() {
   // 마운트 시 초기 히스토리 상태 설정 및 popstate 이벤트 리스너 등록
   useEffect(() => {
     const initialTab = (window.location.hash.replace('#', '') as TabType) || 'home';
-    const validTabs: TabType[] = ['home', 'gallery', 'reviews', 'services', 'care', 'location'];
+    const validTabs: TabType[] = ['home', 'gallery', 'reviews', 'services', 'care', 'location', 'profile'];
     const targetTab = validTabs.includes(initialTab) ? initialTab : 'home';
 
     window.history.replaceState({ tab: targetTab }, '', `#${targetTab}`);
@@ -526,6 +527,11 @@ function App() {
           {/* === LOCATION TAB === */}
           {activeTab === 'location' && (
             <LocationGuide onStartConsulting={openConsulting} />
+          )}
+
+          {/* === PROFILE TAB === */}
+          {activeTab === 'profile' && (
+            <DirectorProfile onStartConsulting={openConsulting} />
           )}
 
         </main>
