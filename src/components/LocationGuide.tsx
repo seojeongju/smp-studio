@@ -233,7 +233,7 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
             <div>
               <div style={{ fontSize: '12px', fontWeight: 600 }}>주차</div>
               <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                앞산리슈빌앤리마크 501동 상가 · 단지 내 주차 이용 가능
+                앞산리슈빌앤리마크 501동 지하1층 상가 · 단지 내 주차 이용 가능
               </div>
             </div>
           </div>
