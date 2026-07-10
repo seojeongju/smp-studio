@@ -1,7 +1,15 @@
 import React from 'react';
 import { Home, Image, MessageSquare, BookOpen, Compass, MapPin, UserRound } from 'lucide-react';
 
-export type TabType = 'home' | 'gallery' | 'reviews' | 'services' | 'care' | 'location' | 'profile';
+export type TabType =
+  | 'home'
+  | 'gallery'
+  | 'reviews'
+  | 'services'
+  | 'care'
+  | 'location'
+  | 'profile'
+  | 'admin';
 
 interface BottomNavProps {
   activeTab: TabType;
@@ -9,6 +17,7 @@ interface BottomNavProps {
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab }) => {
+  // 관리자(admin)는 하단 탭에 노출하지 않음 — #admin URL로만 접근
   const navItems = [
     { id: 'home' as TabType, label: '홈', icon: Home },
     { id: 'gallery' as TabType, label: '전후사진', icon: Image },

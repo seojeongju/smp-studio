@@ -1,4 +1,5 @@
 import { Env } from '../types';
+import { isErrorResponse, requireAdmin } from '../lib/auth';
 
 /**
  * Cloudflare R2 버킷에 이미지를 업로드하는 API
@@ -20,7 +21,15 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     // 폼 데이터 파싱
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
-    const folder = formData.get('folder') as string || 'reviews'; // 'reviews' 또는 'consulting'
+    const rawFolder = (formData.get('folder') as string) || 'reviews';
+    const allowedFolders = ['reviews', 'consulting', 'portfolio'];
+    const folder = allowedFolders.includes(rawFolder) ? rawFolder : 'reviews';
+
+    // 포트폴리오 업로드는 관리자만 가능
+    if (folder === 'portfolio') {
+      const auth = await requireAdmin(request, env);
+      if (isErrorResponse(auth)) return auth;
+    }
 
     if (!file) {
       return new Response(

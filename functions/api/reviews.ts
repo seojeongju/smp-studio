@@ -38,12 +38,12 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     const limit = Math.min(parseInt(url.searchParams.get('limit') || '20', 10), 50); // 최대 50개 제한으로 D1 데이터량 제어
     const offset = parseInt(url.searchParams.get('offset') || '0', 10);
 
-    let query = 'SELECT id, name, rating, category, comment, image_url_1, image_url_2, created_at FROM reviews';
+    let query = 'SELECT id, name, rating, category, comment, image_url_1, image_url_2, created_at FROM reviews WHERE COALESCE(is_hidden, 0) = 0';
     const params: any[] = [];
 
     // 필터 조건 추가
     if (category && category !== '전체') {
-      query += ' WHERE category = ?';
+      query += ' AND category = ?';
       params.push(category);
     }
 

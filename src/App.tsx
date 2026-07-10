@@ -9,14 +9,18 @@ import { ConsultingForm } from './components/ConsultingForm';
 import { ServicesInfo } from './components/ServicesInfo';
 import { LocationGuide } from './components/LocationGuide';
 import { DirectorProfile } from './components/DirectorProfile';
+import { AdminPanel } from './components/AdminPanel';
 import { KakaoChannelCard } from './components/KakaoChannelCard';
 import { KakaoChannelButton } from './components/KakaoChannelButton';
 import { KakaoChannelFab } from './components/KakaoChannelFab';
 import { SHOP_LOCATION } from './constants/location';
-import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award, ChevronLeft } from 'lucide-react';
+import { FALLBACK_PORTFOLIOS, type PortfolioItem } from './constants/services';
+import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award, ChevronLeft, Loader2 } from 'lucide-react';
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('home');
+  const [portfolios, setPortfolios] = useState<PortfolioItem[]>(FALLBACK_PORTFOLIOS);
+  const [portfoliosLoading, setPortfoliosLoading] = useState(false);
 
   // 모달 제어 상태
   const [isReviewFormOpen, setIsReviewFormOpen] = useState<boolean>(false);
@@ -62,7 +66,7 @@ function App() {
   // 마운트 시 초기 히스토리 상태 설정 및 popstate 이벤트 리스너 등록
   useEffect(() => {
     const initialTab = (window.location.hash.replace('#', '') as TabType) || 'home';
-    const validTabs: TabType[] = ['home', 'gallery', 'reviews', 'services', 'care', 'location', 'profile'];
+    const validTabs: TabType[] = ['home', 'gallery', 'reviews', 'services', 'care', 'location', 'profile', 'admin'];
     const targetTab = validTabs.includes(initialTab) ? initialTab : 'home';
 
     window.history.replaceState({ tab: targetTab }, '', `#${targetTab}`);
@@ -93,34 +97,30 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // 비포애프터 포트폴리오 데이터 (duration·point 추가)
-  const beforeAfterPortfolio = [
-    {
-      before: '/eyebrow-before.png',
-      after: '/eyebrow-after.png',
-      title: '여성 자연 눈썹 디자인 (엠보 메이크업)',
-      category: '눈썹 디자인',
-      duration: '90분 소요',
-      point: '모근 결을 한 올씩 표현하는 엠보 기법으로 지극히 자연스러운 눈썹 결을 완성했습니다.',
-    },
-    {
-      before: '/smp-before.png',
-      after: '/smp-after.png',
-      title: '정수리 두피 커버 디자인 케어',
-      category: '두피 케어',
-      duration: '세션당 120분',
-      point: '실제 모근 크기와 동일한 초미세 도팅으로 두피의 빈틈을 자연스럽게 채웠습니다.',
-      imageAspectRatio: '3 / 4',
-    },
-    {
-      before: '/men-eyebrow-before.png',
-      after: '/men-eyebrow-after.png',
-      title: '남성 골격 맞춤 브로우 메이크업',
-      category: '브로우 메이크업',
-      duration: '90분 소요',
-      point: '두상 골격과 근육 움직임을 분석해 과장되지 않은 정돈된 남성 눈썹을 디자인했습니다.',
-    },
-  ];
+  // 공개 포트폴리오 로드
+  useEffect(() => {
+    let cancelled = false;
+    setPortfoliosLoading(true);
+
+    fetch('/api/portfolios')
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled) return;
+        if (data?.portfolios?.length) {
+          setPortfolios(data.portfolios);
+        }
+      })
+      .catch(() => {
+        // 폴백 유지
+      })
+      .finally(() => {
+        if (!cancelled) setPortfoliosLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div className="desktop-layout-wrapper">
@@ -473,17 +473,24 @@ function App() {
                 </div>
               </div>
 
-              {beforeAfterPortfolio.map((item, idx) => (
+              {portfoliosLoading && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: 'var(--color-text-muted)', fontSize: '12px' }}>
+                  <Loader2 size={14} className="admin-spin" />
+                  포트폴리오 불러오는 중…
+                </div>
+              )}
+
+              {portfolios.map((item, idx) => (
                 <BeforeAfterSlider
-                  key={idx}
+                  key={item.id}
                   index={idx + 1}
-                  beforeImage={item.before}
-                  afterImage={item.after}
+                  beforeImage={item.before_url}
+                  afterImage={item.after_url}
                   title={item.title}
                   category={item.category}
-                  duration={item.duration}
-                  point={item.point}
-                  imageAspectRatio={'imageAspectRatio' in item ? item.imageAspectRatio : undefined}
+                  duration={item.duration || undefined}
+                  point={item.point || undefined}
+                  imageAspectRatio={item.image_aspect_ratio || undefined}
                 />
               ))}
             </div>
@@ -510,7 +517,7 @@ function App() {
             <div style={{ animation: 'fadeIn 0.3s ease' }}>
               <h2 className="section-title">케어 프로그램 및 비용</h2>
               <p className="section-subtitle">
-                케어 부위와 종류별 소요 시간 및 관리 상세 기준표입니다.
+                시술별 기준 단가와 상담 안내입니다. 모든 시술 VAT 10% 별도.
               </p>
 
               <ServicesInfo onStartConsulting={openConsulting} />
@@ -532,6 +539,11 @@ function App() {
           {/* === PROFILE TAB === */}
           {activeTab === 'profile' && (
             <DirectorProfile onStartConsulting={openConsulting} />
+          )}
+
+          {/* === ADMIN TAB === */}
+          {activeTab === 'admin' && (
+            <AdminPanel />
           )}
 
         </main>
