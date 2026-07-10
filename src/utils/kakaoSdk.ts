@@ -4,6 +4,7 @@ import {
   getKakaoChannelChatUrl,
   getKakaoChannelHomeUrl,
   isKakaoChannelConfigured,
+  loadPublicConfig,
 } from '../constants/kakao';
 
 const KAKAO_JS_SDK_URL =
@@ -11,26 +12,29 @@ const KAKAO_JS_SDK_URL =
 
 let jsSdkPromise: Promise<KakaoSDK> | null = null;
 
-function initKakaoSdk(): KakaoSDK {
-  const appKey = getKakaoAppKey();
-  if (!appKey) {
+function initKakaoSdk(appKey?: string): KakaoSDK {
+  const key = appKey || getKakaoAppKey();
+  if (!key) {
     throw new Error('카카오 JavaScript 키가 설정되지 않았습니다.');
   }
   if (!window.Kakao.isInitialized()) {
-    window.Kakao.init(appKey);
+    window.Kakao.init(key);
   }
   return window.Kakao;
 }
 
-export function loadKakaoJsSdk(): Promise<KakaoSDK> {
+export async function loadKakaoJsSdk(): Promise<KakaoSDK> {
   if (jsSdkPromise) {
     return jsSdkPromise;
   }
 
+  const config = await loadPublicConfig();
+  const appKey = config.kakaoAppKey || undefined;
+
   jsSdkPromise = new Promise((resolve, reject) => {
     if (window.Kakao) {
       try {
-        resolve(initKakaoSdk());
+        resolve(initKakaoSdk(appKey));
       } catch (error) {
         jsSdkPromise = null;
         reject(error);
@@ -43,7 +47,7 @@ export function loadKakaoJsSdk(): Promise<KakaoSDK> {
     script.async = true;
     script.onload = () => {
       try {
-        resolve(initKakaoSdk());
+        resolve(initKakaoSdk(appKey));
       } catch (error) {
         jsSdkPromise = null;
         reject(error);

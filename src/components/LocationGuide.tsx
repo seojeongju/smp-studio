@@ -7,10 +7,8 @@ import {
 } from '../constants/location';
 import { loadKakaoMapSdk } from '../utils/kakaoMap';
 import { createShopMapMarkerHtml } from '../utils/mapMarkerOverlay';
-import { getKakaoAppKey } from '../constants/kakao';
+import { getKakaoAppKey, loadPublicConfig } from '../constants/kakao';
 import { KakaoChannelCard } from './KakaoChannelCard';
-
-const KAKAO_APP_KEY = getKakaoAppKey();
 
 interface LocationGuideProps {
   onStartConsulting?: () => void;
@@ -22,18 +20,24 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
   const [coords, setCoords] = useState({ lat: SHOP_LOCATION.lat, lng: SHOP_LOCATION.lng });
   const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'fallback' | 'error'>('loading');
   const [copyDone, setCopyDone] = useState(false);
+  const [kakaoAppKey, setKakaoAppKey] = useState<string | undefined>(getKakaoAppKey());
 
   useEffect(() => {
-    if (!KAKAO_APP_KEY || !mapContainerRef.current) {
-      setMapStatus('fallback');
-      return;
-    }
-
     let cancelled = false;
 
     const initMap = async () => {
+      const config = await loadPublicConfig();
+      const appKey = config.kakaoAppKey || undefined;
+      if (cancelled) return;
+      setKakaoAppKey(appKey);
+
+      if (!appKey || !mapContainerRef.current) {
+        setMapStatus('fallback');
+        return;
+      }
+
       try {
-        const kakao = await loadKakaoMapSdk(KAKAO_APP_KEY);
+        const kakao = await loadKakaoMapSdk(appKey);
         if (cancelled || !mapContainerRef.current) return;
 
         const geocoder = new kakao.maps.services.Geocoder();
@@ -93,7 +97,7 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
       }
     };
 
-    initMap();
+    void initMap();
 
     return () => {
       cancelled = true;
@@ -144,9 +148,9 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
           <div className="location-map-fallback">
             <MapPin size={32} color="var(--color-text-muted)" />
             <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
-              {KAKAO_APP_KEY
+              {kakaoAppKey
                 ? '지도를 표시할 수 없습니다. 아래 버튼으로 카카오맵에서 확인해 주세요.'
-                : '카카오맵 API 키가 설정되지 않았습니다. VITE_KAKAO_APP_KEY 또는 VITE_KAKAO_MAP_APP_KEY를 추가해 주세요.'}
+                : '카카오맵 API 키가 설정되지 않았습니다. Cloudflare Pages Variables에 KAKAO_APP_KEY(또는 VITE_KAKAO_APP_KEY)를 추가해 주세요.'}
             </p>
             <a
               href={mapLink}
