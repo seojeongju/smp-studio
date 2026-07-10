@@ -16,7 +16,7 @@ import { KakaoChannelButton } from './components/KakaoChannelButton';
 import { KakaoChannelFab } from './components/KakaoChannelFab';
 import { SHOP_LOCATION } from './constants/location';
 import { FALLBACK_PORTFOLIOS, type PortfolioItem } from './constants/services';
-import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award, ChevronLeft, Loader2 } from 'lucide-react';
+import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award, ChevronLeft, Loader2, Settings2 } from 'lucide-react';
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -254,6 +254,15 @@ function App() {
             </div>
           </div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexShrink: 0 }}>
+            <button
+              type="button"
+              onClick={() => changeTab('admin')}
+              className={`header-admin-btn${activeTab === 'admin' ? ' active' : ''}`}
+              aria-label="관리자"
+              title="관리자"
+            >
+              <Settings2 size={16} />
+            </button>
             <a
               href="tel:010-0000-0000"
               style={{ color: 'var(--color-text-main)', display: 'flex', alignItems: 'center', flexShrink: 0 }}
