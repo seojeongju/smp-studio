@@ -7,12 +7,13 @@ export const DIRECTOR = {
     '정교한 기술과 따뜻한 상담으로, 고객 본연의 아름다움을 가장 자연스럽게 완성합니다.',
   highlights: [
     { label: '전문 경력', value: '20년+' },
-    { label: '수상·자격', value: '10+' },
+    { label: '수상·자격', value: '12+' },
     { label: '협회 활동', value: '현직' },
   ],
 } as const;
 
 export const DIRECTOR_CAREER = [
+  '제4회 월드K뷰티페스티벌 콘테스트 대회장 (한국의료뷰티산업진흥협회, 2018)',
   '한국 패션 타투협회 부회장',
   '한국 미용 직업교육 협회 정회원',
   '한국 미용 기능 경기대회 아트 메이크업, 속눈썹, 타투 심사위원',
@@ -28,6 +29,7 @@ export const DIRECTOR_CAREER = [
 ] as const;
 
 export const DIRECTOR_AWARDS = [
+  '2019 월드K뷰티페스티벌 우수지도자상 공로패',
   '미용사 국가기술 자격증',
   '속눈썹 연장 1급 자격증',
   '타투아티스트 교육과정 2급 자격증',
