@@ -10,6 +10,7 @@ import { ServicesInfo } from './components/ServicesInfo';
 import { LocationGuide } from './components/LocationGuide';
 import { DirectorProfile } from './components/DirectorProfile';
 import { AdminPanel } from './components/AdminPanel';
+import { HomeFeaturedResults } from './components/HomeFeaturedResults';
 import { KakaoChannelCard } from './components/KakaoChannelCard';
 import { KakaoChannelButton } from './components/KakaoChannelButton';
 import { KakaoChannelFab } from './components/KakaoChannelFab';
@@ -21,6 +22,7 @@ function App() {
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const [portfolios, setPortfolios] = useState<PortfolioItem[]>(FALLBACK_PORTFOLIOS);
   const [portfoliosLoading, setPortfoliosLoading] = useState(false);
+  const [galleryCategory, setGalleryCategory] = useState('전체');
 
   // 모달 제어 상태
   const [isReviewFormOpen, setIsReviewFormOpen] = useState<boolean>(false);
@@ -121,6 +123,12 @@ function App() {
       cancelled = true;
     };
   }, []);
+
+  const galleryCategories = ['전체', ...Array.from(new Set(portfolios.map((p) => p.category)))];
+  const filteredPortfolios =
+    galleryCategory === '전체'
+      ? portfolios
+      : portfolios.filter((p) => p.category === galleryCategory);
 
   return (
     <div className="desktop-layout-wrapper">
@@ -385,6 +393,14 @@ function App() {
                 </div>
               </div>
 
+              {/* 대표 전후 결과 + 원장 신뢰 요약 */}
+              <HomeFeaturedResults
+                portfolios={portfolios}
+                onOpenGallery={() => changeTab('gallery')}
+                onOpenProfile={() => changeTab('profile')}
+                onStartConsulting={openConsulting}
+              />
+
               {/* 카카오톡 공식 채널 */}
               <KakaoChannelCard onAlternateContact={openConsulting} />
 
@@ -480,7 +496,22 @@ function App() {
                 </div>
               )}
 
-              {portfolios.map((item, idx) => (
+              <div className="gallery-filters" role="tablist" aria-label="포트폴리오 카테고리">
+                {galleryCategories.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    role="tab"
+                    aria-selected={galleryCategory === cat}
+                    className={`gallery-filter-chip${galleryCategory === cat ? ' active' : ''}`}
+                    onClick={() => setGalleryCategory(cat)}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+
+              {filteredPortfolios.map((item, idx) => (
                 <BeforeAfterSlider
                   key={item.id}
                   index={idx + 1}
@@ -491,8 +522,15 @@ function App() {
                   duration={item.duration || undefined}
                   point={item.point || undefined}
                   imageAspectRatio={item.image_aspect_ratio || undefined}
+                  onConsult={openConsulting}
                 />
               ))}
+
+              {!portfoliosLoading && filteredPortfolios.length === 0 && (
+                <div className="gallery-empty">
+                  해당 카테고리의 전후 사진이 아직 없습니다.
+                </div>
+              )}
             </div>
           )}
 

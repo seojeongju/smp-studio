@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronsLeftRight, Sparkles, ShieldCheck, Clock } from 'lucide-react';
+import { ChevronsLeftRight, Sparkles, ShieldCheck, Clock, ChevronRight } from 'lucide-react';
 
 interface BeforeAfterSliderProps {
   beforeImage: string;
@@ -13,6 +13,7 @@ interface BeforeAfterSliderProps {
   imageAspectRatio?: string;
   imageObjectFit?: 'cover' | 'contain';
   imageObjectPosition?: string;
+  onConsult?: () => void;
 }
 
 export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
@@ -26,6 +27,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
   imageAspectRatio = '4 / 3',
   imageObjectFit = 'cover',
   imageObjectPosition = 'center',
+  onConsult,
 }) => {
   const imageStyle: React.CSSProperties = {
     width: '100%',
@@ -351,6 +353,35 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
           }}>
             {point}
           </span>
+        </div>
+      )}
+
+      {onConsult && (
+        <div style={{ padding: '0 16px 16px', borderTop: point ? undefined : '1px solid var(--color-border)' }}>
+          <button
+            type="button"
+            onClick={onConsult}
+            style={{
+              width: '100%',
+              marginTop: point ? 12 : 14,
+              padding: '11px 14px',
+              borderRadius: 'var(--radius-sm)',
+              border: '1.5px solid var(--color-primary-dark)',
+              backgroundColor: 'transparent',
+              color: 'var(--color-text-main)',
+              fontSize: '12.5px',
+              fontWeight: 700,
+              fontFamily: 'var(--font-family)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+            }}
+          >
+            이 시술 1:1 상담하기
+            <ChevronRight size={14} />
+          </button>
         </div>
       )}
     </div>
