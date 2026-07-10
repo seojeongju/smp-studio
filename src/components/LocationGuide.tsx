@@ -40,56 +40,33 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
         const kakao = await loadKakaoMapSdk(appKey);
         if (cancelled || !mapContainerRef.current) return;
 
-        const geocoder = new kakao.maps.services.Geocoder();
+        // 검증된 단지 좌표를 직접 사용 (지오코딩 오차·실패로 핀이 어긋나는 것 방지)
+        const lat = SHOP_LOCATION.lat;
+        const lng = SHOP_LOCATION.lng;
+        const center = new kakao.maps.LatLng(lat, lng);
+        const map = new kakao.maps.Map(mapContainerRef.current, {
+          center,
+          level: 3,
+        });
+        mapInstanceRef.current = map;
 
-        const searchAddress = (queries: string[], index = 0): void => {
-          if (cancelled || index >= queries.length) {
-            placeMarker(SHOP_LOCATION.lat, SHOP_LOCATION.lng);
-            return;
-          }
+        const overlay = new kakao.maps.CustomOverlay({
+          map,
+          position: center,
+          content: createShopMapMarkerHtml(),
+          xAnchor: 0.5,
+          yAnchor: 1,
+          zIndex: 3,
+        });
+        overlay.setMap(map);
 
-          geocoder.addressSearch(queries[index], (result, status) => {
-            if (cancelled) return;
+        setCoords({ lat, lng });
+        setMapStatus('ready');
 
-            if (status === kakao.maps.services.Status.OK && result[0]) {
-              placeMarker(parseFloat(result[0].y), parseFloat(result[0].x));
-            } else {
-              searchAddress(queries, index + 1);
-            }
-          });
-        };
-
-        const placeMarker = (lat: number, lng: number) => {
-          if (cancelled || !mapContainerRef.current) return;
-
-          const center = new kakao.maps.LatLng(lat, lng);
-          const map = new kakao.maps.Map(mapContainerRef.current, {
-            center,
-            level: 3,
-          });
-          mapInstanceRef.current = map;
-
-          const overlay = new kakao.maps.CustomOverlay({
-            map,
-            position: center,
-            content: createShopMapMarkerHtml(),
-            xAnchor: 0.5,
-            yAnchor: 1,
-            zIndex: 3,
-          });
-          overlay.setMap(map);
-
-          setCoords({ lat, lng });
-          setMapStatus('ready');
-
-          // 컨테이너 크기 반영 후 타일 재렌더링
-          requestAnimationFrame(() => {
-            map.relayout();
-            map.setCenter(center);
-          });
-        };
-
-        searchAddress(SHOP_LOCATION.geocodeQueries);
+        requestAnimationFrame(() => {
+          map.relayout();
+          map.setCenter(center);
+        });
       } catch {
         if (!cancelled) {
           setMapStatus('fallback');
