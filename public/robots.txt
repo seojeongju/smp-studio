@@ -9,4 +9,4 @@ Allow: /
 User-agent: Googlebot
 Allow: /
 
-Sitemap: https://smp-studio.pages.dev/sitemap.xml
+Sitemap: https://grace.ai.kr/sitemap.xml

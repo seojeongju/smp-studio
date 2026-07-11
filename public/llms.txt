@@ -2,7 +2,7 @@
 
 > 대구 남구 안지랑 반영구 눈썹·두피커버 전문 프라이빗 뷰티 스튜디오
 
-- 사이트: https://smp-studio.pages.dev/
+- 사이트: https://grace.ai.kr/
 - 주소: 대구광역시 남구 안지랑로 73 앞산리슈빌앤리마크 501동 지하1층 105호
 - 원장: 권영미
 - 운영: 100% 1:1 사전 예약제
@@ -10,14 +10,14 @@
 
 ## 주요 페이지
 
-- [홈](https://smp-studio.pages.dev/): 스튜디오 소개·대표 결과·FAQ
-- [시술 안내](https://smp-studio.pages.dev/#services): 시술·가격
-- [전후사진](https://smp-studio.pages.dev/#portfolio): 시술 전후 비교
-- [갤러리](https://smp-studio.pages.dev/#gallery): 시술 사진
-- [케어 가이드](https://smp-studio.pages.dev/#care): 시술 후 관리
-- [오시는 길](https://smp-studio.pages.dev/#location): 지도·교통
-- [원장 소개](https://smp-studio.pages.dev/#profile): 권영미 원장 프로필
-- [고객 후기](https://smp-studio.pages.dev/#reviews): 리뷰
+- [홈](https://grace.ai.kr/): 스튜디오 소개·대표 결과·FAQ
+- [시술 안내](https://grace.ai.kr/#services): 시술·가격
+- [전후사진](https://grace.ai.kr/#portfolio): 시술 전후 비교
+- [갤러리](https://grace.ai.kr/#gallery): 시술 사진
+- [케어 가이드](https://grace.ai.kr/#care): 시술 후 관리
+- [오시는 길](https://grace.ai.kr/#location): 지도·교통
+- [원장 소개](https://grace.ai.kr/#profile): 권영미 원장 프로필
+- [고객 후기](https://grace.ai.kr/#reviews): 리뷰
 
 ## 연락·예약
 

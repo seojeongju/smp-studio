@@ -2,7 +2,7 @@ import { SHOP_LOCATION } from './location';
 import { DIRECTOR } from './director';
 
 /** 프로덕션 공개 URL (검색·OG·sitemap 기준) */
-export const SITE_URL = 'https://smp-studio.pages.dev';
+export const SITE_URL = 'https://grace.ai.kr';
 
 export const SITE_NAME = '그레이스샵';
 export const SITE_NAME_EN = 'Grace Shop';
