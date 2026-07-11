@@ -263,6 +263,7 @@ body {
   object-fit: contain;
   display: block;
   flex-shrink: 1;
+  background: transparent;
 }
 
 .sr-only {
