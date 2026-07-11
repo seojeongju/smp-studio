@@ -12,19 +12,24 @@ import { DirectorProfile } from './components/DirectorProfile';
 import { AdminPanel } from './components/AdminPanel';
 import { HomeFeaturedResults } from './components/HomeFeaturedResults';
 import { HomeFaq } from './components/HomeFaq';
+import { HomeReviews } from './components/HomeReviews';
 import { GalleryFeed } from './components/GalleryFeed';
 import { KakaoChannelCard } from './components/KakaoChannelCard';
 import { KakaoChannelButton } from './components/KakaoChannelButton';
 import { KakaoChannelFab } from './components/KakaoChannelFab';
 import { SeoContent } from './components/SeoContent';
 import { SHOP_LOCATION } from './constants/location';
-import { FALLBACK_PORTFOLIOS, type PortfolioItem } from './constants/services';
+import { FALLBACK_PORTFOLIOS, FALLBACK_SERVICE_PRICES, type PortfolioItem, type ServicePrice } from './constants/services';
 import { applyTabSeo } from './utils/seoDocument';
+import { loadAndApplyReviewJsonLd } from './utils/reviewSeo';
+import { loadPublicConfig } from './constants/kakao';
+import { resolveServiceDuration } from './utils/serviceDuration';
 import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award, ChevronLeft, Loader2, Settings2 } from 'lucide-react';
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const [portfolios, setPortfolios] = useState<PortfolioItem[]>(FALLBACK_PORTFOLIOS);
+  const [servicePrices, setServicePrices] = useState<ServicePrice[]>(FALLBACK_SERVICE_PRICES);
   const [portfoliosLoading, setPortfoliosLoading] = useState(false);
   const [galleryCategory, setGalleryCategory] = useState('전체');
 
@@ -34,6 +39,29 @@ function App() {
 
   // 리뷰 리스트 갱신 트리거
   const [refreshReviews, setRefreshReviews] = useState<boolean>(false);
+
+  // 카카오맵 키 등 공개 설정 미리 로드 + 후기 JSON-LD + 케어안내 소요시간
+  useEffect(() => {
+    void loadPublicConfig();
+    void loadAndApplyReviewJsonLd();
+
+    let cancelled = false;
+    const loadPrices = async () => {
+      try {
+        const res = await fetch('/api/prices');
+        const data = await res.json();
+        if (!cancelled && res.ok && data.prices?.length) {
+          setServicePrices(data.prices as ServicePrice[]);
+        }
+      } catch {
+        /* 폴백 유지 */
+      }
+    };
+    void loadPrices();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const triggerRefreshReviews = () => {
     setRefreshReviews((prev) => !prev);
@@ -414,6 +442,8 @@ function App() {
                 onStartConsulting={openConsulting}
               />
 
+              <HomeReviews onOpenReviews={() => changeTab('reviews')} />
+
               {/* 카카오톡 공식 채널 */}
               <KakaoChannelCard onAlternateContact={openConsulting} />
 
@@ -421,7 +451,10 @@ function App() {
               <HomeFaq />
 
               {/* 자가진단 퀴즈 연동 */}
-              <DiagnosticTest onStartConsulting={openConsulting} />
+              <DiagnosticTest
+                onStartConsulting={openConsulting}
+                servicePrices={servicePrices}
+              />
             </div>
           )}
 
@@ -540,7 +573,11 @@ function App() {
                   afterImage={item.after_url}
                   title={item.title}
                   category={item.category}
-                  duration={item.duration || undefined}
+                  duration={resolveServiceDuration(servicePrices, {
+                    category: item.category,
+                    title: item.title,
+                    fallback: item.duration,
+                  })}
                   point={item.point || undefined}
                   imageAspectRatio={item.image_aspect_ratio || undefined}
                   onConsult={openConsulting}

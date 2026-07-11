@@ -40,7 +40,7 @@ export const onRequestPut: PagesFunction<Env> = async (context) => {
     await context.env.DB.prepare(
       `UPDATE service_prices SET
         category_id = ?, category_label = ?, category_subtitle = ?,
-        name = ?, price_label = ?, price_kind = ?, note = ?,
+        name = ?, price_label = ?, price_kind = ?, note = ?, duration = ?,
         popular = ?, sort_order = ?, is_active = ?,
         updated_at = CURRENT_TIMESTAMP
        WHERE id = ?`
@@ -53,6 +53,7 @@ export const onRequestPut: PagesFunction<Env> = async (context) => {
         priceLabel,
         priceKind,
         body.note?.trim() || null,
+        body.duration?.trim() || null,
         body.popular ? 1 : 0,
         Number(body.sort_order) || 0,
         body.is_active === 0 ? 0 : 1,

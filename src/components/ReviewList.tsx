@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Star, Trash2, SlidersHorizontal } from 'lucide-react';
+import { applyReviewJsonLd } from '../utils/reviewSeo';
 
 interface Review {
   id: string;
@@ -42,6 +43,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
       const data = await res.json() as any;
       if (data.success) {
         setReviews(data.reviews);
+        applyReviewJsonLd(data.reviews);
       }
     } catch (err) {
       console.error('리뷰 로드 오류:', err);

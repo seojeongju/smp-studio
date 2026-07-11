@@ -4,10 +4,11 @@ import {
   SHOP_LOCATION,
   getKakaoMapLink,
   getKakaoNavigationLink,
+  getOsmEmbedUrl,
 } from '../constants/location';
 import { loadKakaoMapSdk } from '../utils/kakaoMap';
 import { createShopMapMarkerHtml } from '../utils/mapMarkerOverlay';
-import { getKakaoAppKey, loadPublicConfig } from '../constants/kakao';
+import { loadPublicConfig } from '../constants/kakao';
 import { KakaoChannelCard } from './KakaoChannelCard';
 
 interface LocationGuideProps {
@@ -20,18 +21,32 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
   const [coords, setCoords] = useState({ lat: SHOP_LOCATION.lat, lng: SHOP_LOCATION.lng });
   const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'fallback' | 'error'>('loading');
   const [copyDone, setCopyDone] = useState(false);
-  const [kakaoAppKey, setKakaoAppKey] = useState<string | undefined>(getKakaoAppKey());
 
   useEffect(() => {
     let cancelled = false;
 
+    const waitForContainer = async (retries = 20): Promise<HTMLDivElement | null> => {
+      for (let i = 0; i < retries; i += 1) {
+        if (cancelled) return null;
+        if (mapContainerRef.current) return mapContainerRef.current;
+        await new Promise((r) => window.setTimeout(r, 50));
+      }
+      return mapContainerRef.current;
+    };
+
     const initMap = async () => {
       const config = await loadPublicConfig();
-      const appKey = config.kakaoAppKey || undefined;
+      const appKey = config.kakaoAppKey?.trim() || undefined;
       if (cancelled) return;
-      setKakaoAppKey(appKey);
 
-      if (!appKey || !mapContainerRef.current) {
+      if (!appKey) {
+        setMapStatus('fallback');
+        return;
+      }
+
+      const container = await waitForContainer();
+      if (cancelled) return;
+      if (!container) {
         setMapStatus('fallback');
         return;
       }
@@ -111,6 +126,7 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
 
   const mapLink = getKakaoMapLink(coords.lat, coords.lng);
   const navLink = getKakaoNavigationLink(coords.lat, coords.lng);
+  const osmEmbedUrl = getOsmEmbedUrl(coords.lat, coords.lng);
 
   return (
     <div style={{ animation: 'fadeIn 0.3s ease' }}>
@@ -122,32 +138,19 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
       {/* 지도 영역 */}
       <div className="card location-map-card">
         {mapStatus === 'fallback' ? (
-          <div className="location-map-fallback">
-            <MapPin size={32} color="var(--color-text-muted)" />
-            <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
-              {kakaoAppKey
-                ? '지도를 표시할 수 없습니다. 아래 버튼으로 카카오맵에서 확인해 주세요.'
-                : '카카오맵 API 키가 설정되지 않았습니다. Cloudflare Pages Variables에 KAKAO_APP_KEY(또는 VITE_KAKAO_APP_KEY)를 추가해 주세요.'}
-            </p>
-            <a
-              href={mapLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '10px 16px',
-                backgroundColor: 'var(--color-text-main)',
-                color: 'var(--color-primary-light)',
-                borderRadius: '20px',
-                fontSize: '13px',
-                fontWeight: 700,
-                textDecoration: 'none',
-              }}
-            >
-              <ExternalLink size={14} /> 카카오맵에서 보기
-            </a>
+          <div className="location-map-fallback-embed">
+            <iframe
+              title="그레이스샵 위치 지도"
+              src={osmEmbedUrl}
+              className="location-map-iframe"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <div className="location-map-fallback-bar">
+              <a href={mapLink} target="_blank" rel="noopener noreferrer">
+                <ExternalLink size={14} /> 카카오맵에서 보기
+              </a>
+            </div>
           </div>
         ) : (
           <div className="location-map-wrap">

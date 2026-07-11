@@ -9,6 +9,7 @@ export interface ServicePrice {
   price_label: string;
   price_kind: PriceKind;
   note: string | null;
+  duration: string | null;
   popular: number;
   sort_order: number;
   is_active?: number;
@@ -24,6 +25,7 @@ export interface PriceCategory {
     priceLabel: string;
     kind: PriceKind;
     note?: string;
+    duration?: string;
     popular?: boolean;
   }>;
 }
@@ -101,6 +103,7 @@ export function groupPricesByCategory(prices: ServicePrice[]): PriceCategory[] {
       priceLabel: row.price_label,
       kind: row.price_kind,
       note: row.note || undefined,
+      duration: row.duration || undefined,
       popular: !!row.popular,
     });
   }
@@ -115,10 +118,10 @@ export const FALLBACK_PRICE_CATEGORIES: PriceCategory[] = [
     label: '눈썹 · 아이라인 · 입술',
     subtitle: 'Permanent Makeup',
     items: [
-      { id: 'fb-1', name: '여자눈썹', priceLabel: '150,000', kind: 'fixed', popular: true },
-      { id: 'fb-2', name: '남자눈썹', priceLabel: '200,000', kind: 'fixed' },
-      { id: 'fb-3', name: '아이라인', priceLabel: '150,000', kind: 'fixed' },
-      { id: 'fb-4', name: '입술', priceLabel: '300,000', kind: 'fixed' },
+      { id: 'fb-1', name: '여자눈썹', priceLabel: '150,000', kind: 'fixed', popular: true, duration: '90분 소요' },
+      { id: 'fb-2', name: '남자눈썹', priceLabel: '200,000', kind: 'fixed', duration: '90분 소요' },
+      { id: 'fb-3', name: '아이라인', priceLabel: '150,000', kind: 'fixed', duration: '90분 소요' },
+      { id: 'fb-4', name: '입술', priceLabel: '300,000', kind: 'fixed', duration: '120분 소요' },
     ],
   },
   {
@@ -126,8 +129,8 @@ export const FALLBACK_PRICE_CATEGORIES: PriceCategory[] = [
     label: '두피 · 헤어라인',
     subtitle: 'Scalp & Hairline',
     items: [
-      { id: 'fb-5', name: 'SMP 두피문신', priceLabel: '500,000', kind: 'from', popular: true, note: '면적·밀도에 따라 상담 후 확정' },
-      { id: 'fb-6', name: '헤어라인', priceLabel: '250,000', kind: 'from', note: '라인·범위에 따라 상담 후 확정' },
+      { id: 'fb-5', name: 'SMP 두피문신', priceLabel: '500,000', kind: 'from', popular: true, note: '면적·밀도에 따라 상담 후 확정', duration: '세션당 120분' },
+      { id: 'fb-6', name: '헤어라인', priceLabel: '250,000', kind: 'from', note: '라인·범위에 따라 상담 후 확정', duration: '90분 소요' },
     ],
   },
   {
@@ -135,8 +138,8 @@ export const FALLBACK_PRICE_CATEGORIES: PriceCategory[] = [
     label: '스킨 · 레이저 · 타투',
     subtitle: 'Skin Care & Tattoo',
     items: [
-      { id: 'fb-7', name: 'MTS', priceLabel: '100,000', kind: 'fixed' },
-      { id: 'fb-8', name: '미백레이저 5회', priceLabel: '250,000', kind: 'fixed', note: '5회 패키지' },
+      { id: 'fb-7', name: 'MTS', priceLabel: '100,000', kind: 'fixed', duration: '60분 소요' },
+      { id: 'fb-8', name: '미백레이저 5회', priceLabel: '250,000', kind: 'fixed', note: '5회 패키지', duration: '약 30~40분' },
       { id: 'fb-9', name: '점', priceLabel: '20,000', kind: 'from' },
       { id: 'fb-10', name: '미니타투', priceLabel: '60,000', kind: 'from' },
       { id: 'fb-11', name: '문신제거', priceLabel: '100,000', kind: 'from', note: '크기·색소에 따라 상담 후 확정' },
@@ -144,13 +147,31 @@ export const FALLBACK_PRICE_CATEGORIES: PriceCategory[] = [
   },
 ];
 
+/** 폴백 단가 → ServicePrice 행 (홈 소요시간 연동용) */
+export const FALLBACK_SERVICE_PRICES: ServicePrice[] = FALLBACK_PRICE_CATEGORIES.flatMap((cat) =>
+  cat.items.map((item, index) => ({
+    id: item.id,
+    category_id: cat.id,
+    category_label: cat.label,
+    category_subtitle: cat.subtitle,
+    name: item.name,
+    price_label: item.priceLabel,
+    price_kind: item.kind,
+    note: item.note || null,
+    duration: item.duration || null,
+    popular: item.popular ? 1 : 0,
+    sort_order: index + 1,
+    is_active: 1,
+  }))
+);
+
 export const FALLBACK_PORTFOLIOS: PortfolioItem[] = [
   {
     id: 'pf-01',
     title: '여성 자연 눈썹 디자인 (엠보 메이크업)',
     category: '눈썹 디자인',
-    before_url: '/eyebrow-before.png',
-    after_url: '/eyebrow-after.png',
+    before_url: '/eyebrow-before-v2.png',
+    after_url: '/eyebrow-after-v2.png',
     duration: '90분 소요',
     point: '모근 결을 한 올씩 표현하는 엠보 기법으로 지극히 자연스러운 눈썹 결을 완성했습니다.',
     image_aspect_ratio: null,
@@ -171,8 +192,8 @@ export const FALLBACK_PORTFOLIOS: PortfolioItem[] = [
     id: 'pf-03',
     title: '남성 골격 맞춤 브로우 메이크업',
     category: '브로우 메이크업',
-    before_url: '/men-eyebrow-before.png',
-    after_url: '/men-eyebrow-after.png',
+    before_url: '/men-eyebrow-before-v2.png',
+    after_url: '/men-eyebrow-after-v2.png',
     duration: '90분 소요',
     point: '두상 골격과 근육 움직임을 분석해 과장되지 않은 정돈된 남성 눈썹을 디자인했습니다.',
     image_aspect_ratio: null,

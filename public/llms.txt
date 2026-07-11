@@ -17,7 +17,7 @@
 - [케어 가이드](https://grace.ai.kr/#care): 시술 후 관리
 - [오시는 길](https://grace.ai.kr/#location): 지도·교통
 - [원장 소개](https://grace.ai.kr/#profile): 권영미 원장 프로필
-- [고객 후기](https://grace.ai.kr/#reviews): 리뷰
+- [고객 후기](https://grace.ai.kr/reviews): 실제 시술 고객 리뷰 (검색·크롤러용 HTML)
 
 ## 연락·예약
 

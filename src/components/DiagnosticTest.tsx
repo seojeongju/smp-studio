@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { HelpCircle, ChevronRight, RotateCcw, MessageCircle, Sparkles, Compass, Award, AlertTriangle, UserCheck, Flame, ArrowLeft } from 'lucide-react';
 import { KakaoChannelButton } from './KakaoChannelButton';
+import type { ServicePrice } from '../constants/services';
+import {
+  DIAGNOSTIC_DURATION_NAMES,
+  findPriceDurationByName,
+} from '../utils/serviceDuration';
 
 interface Option {
   label: string;
@@ -15,9 +20,25 @@ interface Question {
   options: Option[];
 }
 
-export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ onStartConsulting }) => {
+interface DiagnosticTestProps {
+  onStartConsulting: () => void;
+  servicePrices?: ServicePrice[];
+}
+
+export const DiagnosticTest: React.FC<DiagnosticTestProps> = ({
+  onStartConsulting,
+  servicePrices = [],
+}) => {
   const [currentStep, setCurrentStep] = useState<number | string>(1);
   const [history, setHistory] = useState<(number | string)[]>([]);
+
+  const durationByResult = useMemo(() => {
+    const map: Record<string, string | undefined> = {};
+    for (const [key, names] of Object.entries(DIAGNOSTIC_DURATION_NAMES)) {
+      map[key] = findPriceDurationByName(servicePrices, names);
+    }
+    return map;
+  }, [servicePrices]);
 
   // 자가진단 흐름 데이터 및 아이콘 매핑
   const steps: Record<number, Question> = {
@@ -48,32 +69,42 @@ export const DiagnosticTest: React.FC<{ onStartConsulting: () => void }> = ({ on
     },
   };
 
+  const browDuration = durationByResult.eyebrow_new || '약 1시간 30분';
+
   // 결과 데이터 정의
   const results: Record<string, { title: string; desc: string; tip: string }> = {
     eyebrow_new: {
       title: '자연 눈썹 (엠보 결) 또는 콤보 눈썹',
       desc: '잔흔이 없는 깨끗한 피부 상태이므로, 본래 눈썹 결을 한 올 한 올 살리는 엠보 기법을 사용해 극도로 자연스러운 연출이 가능합니다. 이목구비를 조금 더 또렷하게 강조하고 싶으시다면 엠보 결 기법에 은은한 섀도우 음영을 한 층 더하는 콤보 기법을 강력 추천합니다.',
-      tip: '케어 시간은 약 1시간 30분 소요되며, 1차 케어 후 피부가 완벽히 재생되는 4~6주 사이에 리터치를 진행해 완성도를 최고로 높입니다.',
+      tip: `케어 시간은 ${browDuration}이며, 1차 케어 후 피부가 완벽히 재생되는 4~6주 사이에 리터치를 진행해 완성도를 최고로 높입니다.`,
     },
     eyebrow_cover: {
       title: '잔흔 중화 & 커버업 콤보 디자인',
       desc: '기존에 받은 디자인의 붉거나 붉푸른 잔흔이 피부에 다소 남아 있는 상태입니다. 이 경우에는 단순 자연눈썹 결 디자인 시 잔흔이 제대로 커버되지 않아 이질감이 생길 수 있습니다. 정교한 보색 중화 과정을 거친 후, 밀도를 높여 덮어주는 수지(섀도우) 기법이 결합된 커버업 콤보 케어를 권장합니다.',
-      tip: '정확한 잔흔 상태 파악을 위해 하단의 [1:1 사진 견적 신청]을 통해 현재 눈썹 부위 사진을 전송해 주시면 더욱 정밀한 1:1 상담이 가능합니다.',
+      tip: durationByResult.eyebrow_cover
+        ? `케어 시간은 ${durationByResult.eyebrow_cover} 정도이며, 정확한 잔흔 상태 파악을 위해 하단의 [1:1 사진 견적 신청]을 통해 현재 눈썹 부위 사진을 전송해 주시면 더욱 정밀한 1:1 상담이 가능합니다.`
+        : '정확한 잔흔 상태 파악을 위해 하단의 [1:1 사진 견적 신청]을 통해 현재 눈썹 부위 사진을 전송해 주시면 더욱 정밀한 1:1 상담이 가능합니다.',
     },
     smp_crown: {
       title: '정수리 / 가르마 미세 도트 커버',
       desc: '모발 사이로 비치는 가르마와 하얗게 드러나는 두피 면적을 시각적으로 자연스럽게 차단하기 위해, 실제 모근 크기와 동일한 미세 도트를 입체감 있게 표현하는 디자인 케어입니다. 가르마 방향에 따라 자연스러운 도트 분산 기법으로 풍성한 머리숱을 연출합니다.',
-      tip: '피부 재생 주기에 맞춰 통상 3~4회 세션으로 점진적으로 채워드리며, 케어 직후 바로 정상적인 일상생활이 가능합니다.',
+      tip: durationByResult.smp_crown
+        ? `세션당 케어 시간은 ${durationByResult.smp_crown}이며, 피부 재생 주기에 맞춰 통상 3~4회 세션으로 점진적으로 채워드립니다. 케어 직후 바로 정상적인 일상생활이 가능합니다.`
+        : '피부 재생 주기에 맞춰 통상 3~4회 세션으로 점진적으로 채워드리며, 케어 직후 바로 정상적인 일상생활이 가능합니다.',
     },
     smp_hairline: {
       title: '헤어라인 쉐이딩 커버 디자인',
       desc: '양측 M자 부위나 불규칙하게 뒤로 밀려난 헤어라인을 메워 얼굴형을 작고 입체감 있게 잡아주는 정밀 디자인 케어입니다. 주변 모근 두께와 정밀하게 톤을 매칭하여 흐르듯 자연스러운 이마 라인을 완성합니다.',
-      tip: '헤어라인 부위는 두피 중에서도 표피층이 얇고 섬세하므로 깊이 조절에 능숙한 마이크로 디테일 케어가 필요합니다.',
+      tip: durationByResult.smp_hairline
+        ? `케어 시간은 ${durationByResult.smp_hairline}이며, 헤어라인 부위는 두피 중에서도 표피층이 얇고 섬세하므로 깊이 조절에 능숙한 마이크로 디테일 케어가 필요합니다.`
+        : '헤어라인 부위는 두피 중에서도 표피층이 얇고 섬세하므로 깊이 조절에 능숙한 마이크로 디테일 케어가 필요합니다.',
     },
     smp_full: {
       title: '민머리 삭발 전체 커버 디자인',
       desc: '전반적인 탈모가 많이 진행되었거나 삭발 스타일을 상시 유지하시는 분들을 위한 토탈 디자인 케어 프로그램입니다. 구강 구조, 이마 비율, 관자놀이 라인을 토대로 가상의 세련된 헤어라인 구획을 디자인하고 모근 밀도를 완성도 높게 채워 시각적인 젊음을 선사합니다.',
-      tip: '전체 커버 디자인은 광범위한 명도 대비 톤 매칭이 핵심이므로 보통 4~5회 이상의 정밀 레이어링 세션이 필요합니다.',
+      tip: durationByResult.smp_full
+        ? `세션당 케어 시간은 ${durationByResult.smp_full}이며, 전체 커버 디자인은 광범위한 명도 대비 톤 매칭이 핵심이므로 보통 4~5회 이상의 정밀 레이어링 세션이 필요합니다.`
+        : '전체 커버 디자인은 광범위한 명도 대비 톤 매칭이 핵심이므로 보통 4~5회 이상의 정밀 레이어링 세션이 필요합니다.',
     },
   };
 

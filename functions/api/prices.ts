@@ -8,7 +8,7 @@ import type { ServicePriceRow } from './admin/prices';
 export const onRequestGet: PagesFunction<Env> = async (context) => {
   try {
     const { results } = await context.env.DB.prepare(
-      `SELECT id, category_id, category_label, category_subtitle, name, price_label, price_kind, note, popular, sort_order
+      `SELECT id, category_id, category_label, category_subtitle, name, price_label, price_kind, note, duration, popular, sort_order
        FROM service_prices
        WHERE is_active = 1
        ORDER BY category_id ASC, sort_order ASC, name ASC`

@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent, type MouseEvent } from 'react';
 import {
   Check,
   Eye,
@@ -75,6 +75,7 @@ interface PriceFormState {
   price_label: string;
   price_kind: PriceKind;
   note: string;
+  duration: string;
   popular: boolean;
   sort_order: number;
   is_active: boolean;
@@ -111,6 +112,7 @@ const emptyPriceForm = (): PriceFormState => ({
   price_label: '',
   price_kind: 'fixed',
   note: '',
+  duration: '',
   popular: false,
   sort_order: 0,
   is_active: true,
@@ -164,6 +166,20 @@ export function AdminPanel() {
   const [showGalleryForm, setShowGalleryForm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState<'before' | 'after' | 'gallery' | null>(null);
+  /** 입력 중 드래그로 오버레이에 mouseup 되어 모달이 닫히는 것 방지 */
+  const overlayPointerDownRef = useRef(false);
+
+  const bindOverlayClose = (onClose: () => void) => ({
+    onMouseDown: (e: MouseEvent<HTMLDivElement>) => {
+      overlayPointerDownRef.current = e.target === e.currentTarget;
+    },
+    onClick: (e: MouseEvent<HTMLDivElement>) => {
+      if (e.target === e.currentTarget && overlayPointerDownRef.current) {
+        onClose();
+      }
+      overlayPointerDownRef.current = false;
+    },
+  });
 
   useEffect(() => {
     checkAdminAuth()
@@ -339,6 +355,7 @@ export function AdminPanel() {
       price_label: formatPriceNumber(row.price_label),
       price_kind: row.price_kind,
       note: row.note || '',
+      duration: row.duration || '',
       popular: !!row.popular,
       sort_order: row.sort_order,
       is_active: row.is_active !== 0,
@@ -360,6 +377,7 @@ export function AdminPanel() {
         price_label: formatPriceNumber(priceForm.price_label),
         price_kind: priceForm.price_kind,
         note: priceForm.note || null,
+        duration: priceForm.duration || null,
         popular: priceForm.popular ? 1 : 0,
         sort_order: Number(priceForm.sort_order) || 0,
         is_active: priceForm.is_active ? 1 : 0,
@@ -717,6 +735,7 @@ export function AdminPanel() {
                     </div>
                     <p className="admin-item-meta">
                       {row.category_label} · {formatPriceDisplay(row.price_label, row.price_kind)}
+                      {row.duration ? ` · ${row.duration}` : ''}
                     </p>
                   </div>
                   <div className="admin-item-actions">
@@ -972,7 +991,7 @@ export function AdminPanel() {
       )}
 
       {showPriceForm && (
-        <div className="admin-modal-overlay" onClick={() => setShowPriceForm(false)}>
+        <div className="admin-modal-overlay" {...bindOverlayClose(() => setShowPriceForm(false))}>
           <form className="admin-modal" onClick={(e) => e.stopPropagation()} onSubmit={savePrice}>
             <div className="admin-modal-head">
               <h3>{priceForm.id ? '단가 수정' : '단가 추가'}</h3>
@@ -1045,6 +1064,19 @@ export function AdminPanel() {
               />
             </label>
 
+            <label className="admin-label">
+              소요시간 (선택)
+              <input
+                className="admin-input"
+                value={priceForm.duration}
+                onChange={(e) => setPriceForm((p) => ({ ...p, duration: e.target.value }))}
+                placeholder="예: 90분 소요"
+              />
+              <span className="admin-field-hint">
+                케어안내에 표시되며, 홈·전후사진 등 해당 시술 소요시간에 함께 반영됩니다.
+              </span>
+            </label>
+
             <div className="admin-grid-2">
               <label className="admin-label">
                 정렬 순서
@@ -1085,7 +1117,7 @@ export function AdminPanel() {
       )}
 
       {showPortfolioForm && (
-        <div className="admin-modal-overlay" onClick={() => setShowPortfolioForm(false)}>
+        <div className="admin-modal-overlay" {...bindOverlayClose(() => setShowPortfolioForm(false))}>
           <form
             className="admin-modal"
             onClick={(e) => e.stopPropagation()}
@@ -1166,6 +1198,9 @@ export function AdminPanel() {
                 onChange={(e) => setPortfolioForm((p) => ({ ...p, duration: e.target.value }))}
                 placeholder="예: 90분 소요"
               />
+              <span className="admin-field-hint">
+                케어안내 단가표에 같은 시술 소요시간이 있으면 그 값이 우선 표시됩니다.
+              </span>
             </label>
 
             <label className="admin-label">
@@ -1216,7 +1251,7 @@ export function AdminPanel() {
       )}
 
       {showGalleryForm && (
-        <div className="admin-modal-overlay" onClick={() => setShowGalleryForm(false)}>
+        <div className="admin-modal-overlay" {...bindOverlayClose(() => setShowGalleryForm(false))}>
           <form
             className="admin-modal"
             onClick={(e) => e.stopPropagation()}

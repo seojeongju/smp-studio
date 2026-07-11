@@ -44,9 +44,26 @@ export function getKakaoChannelHomeUrl(): string | null {
     : null;
 }
 
-/** /api/config 에서 런타임 키를 불러와 캐시 (지도·채널 공통) */
+async function fetchJsonConfig(url: string): Promise<Partial<PublicConfig> | null> {
+  try {
+    const res = await fetch(url, { cache: 'no-cache' });
+    if (!res.ok) return null;
+    const ct = res.headers.get('content-type') || '';
+    if (!ct.includes('application/json') && !ct.includes('text/json')) {
+      // SPA HTML 폴백 응답을 JSON으로 오인하지 않음
+      const text = await res.text();
+      if (!text.trimStart().startsWith('{')) return null;
+      return JSON.parse(text) as Partial<PublicConfig>;
+    }
+    return (await res.json()) as Partial<PublicConfig>;
+  } catch {
+    return null;
+  }
+}
+
+/** /api/config → /config.json → 빌드 타임 순으로 런타임 키 로드 (지도·채널 공통) */
 export async function loadPublicConfig(): Promise<PublicConfig> {
-  if (cachedConfig) return cachedConfig;
+  if (cachedConfig?.kakaoAppKey) return cachedConfig;
   if (loadPromise) return loadPromise;
 
   loadPromise = (async () => {
@@ -55,24 +72,16 @@ export async function loadPublicConfig(): Promise<PublicConfig> {
       kakaoChannelId: buildTimeChannelId() || null,
     };
 
-    try {
-      const res = await fetch('/api/config');
-      if (!res.ok) {
-        cachedConfig = fallback;
-        return cachedConfig;
-      }
-      const data = await res.json();
-      cachedConfig = {
-        kakaoAppKey: data.kakaoAppKey || fallback.kakaoAppKey,
-        kakaoChannelId: data.kakaoChannelId || fallback.kakaoChannelId,
-      };
-      return cachedConfig;
-    } catch {
-      cachedConfig = fallback;
-      return cachedConfig;
-    } finally {
-      loadPromise = null;
-    }
+    const fromApi = await fetchJsonConfig('/api/config');
+    const fromStatic = fromApi?.kakaoAppKey ? null : await fetchJsonConfig('/config.json');
+    const data = fromApi?.kakaoAppKey ? fromApi : fromStatic || fromApi;
+
+    cachedConfig = {
+      kakaoAppKey: data?.kakaoAppKey || fallback.kakaoAppKey,
+      kakaoChannelId: data?.kakaoChannelId || fallback.kakaoChannelId,
+    };
+    loadPromise = null;
+    return cachedConfig;
   })();
 
   return loadPromise;

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   AlertCircle,
   ChevronRight,
+  Clock,
   Info,
   Loader2,
   Sparkles,
@@ -112,6 +113,12 @@ export function ServicesInfo({ onStartConsulting }: ServicesInfoProps) {
                     {item.kind === 'from' && <span className="services-from-tag">상담가</span>}
                   </div>
                   {item.note && <p className="services-price-note">{item.note}</p>}
+                  {item.duration && (
+                    <p className="services-price-duration">
+                      <Clock size={12} />
+                      {item.duration}
+                    </p>
+                  )}
                 </div>
                 <div className="services-price-value notranslate">
                   <strong>{formatPriceDisplay(item.priceLabel, item.kind)}</strong>

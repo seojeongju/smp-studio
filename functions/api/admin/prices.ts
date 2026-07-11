@@ -10,6 +10,7 @@ export interface ServicePriceRow {
   price_label: string;
   price_kind: 'fixed' | 'from';
   note: string | null;
+  duration: string | null;
   popular: number;
   sort_order: number;
   is_active: number;
@@ -60,8 +61,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const id = crypto.randomUUID();
     await context.env.DB.prepare(
       `INSERT INTO service_prices
-        (id, category_id, category_label, category_subtitle, name, price_label, price_kind, note, popular, sort_order, is_active)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        (id, category_id, category_label, category_subtitle, name, price_label, price_kind, note, duration, popular, sort_order, is_active)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
       .bind(
         id,
@@ -72,6 +73,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         priceLabel,
         priceKind,
         body.note?.trim() || null,
+        (body as { duration?: string | null }).duration?.trim() || null,
         body.popular ? 1 : 0,
         Number(body.sort_order) || 0,
         body.is_active === 0 ? 0 : 1

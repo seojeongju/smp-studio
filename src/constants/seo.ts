@@ -94,9 +94,9 @@ export const SEO_FAQS: Array<{ question: string; answer: string }> = [
     answer: `${DIRECTOR.nameKo} 원장이 운영합니다. 전문 경력 20년 이상이며, 월드K뷰티페스티벌·국제 미용 기능경기대회 등 다수 수상·지도 이력이 있습니다.`,
   },
   {
-    question: '시술 후 관리는 어떻게 하나요?',
+    question: '그레이스샵 고객 후기는 어디서 보나요?',
     answer:
-      '시술 직후부터 리터치 시기까지 단계별 케어 가이드를 안내합니다. 일반적으로 4~6주 후 리터치가 권장되며, 자세한 내용은 케어 가이드 메뉴에서 확인할 수 있습니다.',
+      '그레이스샵 홈페이지의 고객 후기 메뉴와 https://grace.ai.kr/reviews 페이지에서 실제 시술 고객의 눈썹·두피·헤어라인 리뷰를 확인할 수 있습니다.',
   },
 ];
 
@@ -108,5 +108,7 @@ export function absoluteUrl(path = '/') {
 
 export function tabCanonical(tab?: string) {
   if (!tab || tab === 'home' || tab === 'admin') return `${SITE_URL}/`;
+  // 후기는 크롤러용 서버 HTML 경로를 canonical로 사용
+  if (tab === 'reviews') return `${SITE_URL}/reviews`;
   return `${SITE_URL}/#${tab}`;
 }

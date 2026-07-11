@@ -59,6 +59,6 @@ INSERT OR IGNORE INTO service_prices (id, category_id, category_label, category_
 
 -- 기존 갤러리 포트폴리오 시드
 INSERT OR IGNORE INTO portfolios (id, title, category, before_url, after_url, duration, point, image_aspect_ratio, sort_order, is_published) VALUES
-('pf-01', '여성 자연 눈썹 디자인 (엠보 메이크업)', '눈썹 디자인', '/eyebrow-before.png', '/eyebrow-after.png', '90분 소요', '모근 결을 한 올씩 표현하는 엠보 기법으로 지극히 자연스러운 눈썹 결을 완성했습니다.', NULL, 1, 1),
+('pf-01', '여성 자연 눈썹 디자인 (엠보 메이크업)', '눈썹 디자인', '/eyebrow-before-v2.png', '/eyebrow-after-v2.png', '90분 소요', '모근 결을 한 올씩 표현하는 엠보 기법으로 지극히 자연스러운 눈썹 결을 완성했습니다.', NULL, 1, 1),
 ('pf-02', '정수리 두피 커버 디자인 케어', '두피 케어', '/smp-before.png', '/smp-after.png', '세션당 120분', '실제 모근 크기와 동일한 초미세 도팅으로 두피의 빈틈을 자연스럽게 채웠습니다.', '3 / 4', 2, 1),
-('pf-03', '남성 골격 맞춤 브로우 메이크업', '브로우 메이크업', '/men-eyebrow-before.png', '/men-eyebrow-after.png', '90분 소요', '두상 골격과 근육 움직임을 분석해 과장되지 않은 정돈된 남성 눈썹을 디자인했습니다.', NULL, 3, 1);
+('pf-03', '남성 골격 맞춤 브로우 메이크업', '브로우 메이크업', '/men-eyebrow-before-v2.png', '/men-eyebrow-after-v2.png', '90분 소요', '두상 골격과 근육 움직임을 분석해 과장되지 않은 정돈된 남성 눈썹을 디자인했습니다.', NULL, 3, 1);

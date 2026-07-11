@@ -20,3 +20,12 @@ export function getKakaoMapLink(lat: number, lng: number) {
 export function getKakaoNavigationLink(lat: number, lng: number) {
   return `https://map.kakao.com/link/to/${encodeURIComponent(SHOP_LOCATION.name)},${lat},${lng}`;
 }
+
+/** 카카오 JS SDK 실패 시 사용하는 OpenStreetMap 임베드 (API 키 불필요) */
+export function getOsmEmbedUrl(lat: number, lng: number, delta = 0.004) {
+  const left = lng - delta;
+  const right = lng + delta;
+  const top = lat + delta;
+  const bottom = lat - delta;
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${left}%2C${bottom}%2C${right}%2C${top}&layer=mapnik&marker=${lat}%2C${lng}`;
+}

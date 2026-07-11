@@ -14,9 +14,18 @@ export function loadKakaoMapSdk(appKey?: string): Promise<typeof kakao> {
     return loadPromise;
   }
 
-  loadPromise = new Promise((resolve, reject) => {
+  loadPromise = new Promise<typeof kakao>((resolve, reject) => {
+    const fail = (err: unknown) => {
+      loadPromise = null;
+      reject(err);
+    };
+
     const init = () => {
-      window.kakao.maps.load(() => resolve(window.kakao));
+      try {
+        window.kakao.maps.load(() => resolve(window.kakao));
+      } catch (err) {
+        fail(err);
+      }
     };
 
     if (window.kakao?.maps) {
@@ -29,8 +38,7 @@ export function loadKakaoMapSdk(appKey?: string): Promise<typeof kakao> {
     script.async = true;
     script.onload = init;
     script.onerror = () => {
-      loadPromise = null;
-      reject(new Error('카카오맵 SDK를 불러오지 못했습니다.'));
+      fail(new Error('카카오맵 SDK를 불러오지 못했습니다.'));
     };
     document.head.appendChild(script);
   });
