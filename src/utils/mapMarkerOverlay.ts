@@ -2,7 +2,7 @@ import { SHOP_LOCATION } from '../constants/location';
 
 /** 카카오맵 CustomOverlay용 브랜드 마커 HTML */
 export function createShopMapMarkerHtml(): string {
-  const logoUrl = '/logo.png';
+  const logoUrl = '/logo-mark.png';
 
   return `
     <div style="

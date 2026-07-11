@@ -144,12 +144,15 @@ function App() {
       {/* 데스크톱 전용 브랜드 사이드 패널 (1024px 이상 대화면에서만 노출됨) */}
       <aside className="desktop-brand-panel">
         <div className="desktop-brand-content">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <img src="/logo.png" alt="Grace Shop Premium Logo" className="desktop-brand-logo" />
-            <div>
-              <h2 className="desktop-brand-title" style={{ margin: 0, paddingBottom: '4px' }}>Grace Shop</h2>
-              <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 700, letterSpacing: '1px' }}>PREMIUM BEAUTY STUDIO</span>
-            </div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '10px' }}>
+            <img
+              src="/logo.png"
+              alt="그레이스샵 Grace Shop 로고"
+              className="desktop-brand-logo"
+            />
+            <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 700, letterSpacing: '1px' }}>
+              PREMIUM BEAUTY STUDIO
+            </span>
           </div>
           
           <p className="desktop-brand-desc">
@@ -246,14 +249,15 @@ function App() {
               onClick={() => changeTab('home')}
             >
               <img 
-                src="/logo.png" 
-                alt="Grace Shop Logo" 
+                src="/logo-mark.png" 
+                alt="그레이스샵 로고" 
                 style={{ 
-                  width: '26px', 
-                  height: '26px', 
-                  borderRadius: '50%', 
-                  objectFit: 'cover', 
-                  border: '1px solid var(--color-primary-dark)',
+                  width: '28px', 
+                  height: '28px', 
+                  borderRadius: '8px', 
+                  objectFit: 'contain', 
+                  border: '1px solid var(--color-border)',
+                  background: '#fff',
                   flexShrink: 0 
                 }} 
               />
