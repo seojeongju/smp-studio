@@ -244,26 +244,17 @@ function App() {
                 gap: '6px', 
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
-                minWidth: 0 
+                minWidth: 0,
+                flex: 1,
               }} 
               onClick={() => changeTab('home')}
             >
               <img 
-                src="/logo-mark.png" 
-                alt="그레이스샵 로고" 
-                style={{ 
-                  width: '28px', 
-                  height: '28px', 
-                  borderRadius: '8px', 
-                  objectFit: 'contain', 
-                  border: '1px solid var(--color-border)',
-                  background: '#fff',
-                  flexShrink: 0 
-                }} 
+                src="/logo.png" 
+                alt="그레이스샵 Grace Shop 로고" 
+                className="header-brand-logo"
               />
-              <h1 className="brand-logo" style={{ fontSize: '17px', margin: 0, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                Grace Shop
-              </h1>
+              <h1 className="sr-only">Grace Shop</h1>
             </div>
           </div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexShrink: 0 }}>

@@ -256,6 +256,27 @@ body {
   text-transform: uppercase;
 }
 
+.header-brand-logo {
+  height: 36px;
+  width: auto;
+  max-width: min(160px, 42vw);
+  object-fit: contain;
+  display: block;
+  flex-shrink: 1;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* 헤더 관리자 진입 (고객용 하단탭에는 노출하지 않음) */
 .header-admin-btn {
   width: 32px;
