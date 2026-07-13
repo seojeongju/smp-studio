@@ -2245,6 +2245,31 @@ body {
 }
 
 /* ===== Phase 3: 홈 대표 결과 / 갤러리 필터 ===== */
+.home-seo-intro {
+  margin-bottom: 20px;
+  padding: 4px 2px 0;
+}
+
+.home-seo-intro-title {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--color-text-main);
+}
+
+.home-seo-intro-text {
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  word-break: keep-all;
+}
+
+.home-seo-intro-text:last-child {
+  margin-bottom: 0;
+}
+
 .home-featured {
   margin-bottom: 20px;
 }

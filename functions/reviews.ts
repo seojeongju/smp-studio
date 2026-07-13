@@ -137,8 +137,8 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>고객 후기 | 그레이스샵 대구 반영구 리뷰</title>
-  <meta name="description" content="그레이스샵 실제 고객 후기. 눈썹 디자인·두피 커버·헤어라인 시술 만족도와 생생한 리뷰를 확인하세요." />
+  <title>고객 후기 | 그레이스샵 대구 눈썹문신·반영구 리뷰</title>
+  <meta name="description" content="그레이스샵 대구 눈썹문신·엠보·콤보·남자 눈썹문신·두피문신(SMP)·헤어라인 실제 고객 후기. 안지랑·남구 반영구 리뷰를 확인하세요." />
   <meta name="robots" content="index, follow, max-snippet:-1" />
   <link rel="canonical" href="${siteUrl}/reviews" />
   <meta property="og:type" content="website" />

@@ -13,6 +13,7 @@ import { AdminPanel } from './components/AdminPanel';
 import { HomeFeaturedResults } from './components/HomeFeaturedResults';
 import { HomeFaq } from './components/HomeFaq';
 import { HomeReviews } from './components/HomeReviews';
+import { HomeSeoIntro } from './components/HomeSeoIntro';
 import { GalleryFeed } from './components/GalleryFeed';
 import { KakaoChannelCard } from './components/KakaoChannelCard';
 import { KakaoChannelButton } from './components/KakaoChannelButton';
@@ -357,13 +358,15 @@ function App() {
                     Premium Artistry
                   </span>
                   <h2 style={{ fontSize: '23px', fontWeight: 700, lineHeight: '1.35', marginBottom: '8px', letterSpacing: '-0.5px' }}>
-                    우아함과 자연스러움의 시작<br />그레이스 샵 스튜디오
+                    대구 반영구 눈썹·두피문신<br />그레이스샵 스튜디오
                   </h2>
                   <p style={{ fontSize: '12px', opacity: 0.9, lineHeight: '1.6', fontWeight: 300 }}>
-                    인위적인 느낌을 배제하고, 고객 고유의 모근 결에 최적화된 톤을 한 올 한 올 자연스럽게 디자인해 드립니다.
+                    안지랑·남구에서 엠보·콤보 눈썹과 SMP 헤어라인까지, 고객 고유 모근 결에 맞춘 1:1 프라이빗 케어를 진행합니다.
                   </p>
                 </div>
               </div>
+
+              <HomeSeoIntro />
 
               {/* 브랜드 핵심 가치 (호버 리프트 적용) */}
               <div

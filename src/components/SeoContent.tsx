@@ -1,4 +1,4 @@
-import { SEO_FAQS, SITE_NAME, SITE_TAGLINE } from '../constants/seo';
+import { SEO_FAQS, SEO_INTRO_PARAGRAPHS, SEO_TARGET_KEYWORDS, SITE_NAME, SITE_TAGLINE } from '../constants/seo';
 import { SHOP_LOCATION } from '../constants/location';
 import { DIRECTOR } from '../constants/director';
 
@@ -26,11 +26,9 @@ export function SeoContent() {
       <h2>
         {SITE_NAME} — {SITE_TAGLINE}
       </h2>
-      <p>
-        {SITE_NAME}({SHOP_LOCATION.name})은 대구광역시 남구에 위치한 프리미엄 뷰티 스튜디오입니다.
-        반영구 눈썹 디자인, 콤보 메이크업, 두피 커버, 헤어라인 쉐이딩을 전문으로 하며
-        {DIRECTOR.nameKo} 원장의 1:1 프라이빗 예약제로 운영됩니다.
-      </p>
+      {SEO_INTRO_PARAGRAPHS.map((text) => (
+        <p key={text.slice(0, 20)}>{text}</p>
+      ))}
       <p>주소: {SHOP_LOCATION.fullAddress}</p>
       <p>
         원장: {DIRECTOR.nameKo} ({DIRECTOR.title})
@@ -40,6 +38,12 @@ export function SeoContent() {
         고객 후기: 실제 시술 고객의 눈썹 디자인·두피 커버·헤어라인 리뷰는
         <a href="/reviews">고객 후기 페이지</a>에서 확인할 수 있습니다.
       </p>
+      <h3>주요 키워드</h3>
+      <ul>
+        {SEO_TARGET_KEYWORDS.map((keyword) => (
+          <li key={keyword}>{keyword}</li>
+        ))}
+      </ul>
 
       <h3>자주 묻는 질문</h3>
       <dl>
