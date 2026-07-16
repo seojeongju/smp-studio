@@ -61,9 +61,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const uniqueId = crypto.randomUUID();
     const fileKey = `${folder}/${uniqueId}.${fileExtension}`;
 
-    // R2 Object Storage에 스트림 방식으로 업로드하여 메모리 절약
-    // File 객체는 ReadableStream 인터페이스를 호환하므로 stream()을 활용
-    await env.MEDIA_BUCKET.put(fileKey, file.stream(), {
+    // R2 Object Storage에 업로드
+    await env.MEDIA_BUCKET.put(fileKey, file, {
       httpMetadata: {
         contentType: file.type,
         cacheControl: 'public, max-age=31536000', // 1년 캐싱
@@ -81,6 +80,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     );
   } catch (error: any) {
     // 에러 상황을 명확하게 처리 및 로깅
+    console.error('Image upload error:', error);
     return new Response(
       JSON.stringify({ error: '이미지 업로드 중 서버 에러가 발생했습니다.', details: error.message }),
       { status: 500, headers: { 'content-type': 'application/json' } }
