@@ -40,7 +40,14 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     // 허용할 이미지 확장자 검증
     const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-    const fileExtension = file.name.split('.').pop()?.toLowerCase() || '';
+    let fileExtension = '';
+    const fileName = (file as any).name;
+    if (fileName) {
+      fileExtension = fileName.split('.').pop()?.toLowerCase() || '';
+    } else if (file.type) {
+      fileExtension = file.type.split('/').pop()?.toLowerCase() || '';
+    }
+
     if (!allowedExtensions.includes(fileExtension)) {
       return new Response(
         JSON.stringify({ error: '허용되지 않는 파일 형식입니다. (jpg, jpeg, png, webp, gif만 가능)' }),
