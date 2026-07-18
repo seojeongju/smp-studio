@@ -15,15 +15,17 @@ import { HomeFaq } from './components/HomeFaq';
 import { HomeReviews } from './components/HomeReviews';
 import { HomeSeoIntro } from './components/HomeSeoIntro';
 import { GalleryFeed } from './components/GalleryFeed';
-import { KakaoChannelCard } from './components/KakaoChannelCard';
-import { KakaoChannelButton } from './components/KakaoChannelButton';
-import { KakaoChannelFab } from './components/KakaoChannelFab';
+import { NaverBookingButton } from './components/NaverBookingButton';
+import { NaverTalkButton } from './components/NaverTalkButton';
+import { NaverTalkCard } from './components/NaverTalkCard';
+import { NaverTalkFab } from './components/NaverTalkFab';
 import { SeoContent } from './components/SeoContent';
 import { SHOP_LOCATION } from './constants/location';
 import { FALLBACK_PORTFOLIOS, FALLBACK_SERVICE_PRICES, type PortfolioItem, type ServicePrice } from './constants/services';
 import { applyTabSeo } from './utils/seoDocument';
 import { loadAndApplyReviewJsonLd } from './utils/reviewSeo';
 import { loadPublicConfig } from './constants/kakao';
+import { setNaverBookingUrl, setNaverTalkUrl } from './constants/naver';
 import { resolveServiceDuration } from './utils/serviceDuration';
 import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award, ChevronLeft, Loader2, Settings2 } from 'lucide-react';
 
@@ -41,13 +43,18 @@ function App() {
   // 리뷰 리스트 갱신 트리거
   const [refreshReviews, setRefreshReviews] = useState<boolean>(false);
 
-  // 카카오맵 키 등 공개 설정 미리 로드 + 후기 JSON-LD + 케어안내 소요시간
+  // 카카오맵·네이버예약 설정 + 후기 JSON-LD + 케어안내 소요시간
   useEffect(() => {
-    void loadPublicConfig();
-    void loadAndApplyReviewJsonLd();
-
     let cancelled = false;
-    const loadPrices = async () => {
+
+    const boot = async () => {
+      const config = await loadPublicConfig();
+      if (!cancelled) {
+        setNaverBookingUrl(config.naverBookingUrl);
+        setNaverTalkUrl(config.naverTalkUrl);
+      }
+      void loadAndApplyReviewJsonLd();
+
       try {
         const res = await fetch('/api/prices');
         const data = await res.json();
@@ -58,7 +65,8 @@ function App() {
         /* 폴백 유지 */
       }
     };
-    void loadPrices();
+
+    void boot();
     return () => {
       cancelled = true;
     };
@@ -218,24 +226,21 @@ function App() {
               <MessageSquare size={16} /> 실시간 간편 예약 및 문의
             </p>
             <div className="qr-links">
-              <a
-                href="https://booking.naver.com"
-                target="_blank"
-                rel="noopener noreferrer"
+              <NaverBookingButton
                 className="qr-btn naver"
                 style={{ gap: '8px', boxShadow: '0 4px 12px rgba(3,199,90,0.1)' }}
+                onUnavailable={openConsulting}
               >
                 <Calendar size={16} /> 네이버 실시간 예약 바로가기
-              </a>
-              <KakaoChannelButton
-                action="chat"
-                asLink
+              </NaverBookingButton>
+              <NaverTalkButton
                 hideWhenUnavailable
-                className="qr-btn kakao"
-                style={{ gap: '8px', boxShadow: '0 4px 12px rgba(254,229,0,0.15)' }}
+                className="qr-btn naver-talk"
+                style={{ gap: '8px', boxShadow: '0 4px 12px rgba(3,199,90,0.15)' }}
+                onUnavailable={openConsulting}
               >
-                <MessageSquare size={16} /> 카카오톡 1:1 채팅 문의
-              </KakaoChannelButton>
+                <MessageSquare size={16} /> 네이버 톡톡 1:1 상담
+              </NaverTalkButton>
             </div>
           </div>
         </div>
@@ -447,8 +452,8 @@ function App() {
 
               <HomeReviews onOpenReviews={() => changeTab('reviews')} />
 
-              {/* 카카오톡 공식 채널 */}
-              <KakaoChannelCard onAlternateContact={openConsulting} />
+              {/* 네이버 톡톡 실시간 상담 */}
+              <NaverTalkCard onAlternateContact={openConsulting} />
 
               {/* SEO/AEO FAQ */}
               <HomeFaq />
@@ -660,23 +665,21 @@ function App() {
                 <span>사진 견적</span>
               </span>
             </button>
-            <a
-              href="https://booking.naver.com"
-              target="_blank"
-              rel="noopener noreferrer"
+            <NaverBookingButton
               className="quickbar-btn naver"
+              onUnavailable={openConsulting}
             >
               <span className="quickbar-icon">📅</span>
               <span className="quickbar-text">
                 <span>네이버</span>
                 <span>예약 가기</span>
               </span>
-            </a>
+            </NaverBookingButton>
           </div>
         </div>
 
-        {/* 카카오톡 채널 FAB (우측 하단) */}
-        <KakaoChannelFab onUnavailable={openConsulting} />
+        {/* 네이버 톡톡 FAB (우측 세로 중앙) */}
+        <NaverTalkFab onUnavailable={openConsulting} />
 
         {/* 4. 하단 고정 탭 바 */}
         <BottomNav activeTab={activeTab} setActiveTab={changeTab} />

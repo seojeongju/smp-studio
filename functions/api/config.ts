@@ -18,11 +18,31 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     env.VITE_KAKAO_CHANNEL_ID?.trim() ||
     '';
 
+  const naverBookingUrl =
+    env.NAVER_BOOKING_URL?.trim() ||
+    env.VITE_NAVER_BOOKING_URL?.trim() ||
+    '';
+
+  const talkId =
+    env.NAVER_TALK_ID?.trim() ||
+    env.VITE_NAVER_TALK_ID?.trim() ||
+    '';
+  const naverTalkUrl =
+    env.NAVER_TALK_URL?.trim() ||
+    env.VITE_NAVER_TALK_URL?.trim() ||
+    (talkId
+      ? talkId.startsWith('http')
+        ? talkId
+        : `https://talk.naver.com/${talkId.replace(/^\/+/, '')}`
+      : '');
+
   return json(
     {
       success: true,
       kakaoAppKey: kakaoAppKey || null,
       kakaoChannelId: kakaoChannelId || null,
+      naverBookingUrl: naverBookingUrl || null,
+      naverTalkUrl: naverTalkUrl || null,
     },
     200,
     {

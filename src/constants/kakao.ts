@@ -1,6 +1,8 @@
 export type PublicConfig = {
   kakaoAppKey: string | null;
   kakaoChannelId: string | null;
+  naverBookingUrl: string | null;
+  naverTalkUrl: string | null;
 };
 
 let cachedConfig: PublicConfig | null = null;
@@ -61,24 +63,42 @@ async function fetchJsonConfig(url: string): Promise<Partial<PublicConfig> | nul
   }
 }
 
-/** /api/config → /config.json → 빌드 타임 순으로 런타임 키 로드 (지도·채널 공통) */
+/** /api/config → /config.json → 빌드 타임 순으로 런타임 키 로드 (지도·채널·네이버예약 공통) */
 export async function loadPublicConfig(): Promise<PublicConfig> {
-  if (cachedConfig?.kakaoAppKey) return cachedConfig;
+  if (cachedConfig) return cachedConfig;
   if (loadPromise) return loadPromise;
 
   loadPromise = (async () => {
     const fallback: PublicConfig = {
       kakaoAppKey: buildTimeKakaoKey() || null,
       kakaoChannelId: buildTimeChannelId() || null,
+      naverBookingUrl:
+        (import.meta.env.VITE_NAVER_BOOKING_URL as string | undefined)?.trim() || null,
+      naverTalkUrl:
+        (import.meta.env.VITE_NAVER_TALK_URL as string | undefined)?.trim() ||
+        (import.meta.env.VITE_NAVER_TALK_ID
+          ? `https://talk.naver.com/${String(import.meta.env.VITE_NAVER_TALK_ID).replace(/^\/+/, '')}`
+          : null),
     };
 
     const fromApi = await fetchJsonConfig('/api/config');
-    const fromStatic = fromApi?.kakaoAppKey ? null : await fetchJsonConfig('/config.json');
-    const data = fromApi?.kakaoAppKey ? fromApi : fromStatic || fromApi;
+    const needStatic =
+      !fromApi?.kakaoAppKey ||
+      fromApi.naverBookingUrl === undefined ||
+      fromApi.naverTalkUrl === undefined;
+    const fromStatic = needStatic ? await fetchJsonConfig('/config.json') : null;
+    const data = {
+      kakaoAppKey: fromApi?.kakaoAppKey || fromStatic?.kakaoAppKey,
+      kakaoChannelId: fromApi?.kakaoChannelId || fromStatic?.kakaoChannelId,
+      naverBookingUrl: fromApi?.naverBookingUrl || fromStatic?.naverBookingUrl,
+      naverTalkUrl: fromApi?.naverTalkUrl || fromStatic?.naverTalkUrl,
+    };
 
     cachedConfig = {
-      kakaoAppKey: data?.kakaoAppKey || fallback.kakaoAppKey,
-      kakaoChannelId: data?.kakaoChannelId || fallback.kakaoChannelId,
+      kakaoAppKey: data.kakaoAppKey || fallback.kakaoAppKey,
+      kakaoChannelId: data.kakaoChannelId || fallback.kakaoChannelId,
+      naverBookingUrl: data.naverBookingUrl || fallback.naverBookingUrl,
+      naverTalkUrl: data.naverTalkUrl || fallback.naverTalkUrl,
     };
     loadPromise = null;
     return cachedConfig;

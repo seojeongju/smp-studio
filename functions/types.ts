@@ -14,4 +14,12 @@ export interface Env {
   // 카카오톡 채널 ID (런타임)
   KAKAO_CHANNEL_ID?: string;
   VITE_KAKAO_CHANNEL_ID?: string;
+  // 네이버 예약(스마트플레이스) 예약 페이지 URL
+  NAVER_BOOKING_URL?: string;
+  VITE_NAVER_BOOKING_URL?: string;
+  // 네이버 톡톡 상담 URL 또는 ID
+  NAVER_TALK_URL?: string;
+  VITE_NAVER_TALK_URL?: string;
+  NAVER_TALK_ID?: string;
+  VITE_NAVER_TALK_ID?: string;
 }

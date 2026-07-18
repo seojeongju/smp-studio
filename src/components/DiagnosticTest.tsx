@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { HelpCircle, ChevronRight, RotateCcw, MessageCircle, Sparkles, Compass, Award, AlertTriangle, UserCheck, Flame, ArrowLeft } from 'lucide-react';
-import { KakaoChannelButton } from './KakaoChannelButton';
+import { NaverTalkButton } from './NaverTalkButton';
 import type { ServicePrice } from '../constants/services';
 import {
   DIAGNOSTIC_DURATION_NAMES,
@@ -259,12 +259,11 @@ export const DiagnosticTest: React.FC<DiagnosticTestProps> = ({
               💬 1:1 맞춤 견적 & 사진 상담받기
             </button>
 
-            <KakaoChannelButton
-              action="chat"
+            <NaverTalkButton
               className="btn btn-glow"
               style={{
-                backgroundColor: '#FEE500',
-                color: '#191919',
+                backgroundColor: '#03C75A',
+                color: '#fff',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -272,11 +271,13 @@ export const DiagnosticTest: React.FC<DiagnosticTestProps> = ({
                 width: '100%',
                 border: 'none',
                 cursor: 'pointer',
+                textDecoration: 'none',
               }}
+              onUnavailable={onStartConsulting}
             >
               <MessageCircle size={18} />
-              카카오톡 실시간 빠른 상담
-            </KakaoChannelButton>
+              네이버 톡톡 실시간 빠른 상담
+            </NaverTalkButton>
 
             <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '20px' }}>
               <button

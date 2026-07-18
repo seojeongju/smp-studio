@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Camera, Loader2, CalendarRange } from 'lucide-react';
-import { KakaoChannelButton } from './KakaoChannelButton';
-import { isKakaoChannelConfigured } from '../constants/kakao';
+import { NaverTalkButton } from './NaverTalkButton';
+import { isNaverTalkConfigured } from '../constants/naver';
 
 interface ConsultingFormProps {
   onClose: () => void;
@@ -162,11 +162,11 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
               }}
             >
               입력해주신 연락처로 원장님이 직접 상태 검토 후<br />
-              빠른 시간 내에 카카오톡 또는 문자로 연락해 드립니다.
+              빠른 시간 내에 네이버 톡톡 또는 문자로 연락해 드립니다.
             </p>
 
-            {/* 성공 화면 내 카카오톡 채널 연동 카드 */}
-            {isKakaoChannelConfigured() && (
+            {/* 성공 화면 내 네이버 톡톡 연동 카드 */}
+            {isNaverTalkConfigured() && (
             <div style={{
               backgroundColor: 'var(--color-bg)',
               borderRadius: 'var(--radius-sm)',
@@ -177,17 +177,16 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
             }}>
               <p style={{ fontSize: '11.5px', color: 'var(--color-text-muted)', margin: '0 0 12px 0', lineHeight: 1.5, fontWeight: 500 }}>
                 더 빠른 확답 또는 추가 상세 사진 발송은<br />
-                그레이스 샵 카카오톡 공식 채널을 이용해 주세요.
+                그레이스샵 네이버 톡톡을 이용해 주세요.
               </p>
-              <KakaoChannelButton
-                action="follow"
+              <NaverTalkButton
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  backgroundColor: '#FEE500',
-                  color: '#191919',
+                  backgroundColor: '#03C75A',
+                  color: '#fff',
                   border: 'none',
                   padding: '10px 20px',
                   borderRadius: '12px',
@@ -195,11 +194,12 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
                   fontWeight: 700,
                   width: '100%',
                   cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(254,229,0,0.15)',
+                  boxShadow: '0 4px 12px rgba(3,199,90,0.18)',
+                  textDecoration: 'none',
                 }}
               >
-                💬 그레이스 샵 카톡 추가 문의
-              </KakaoChannelButton>
+                💬 그레이스샵 톡톡 바로 문의
+              </NaverTalkButton>
             </div>
             )}
 
@@ -210,11 +210,11 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
         ) : (
           // 일반 입력 폼 화면
           <>
-            {/* 카카오톡 3초 간편 상담 빠른 배너 */}
-            {isKakaoChannelConfigured() && (
+            {/* 네이버 톡톡 3초 간편 상담 빠른 배너 */}
+            {isNaverTalkConfigured() && (
             <div style={{
-              backgroundColor: '#FAF6E6',
-              border: '1px solid rgba(203, 185, 167, 0.4)',
+              backgroundColor: '#F3FBF6',
+              border: '1px solid rgba(3, 199, 90, 0.25)',
               borderRadius: 'var(--radius-sm)',
               padding: '12px 14px',
               marginBottom: '18px',
@@ -225,22 +225,21 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
             }}>
               <div style={{ minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
-                  <span style={{ fontSize: '9px', fontWeight: 800, backgroundColor: 'var(--color-text-main)', color: 'var(--color-primary-light)', padding: '1.5px 5px', borderRadius: '3px', letterSpacing: '0.5px' }}>FAST</span>
-                  <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-text-main)' }}>카카오톡 3초 간편상담</span>
+                  <span style={{ fontSize: '9px', fontWeight: 800, backgroundColor: '#03C75A', color: '#fff', padding: '1.5px 5px', borderRadius: '3px', letterSpacing: '0.5px' }}>FAST</span>
+                  <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-text-main)' }}>네이버 톡톡 3초 간편상담</span>
                 </div>
                 <p style={{ fontSize: '11px', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.4 }}>
-                  폼 작성이 번거로우시다면 카카오 채널로 바로 케어 문의가 가능합니다.
+                  폼 작성이 번거로우시다면 톡톡으로 바로 케어 문의가 가능합니다.
                 </p>
               </div>
-              <KakaoChannelButton
-                action="chat"
+              <NaverTalkButton
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '4px',
-                  backgroundColor: '#FEE500',
-                  color: '#191919',
+                  backgroundColor: '#03C75A',
+                  color: '#fff',
                   border: 'none',
                   padding: '8px 12px',
                   borderRadius: '10px',
@@ -248,11 +247,12 @@ export const ConsultingForm: React.FC<ConsultingFormProps> = ({ onClose }) => {
                   fontWeight: 700,
                   flexShrink: 0,
                   cursor: 'pointer',
-                  boxShadow: '0 4px 10px rgba(254,229,0,0.18)',
+                  boxShadow: '0 4px 10px rgba(3,199,90,0.2)',
+                  textDecoration: 'none',
                 }}
               >
                 💬 상담 시작
-              </KakaoChannelButton>
+              </NaverTalkButton>
             </div>
             )}
 

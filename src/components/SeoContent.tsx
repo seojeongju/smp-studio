@@ -33,7 +33,7 @@ export function SeoContent() {
       <p>
         원장: {DIRECTOR.nameKo} ({DIRECTOR.title})
       </p>
-      <p>운영: 100% 사전 예약제 · 네이버 예약 및 카카오톡 상담</p>
+      <p>운영: 100% 사전 예약제 · 네이버 예약 및 네이버 톡톡 상담</p>
       <p>
         고객 후기: 실제 시술 고객의 눈썹 디자인·두피 커버·헤어라인 리뷰는
         <a href="/reviews">고객 후기 페이지</a>에서 확인할 수 있습니다.

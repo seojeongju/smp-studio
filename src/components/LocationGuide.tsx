@@ -9,7 +9,7 @@ import {
 import { loadKakaoMapSdk } from '../utils/kakaoMap';
 import { createShopMapMarkerHtml } from '../utils/mapMarkerOverlay';
 import { loadPublicConfig } from '../constants/kakao';
-import { KakaoChannelCard } from './KakaoChannelCard';
+import { NaverTalkCard } from './NaverTalkCard';
 
 interface LocationGuideProps {
   onStartConsulting?: () => void;
@@ -292,7 +292,7 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
       </div>
 
       <div style={{ marginTop: '20px' }}>
-        <KakaoChannelCard onAlternateContact={onStartConsulting} />
+        <NaverTalkCard onAlternateContact={onStartConsulting} />
       </div>
     </div>
   );

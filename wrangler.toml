@@ -5,6 +5,7 @@ pages_build_output_dir = "dist"
 # 카카오 JS 키(공개용) — 도메인 제한은 카카오 개발자 콘솔에서 관리
 [vars]
 KAKAO_APP_KEY = "24f1b05cf10ce5e4d05d7ad1aaa97213"
+NAVER_TALK_URL = "https://talk.naver.com/WX53UE5"
 
 # D1 Database 바인딩
 [[d1_databases]]
