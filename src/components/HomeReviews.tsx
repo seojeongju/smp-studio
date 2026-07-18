@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ChevronRight, Star } from 'lucide-react';
 import { applyReviewJsonLd, type SeoReview } from '../utils/reviewSeo';
+import { shuffleTopReviews } from '../utils/reviewShuffle';
 
 interface HomeReviewsProps {
   onOpenReviews: () => void;
@@ -14,12 +15,13 @@ export function HomeReviews({ onOpenReviews }: HomeReviewsProps) {
 
     const load = async () => {
       try {
-        const res = await fetch('/api/reviews?limit=6&sort=highest');
+        const res = await fetch('/api/reviews?limit=8&sort=highest');
         if (!res.ok) return;
         const data = (await res.json()) as { success?: boolean; reviews?: SeoReview[] };
         if (cancelled || !data.success || !data.reviews) return;
-        setReviews(data.reviews.slice(0, 3));
+        // JSON-LD는 원본(고평점) 순서 유지, 화면만 상위 섞기
         applyReviewJsonLd(data.reviews);
+        setReviews(shuffleTopReviews(data.reviews, 8).slice(0, 3));
       } catch {
         /* ignore */
       }
