@@ -27,6 +27,7 @@ import { loadAndApplyReviewJsonLd } from './utils/reviewSeo';
 import { loadPublicConfig } from './constants/kakao';
 import { setNaverBookingUrl, setNaverTalkUrl } from './constants/naver';
 import { resolveServiceDuration } from './utils/serviceDuration';
+import { trackCta, trackSessionVisit, trackTabView } from './utils/analytics';
 import { Calendar, PhoneCall, Sparkles, ShieldCheck, MapPin, Clock, MessageSquare, Award, ChevronLeft, Loader2, Settings2 } from 'lucide-react';
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
   // 카카오맵·네이버예약 설정 + 후기 JSON-LD + 케어안내 소요시간
   useEffect(() => {
     let cancelled = false;
+    trackSessionVisit();
 
     const boot = async () => {
       const config = await loadPublicConfig();
@@ -79,11 +81,13 @@ function App() {
   // activeTab 변경 시 히스토리에 푸시하는 함수
   const changeTab = (tab: TabType) => {
     setActiveTab(tab);
+    trackTabView(tab);
     window.history.pushState({ tab }, '', `#${tab}`);
   };
 
   // 모달 열기 래퍼
   const openConsulting = () => {
+    trackCta('consulting');
     setIsConsultingOpen(true);
     window.history.pushState({ modal: 'consulting', tab: activeTab }, '', `#${activeTab}`);
   };
@@ -119,6 +123,7 @@ function App() {
 
     window.history.replaceState({ tab: targetTab }, '', `#${targetTab}`);
     setActiveTab(targetTab);
+    trackTabView(targetTab);
 
     const handlePopState = (event: PopStateEvent) => {
       const state = event.state;

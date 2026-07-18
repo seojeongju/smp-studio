@@ -1,4 +1,5 @@
 import { loadPublicConfig } from './kakao';
+import { trackCta } from '../utils/analytics';
 
 let runtimeBookingUrl: string | null | undefined;
 let runtimeTalkUrl: string | null | undefined;
@@ -41,6 +42,7 @@ export function setNaverBookingUrl(url: string | null | undefined) {
 export function openNaverBooking(): boolean {
   const url = getNaverBookingUrl();
   if (!url) return false;
+  trackCta('booking');
   window.open(url, '_blank', 'noopener,noreferrer');
   return true;
 }
@@ -61,6 +63,7 @@ export function setNaverTalkUrl(url: string | null | undefined) {
 export function openNaverTalk(): boolean {
   const url = getNaverTalkUrl();
   if (!url) return false;
+  trackCta('talk');
   window.open(url, '_blank', 'noopener,noreferrer');
   return true;
 }

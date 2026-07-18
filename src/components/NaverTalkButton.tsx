@@ -1,5 +1,6 @@
 import { type CSSProperties, type ReactNode } from 'react';
 import { getNaverTalkUrl, isNaverTalkConfigured, openNaverTalk } from '../constants/naver';
+import { trackCta } from '../utils/analytics';
 
 interface NaverTalkButtonProps {
   children: ReactNode;
@@ -29,10 +30,12 @@ export function NaverTalkButton({
       onUnavailable?.();
       return;
     }
-    if (!(event.currentTarget instanceof HTMLAnchorElement)) {
-      event.preventDefault();
-      openNaverTalk();
+    if (event.currentTarget instanceof HTMLAnchorElement) {
+      trackCta('talk');
+      return;
     }
+    event.preventDefault();
+    openNaverTalk();
   };
 
   if (configured && href) {

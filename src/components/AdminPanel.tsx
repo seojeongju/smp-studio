@@ -31,8 +31,42 @@ import {
 } from '../utils/adminApi';
 import { formatPriceDisplay, formatPriceInput, formatPriceNumber } from '../utils/priceFormat';
 
-type AdminSection = 'prices' | 'portfolios' | 'gallery' | 'reviews' | 'reservations';
+type AdminSection = 'analytics' | 'prices' | 'portfolios' | 'gallery' | 'reviews' | 'reservations';
 type ReservationStatus = 'pending' | 'confirmed' | 'cancelled' | 'done';
+
+interface AnalyticsSummary {
+  todayVisits: number;
+  periodVisits: number;
+  days: number;
+  from: string;
+  to: string;
+  visitsByDay: Array<{ day: string; count: number }>;
+  tabs: Array<{ key: string; count: number }>;
+  ctas: Array<{ key: string; count: number }>;
+  devices: Array<{ key: string; count: number }>;
+}
+
+const TAB_LABEL: Record<string, string> = {
+  home: '홈',
+  care: '맞춤케어',
+  services: '케어안내',
+  profile: '원장소개',
+  portfolio: '전후사진',
+  gallery: '갤러리',
+  reviews: '고객후기',
+  location: '오시는길',
+};
+
+const CTA_LABEL: Record<string, string> = {
+  talk: '네이버 톡톡',
+  consulting: '1:1 상담폼',
+  booking: '네이버 예약',
+};
+
+const DEVICE_LABEL: Record<string, string> = {
+  mobile: '모바일',
+  desktop: 'PC',
+};
 
 interface AdminReview {
   id: string;
@@ -146,12 +180,13 @@ export function AdminPanel() {
   const [loginError, setLoginError] = useState('');
   const [loggingIn, setLoggingIn] = useState(false);
 
-  const [section, setSection] = useState<AdminSection>('prices');
+  const [section, setSection] = useState<AdminSection>('analytics');
   const [prices, setPrices] = useState<ServicePrice[]>([]);
   const [portfolios, setPortfolios] = useState<PortfolioItem[]>([]);
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const [reviews, setReviews] = useState<AdminReview[]>([]);
   const [reservations, setReservations] = useState<AdminReservation[]>([]);
+  const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
   const [reviewFilter, setReviewFilter] = useState<'all' | 'visible' | 'hidden'>('all');
   const [reservationFilter, setReservationFilter] = useState<'all' | ReservationStatus>('all');
   const [loading, setLoading] = useState(false);
@@ -196,7 +231,22 @@ export function AdminPanel() {
     setLoading(true);
     setError('');
     try {
-      if (target === 'prices') {
+      if (target === 'analytics') {
+        const res = await fetch('/api/admin/analytics?days=14', { credentials: 'include' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || '접속 현황을 불러오지 못했습니다.');
+        setAnalytics({
+          todayVisits: data.todayVisits || 0,
+          periodVisits: data.periodVisits || 0,
+          days: data.days || 14,
+          from: data.from || '',
+          to: data.to || '',
+          visitsByDay: data.visitsByDay || [],
+          tabs: data.tabs || [],
+          ctas: data.ctas || [],
+          devices: data.devices || [],
+        });
+      } else if (target === 'prices') {
         const res = await fetch('/api/admin/prices', { credentials: 'include' });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || '단가표를 불러오지 못했습니다.');
@@ -256,6 +306,7 @@ export function AdminPanel() {
     setGalleryImages([]);
     setReviews([]);
     setReservations([]);
+    setAnalytics(null);
   };
 
   const toggleReviewHidden = async (row: AdminReview) => {
@@ -659,6 +710,13 @@ export function AdminPanel() {
       <div className="admin-tabs admin-tabs-wrap">
         <button
           type="button"
+          className={`admin-tab${section === 'analytics' ? ' active' : ''}`}
+          onClick={() => setSection('analytics')}
+        >
+          접속현황
+        </button>
+        <button
+          type="button"
           className={`admin-tab${section === 'prices' ? ' active' : ''}`}
           onClick={() => setSection('prices')}
         >
@@ -710,6 +768,115 @@ export function AdminPanel() {
             <X size={14} />
           </button>
         </div>
+      )}
+
+      {section === 'analytics' && (
+        <section className="admin-section">
+          <div className="admin-section-bar">
+            <h3>접속 현황 (최근 {analytics?.days ?? 14}일)</h3>
+            <button
+              type="button"
+              className="admin-add-btn"
+              onClick={() => void loadSectionData('analytics')}
+              disabled={loading}
+            >
+              새로고침
+            </button>
+          </div>
+          <p className="admin-item-meta" style={{ marginBottom: 12 }}>
+            세션 단위 방문·메뉴 조회·상담 버튼 클릭만 집계합니다. IP·개인정보는 저장하지 않습니다.
+          </p>
+
+          {loading && !analytics ? (
+            <div className="admin-center"><Loader2 className="admin-spin" size={20} /></div>
+          ) : analytics ? (
+            <>
+              <div className="admin-analytics-kpis">
+                <div className="admin-analytics-kpi">
+                  <span className="admin-analytics-kpi__label">오늘 방문</span>
+                  <strong>{analytics.todayVisits.toLocaleString()}</strong>
+                </div>
+                <div className="admin-analytics-kpi">
+                  <span className="admin-analytics-kpi__label">{analytics.days}일 합계</span>
+                  <strong>{analytics.periodVisits.toLocaleString()}</strong>
+                </div>
+              </div>
+
+              <div className="admin-analytics-block">
+                <h4>일별 방문</h4>
+                {(() => {
+                  const max = Math.max(1, ...analytics.visitsByDay.map((d) => d.count));
+                  return (
+                    <ul className="admin-analytics-bars">
+                      {analytics.visitsByDay.map((row) => (
+                        <li key={row.day}>
+                          <span className="admin-analytics-bars__day">{row.day.slice(5)}</span>
+                          <div className="admin-analytics-bars__track">
+                            <div
+                              className="admin-analytics-bars__fill"
+                              style={{ width: `${Math.round((row.count / max) * 100)}%` }}
+                            />
+                          </div>
+                          <span className="admin-analytics-bars__count">{row.count}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  );
+                })()}
+              </div>
+
+              <div className="admin-analytics-grid">
+                <div className="admin-analytics-block">
+                  <h4>인기 메뉴</h4>
+                  {analytics.tabs.length === 0 ? (
+                    <p className="admin-item-meta">아직 데이터가 없습니다.</p>
+                  ) : (
+                    <ul className="admin-analytics-rank">
+                      {analytics.tabs.map((row) => (
+                        <li key={row.key}>
+                          <span>{TAB_LABEL[row.key] || row.key}</span>
+                          <strong>{row.count.toLocaleString()}</strong>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <div className="admin-analytics-block">
+                  <h4>상담·예약 클릭</h4>
+                  {analytics.ctas.length === 0 ? (
+                    <p className="admin-item-meta">아직 데이터가 없습니다.</p>
+                  ) : (
+                    <ul className="admin-analytics-rank">
+                      {analytics.ctas.map((row) => (
+                        <li key={row.key}>
+                          <span>{CTA_LABEL[row.key] || row.key}</span>
+                          <strong>{row.count.toLocaleString()}</strong>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <div className="admin-analytics-block">
+                  <h4>기기</h4>
+                  {analytics.devices.length === 0 ? (
+                    <p className="admin-item-meta">아직 데이터가 없습니다.</p>
+                  ) : (
+                    <ul className="admin-analytics-rank">
+                      {analytics.devices.map((row) => (
+                        <li key={row.key}>
+                          <span>{DEVICE_LABEL[row.key] || row.key}</span>
+                          <strong>{row.count.toLocaleString()}</strong>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            </>
+          ) : (
+            <p className="admin-item-meta">접속 현황을 불러오지 못했습니다.</p>
+          )}
+        </section>
       )}
 
       {section === 'prices' && (

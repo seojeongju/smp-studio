@@ -4,6 +4,7 @@ import {
   isNaverBookingConfigured,
   openNaverBooking,
 } from '../constants/naver';
+import { trackCta } from '../utils/analytics';
 
 interface NaverBookingButtonProps {
   children: ReactNode;
@@ -35,11 +36,12 @@ export function NaverBookingButton({
       onUnavailable?.();
       return;
     }
-    // a 태그 기본 동작으로 충분. JS open도 허용.
-    if (!(event.currentTarget instanceof HTMLAnchorElement)) {
-      event.preventDefault();
-      openNaverBooking();
+    if (event.currentTarget instanceof HTMLAnchorElement) {
+      trackCta('booking');
+      return;
     }
+    event.preventDefault();
+    openNaverBooking();
   };
 
   if (configured && href) {
