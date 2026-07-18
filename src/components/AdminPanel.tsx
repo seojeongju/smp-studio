@@ -33,18 +33,33 @@ import { formatPriceDisplay, formatPriceInput, formatPriceNumber } from '../util
 
 type AdminSection = 'analytics' | 'prices' | 'portfolios' | 'gallery' | 'reviews' | 'reservations';
 type ReservationStatus = 'pending' | 'confirmed' | 'cancelled' | 'done';
+type AnalyticsRange = 'week' | 'weekly' | 'month';
+
+interface AnalyticsSeriesItem {
+  key: string;
+  label: string;
+  count: number;
+}
 
 interface AnalyticsSummary {
+  range: AnalyticsRange;
+  rangeLabel: string;
+  chartTitle: string;
   todayVisits: number;
   periodVisits: number;
-  days: number;
   from: string;
   to: string;
-  visitsByDay: Array<{ day: string; count: number }>;
+  series: AnalyticsSeriesItem[];
   tabs: Array<{ key: string; count: number }>;
   ctas: Array<{ key: string; count: number }>;
   devices: Array<{ key: string; count: number }>;
 }
+
+const ANALYTICS_RANGE_OPTIONS: Array<{ id: AnalyticsRange; label: string }> = [
+  { id: 'week', label: '1주일' },
+  { id: 'weekly', label: '주별' },
+  { id: 'month', label: '월별' },
+];
 
 const TAB_LABEL: Record<string, string> = {
   home: '홈',
@@ -187,6 +202,7 @@ export function AdminPanel() {
   const [reviews, setReviews] = useState<AdminReview[]>([]);
   const [reservations, setReservations] = useState<AdminReservation[]>([]);
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
+  const [analyticsRange, setAnalyticsRange] = useState<AnalyticsRange>('week');
   const [reviewFilter, setReviewFilter] = useState<'all' | 'visible' | 'hidden'>('all');
   const [reservationFilter, setReservationFilter] = useState<'all' | ReservationStatus>('all');
   const [loading, setLoading] = useState(false);
@@ -225,23 +241,34 @@ export function AdminPanel() {
   useEffect(() => {
     if (!authenticated) return;
     void loadSectionData(section);
-  }, [authenticated, section, reviewFilter, reservationFilter]);
+  }, [authenticated, section, reviewFilter, reservationFilter, analyticsRange]);
 
   const loadSectionData = async (target: AdminSection) => {
     setLoading(true);
     setError('');
     try {
       if (target === 'analytics') {
-        const res = await fetch('/api/admin/analytics?days=14', { credentials: 'include' });
+        const res = await fetch(`/api/admin/analytics?range=${analyticsRange}`, {
+          credentials: 'include',
+        });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || '접속 현황을 불러오지 못했습니다.');
+        const series: AnalyticsSeriesItem[] = (data.series || data.visitsByDay || []).map(
+          (row: { key?: string; day?: string; label?: string; count?: number }) => ({
+            key: row.key || row.day || '',
+            label: row.label || (row.day ? String(row.day).slice(5) : ''),
+            count: row.count || 0,
+          }),
+        );
         setAnalytics({
+          range: data.range || analyticsRange,
+          rangeLabel: data.rangeLabel || '최근 7일',
+          chartTitle: data.chartTitle || '일별 방문',
           todayVisits: data.todayVisits || 0,
           periodVisits: data.periodVisits || 0,
-          days: data.days || 14,
           from: data.from || '',
           to: data.to || '',
-          visitsByDay: data.visitsByDay || [],
+          series,
           tabs: data.tabs || [],
           ctas: data.ctas || [],
           devices: data.devices || [],
@@ -773,7 +800,7 @@ export function AdminPanel() {
       {section === 'analytics' && (
         <section className="admin-section">
           <div className="admin-section-bar">
-            <h3>접속 현황 (최근 {analytics?.days ?? 14}일)</h3>
+            <h3>접속 현황 ({analytics?.rangeLabel ?? '최근 7일'})</h3>
             <button
               type="button"
               className="admin-add-btn"
@@ -783,8 +810,24 @@ export function AdminPanel() {
               새로고침
             </button>
           </div>
-          <p className="admin-item-meta" style={{ marginBottom: 12 }}>
-            세션 단위 방문·메뉴 조회·상담 버튼 클릭만 집계합니다. IP·개인정보는 저장하지 않습니다.
+
+          <div className="admin-analytics-range" role="tablist" aria-label="집계 기간">
+            {ANALYTICS_RANGE_OPTIONS.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                role="tab"
+                aria-selected={analyticsRange === option.id}
+                className={`admin-analytics-range__btn${analyticsRange === option.id ? ' active' : ''}`}
+                onClick={() => setAnalyticsRange(option.id)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+
+          <p className="admin-item-meta" style={{ margin: '0 14px 12px' }}>
+            1주일=최근 7일(일별) · 주별=최근 12주 · 월별=최근 12개월. IP·개인정보는 저장하지 않습니다.
           </p>
 
           {loading && !analytics ? (
@@ -797,30 +840,42 @@ export function AdminPanel() {
                   <strong>{analytics.todayVisits.toLocaleString()}</strong>
                 </div>
                 <div className="admin-analytics-kpi">
-                  <span className="admin-analytics-kpi__label">{analytics.days}일 합계</span>
+                  <span className="admin-analytics-kpi__label">기간 합계</span>
                   <strong>{analytics.periodVisits.toLocaleString()}</strong>
                 </div>
               </div>
 
               <div className="admin-analytics-block">
-                <h4>일별 방문</h4>
+                <h4>{analytics.chartTitle}</h4>
                 {(() => {
-                  const max = Math.max(1, ...analytics.visitsByDay.map((d) => d.count));
+                  const max = Math.max(1, ...analytics.series.map((d) => d.count));
+                  const dense = analytics.range !== 'week';
                   return (
-                    <ul className="admin-analytics-bars">
-                      {analytics.visitsByDay.map((row) => (
-                        <li key={row.day}>
-                          <span className="admin-analytics-bars__day">{row.day.slice(5)}</span>
-                          <div className="admin-analytics-bars__track">
-                            <div
-                              className="admin-analytics-bars__fill"
-                              style={{ width: `${Math.round((row.count / max) * 100)}%` }}
-                            />
+                    <div
+                      className={`admin-analytics-chart${dense ? ' is-dense' : ''}`}
+                      role="img"
+                      aria-label={`${analytics.chartTitle} 막대 그래프`}
+                    >
+                      {analytics.series.map((row) => {
+                        const heightPct = Math.max(row.count > 0 ? 8 : 0, Math.round((row.count / max) * 100));
+                        return (
+                          <div
+                            key={row.key}
+                            className="admin-analytics-chart__col"
+                            title={`${row.label}: ${row.count}회`}
+                          >
+                            <span className="admin-analytics-chart__value">{row.count}</span>
+                            <div className="admin-analytics-chart__bar-wrap">
+                              <div
+                                className={`admin-analytics-chart__bar${row.count === 0 ? ' is-empty' : ''}`}
+                                style={{ height: `${heightPct}%` }}
+                              />
+                            </div>
+                            <span className="admin-analytics-chart__day">{row.label}</span>
                           </div>
-                          <span className="admin-analytics-bars__count">{row.count}</span>
-                        </li>
-                      ))}
-                    </ul>
+                        );
+                      })}
+                    </div>
                   );
                 })()}
               </div>
