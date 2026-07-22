@@ -187,7 +187,7 @@ export function LocationGuide({ onStartConsulting }: LocationGuideProps) {
               {SHOP_LOCATION.fullAddress}
             </div>
             <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
-              {SHOP_LOCATION.building} · {SHOP_LOCATION.name}
+              대구 남구 대명동·안지랑 · {SHOP_LOCATION.building} · {SHOP_LOCATION.name}
             </div>
           </div>
         </div>

@@ -18,7 +18,7 @@ export function HomeFaq() {
         </h2>
       </div>
       <p style={{ margin: '0 0 12px', fontSize: '12px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-        위치·대구 눈썹문신·두피문신·예약·원장 소개를 한눈에 확인하세요.
+        위치·남구 대명동 두피문신·대구 남구 눈썹문신·예약·원장 소개를 한눈에 확인하세요.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {SEO_FAQS.map((faq, index) => {

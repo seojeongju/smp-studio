@@ -5,7 +5,7 @@ export function HomeSeoIntro() {
   return (
     <section className="home-seo-intro" aria-labelledby="home-seo-intro-title">
       <h2 id="home-seo-intro-title" className="home-seo-intro-title">
-        {SITE_NAME} · 대구 반영구 전문
+        {SITE_NAME} · 남구 대명동 두피문신·반영구
       </h2>
       {SEO_INTRO_PARAGRAPHS.map((text) => (
         <p key={text.slice(0, 24)} className="home-seo-intro-text">

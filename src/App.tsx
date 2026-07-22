@@ -368,10 +368,10 @@ function App() {
                     Premium Artistry
                   </span>
                   <h2 style={{ fontSize: '23px', fontWeight: 700, lineHeight: '1.35', marginBottom: '8px', letterSpacing: '-0.5px' }}>
-                    대구 반영구 눈썹·두피문신<br />그레이스샵 스튜디오
+                    남구 대명동 두피문신·대구 반영구<br />그레이스샵 스튜디오
                   </h2>
                   <p style={{ fontSize: '12px', opacity: 0.9, lineHeight: '1.6', fontWeight: 300 }}>
-                    안지랑·남구에서 엠보·콤보 눈썹과 SMP 헤어라인까지, 고객 고유 모근 결에 맞춘 1:1 프라이빗 케어를 진행합니다.
+                    대명동·안지랑에서 대구 두피문신샵·대구 남구 눈썹문신·대구남구반영구까지, 고객 고유 모근 결에 맞춘 1:1 프라이빗 케어를 진행합니다.
                   </p>
                 </div>
               </div>
